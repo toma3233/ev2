@@ -1,0 +1,17 @@
+Steps:
+  - Script: ensure_package jq
+    Retry: true
+  - Script: ensure_azlogin "${OVERLAY_RESOURCES_SUBSCRIPTION_ID}"
+    Retry: true
+  - Script: |
+      function call() {
+        echo "--------------------------------"
+        echo "Run '$@' begin"
+        $@
+        echo "Run '$@' end"
+        echo "--------------------------------"
+      }
+
+      echo "Run aro.resource.region script for ${CLOUDENV}.${DEPLOYENV}.${REGION} begin"
+      call bash assign-msi.sh
+      echo "Run aro.resource.region script for ${CLOUDENV}.${DEPLOYENV}.${REGION} end"

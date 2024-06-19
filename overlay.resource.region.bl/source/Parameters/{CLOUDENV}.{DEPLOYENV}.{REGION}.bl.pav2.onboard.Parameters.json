@@ -1,0 +1,151 @@
+{
+    "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/RolloutParameters.json",
+    "contentVersion": "1.0.0.0",
+    "extensions": [
+        {
+            "name": "ManageStorageAccount",
+            "type": "Microsoft.KeyVault.DataPlane/SetStorageAccount",
+            "version": "2020-03-01",
+            "connectionProperties": {
+                "maxExecutionTime": "PT20M",
+                "authentication": {
+                    "type": "AadApplicationAuthentication",
+                    "reference": {
+                        "provider": "AzureKeyVault",
+                        "parameters": {
+                            "secretId": "__EV2_EXTENSION_OPERATOR_APPCERTIFICATE__"
+                        }
+                    },
+                    "properties": {
+                        "applicationId": "__EV2_EXTENSION_OPERATOR_APPID__"
+                    }
+                }
+            },
+            "payloadProperties": {
+                "vaultBaseUrl": {
+                    "value": "https://{resource_name_prefix}aksblp{region_short_name}.{keyvault_suffix}"
+                },
+                "storageAccountName": {
+                    "value": "{resource_name_prefix_nodash}aksblp{region_short_name}"
+                },
+                "activeKeyName": {
+                    "value": "key1"
+                },
+                "autoRegenerateKey": {
+                    "value": "true"
+                },
+                "regenerationPeriod": {
+                    "value": "P7D"
+                },
+                "resourceId": {
+                    "value": "/subscriptions/{overlay_resources_subscription_id}/resourceGroups/{resource_name_prefix}Feature.PAv2-{REGION}/providers/Microsoft.Storage/storageAccounts/{resource_name_prefix_nodash}aksblp{region_short_name}"
+                }
+            }
+        },
+        {
+            "name": "SetSasDefinition",
+            "type": "Microsoft.KeyVault.DataPlane/SetSasDefinition",
+            "version": "2020-03-01",
+            "connectionProperties": {
+                "maxExecutionTime": "PT20M",
+                "authentication": {
+                    "type": "AadApplicationAuthentication",
+                    "reference": {
+                        "provider": "AzureKeyVault",
+                        "parameters": {
+                            "secretId": "__EV2_EXTENSION_OPERATOR_APPCERTIFICATE__"
+                        }
+                    },
+                    "properties": {
+                        "applicationId": "__EV2_EXTENSION_OPERATOR_APPID__"
+                    }
+                }
+            },
+            "payloadProperties": {
+                "vaultBaseUrl": {
+                    "value": "https://{resource_name_prefix}aksblp{region_short_name}.{keyvault_suffix}"
+                },
+                "storageAccountName": {
+                    "value": "{resource_name_prefix_nodash}aksblp{region_short_name}"
+                },
+                "sasDefinitionName": {
+                    "value": "sas"
+                },
+                "sasType": {
+                    "value": "account"
+                },
+                "templateUri": {
+                    "value": "sv=2015-04-05&ss=bfqt&srt=sco&sp=cdlruwap&spr=https"
+                },
+                "validityPeriod": {
+                    "value": "PT24H"
+                }
+            }
+        },
+        {
+            "name": "PAv2AddAccountOperation",
+            "type": "Microsoft.Geneva.Actions/OperationExecution",
+            "version": "2016-11-01",
+            "connectionProperties": {
+                "endpoint": "{acis_connection_endpoint}",
+                "maxExecutionTime": "PT24H",
+                "authentication": {
+                    "type": "DstsServiceClientCertificateAuthentication",
+                    "reference": {
+                        "provider": "AzureKeyVault",
+                        "parameters": {
+                            "secretId": "{acis_keyvault_secret_id}"
+                        }
+                    },
+                    "properties": {
+                        "serviceName": "acis",
+                        "metadataRelativeUri": "/api/v2/auth/claims",
+                        "homeSts": "{acis_home_sts}",
+                        "identificationType": "SubjectName"
+                    }
+                }
+            },
+            "payloadProperties": {
+                "ga-extension-name": {
+                    "value": "PushAgentV2"
+                },
+                "ga-endpoint": {
+                    "value": "PAv2 Management"
+                },
+                "ga-operation-id": {
+                    "value": "addaccount"
+                },
+                "smeresourceproviderparameter": {
+                    "value": "AzureKubernetes"
+                },
+                "smeaccounttypeparameter": {
+                    "value": "KeyVault"
+                },
+                "smeregionparameter": {
+                    "value": "{REGION}"
+                },
+                "smestorageaccountparameter": {
+                    "value": "{resource_name_prefix_nodash}aksblp{region_short_name}"
+                },
+                "smesecretpathparameter": {
+                    "value": "https://{resource_name_prefix}aksblp{region_short_name}.{keyvault_suffix}/secrets/{resource_name_prefix_nodash}aksblp{region_short_name}-sas"
+                },
+                "smeusagereportingqueueparameter": {
+                    "value": "aksusage"
+                },
+                "smeusagereportingtableparameter": {
+                    "value": "aksusage"
+                },
+                "smeerrorreportingqueueparameter": {
+                    "value": "akserrors"
+                },
+                "smeerrorreportingtableparameter": {
+                    "value": "akserrors"
+                },
+                "smeendpointsuffixparameter": {
+                    "value": "{storage_suffix}"
+                }
+            }
+        }        
+    ]
+}

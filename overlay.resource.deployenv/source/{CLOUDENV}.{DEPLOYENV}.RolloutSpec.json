@@ -1,0 +1,161 @@
+{
+    "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/rolloutSpecification.json",
+    "contentVersion": "1.0.0.0",
+    "rolloutMetadata": {
+        "serviceModelPath": "{CLOUDENV}.{DEPLOYENV}.ServiceModel.json",
+        "scopeBindingsPath": "{CLOUDENV}.{DEPLOYENV}.ScopeBindings.json",
+        "name": "{rollout_name}",
+        "rolloutType": "Major",
+        "buildSource": {
+            "parameters": {
+                "versionFile": "buildver.txt"
+            }
+        },
+        "notification": {
+            "email": {
+                "to": "{notification_email}"
+            }
+        }
+    },
+    "orchestratedSteps": [
+        {
+            "name": "arn.actiongrp",
+            "targetType": "ServiceResource",
+            "targetName": "arn.actiongrp",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "base",
+            "targetType": "ServiceResource",
+            "targetName": "base",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "bus.actiongrp",
+            "targetType": "ServiceResource",
+            "targetName": "bus.actiongrp",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "devhub.frontdoor",
+            "targetType": "ServiceResource",
+            "targetName": "devhub.frontdoor",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "devhubfd.cert.issuers",
+            "targetType": "ServiceResource",
+            "targetName": "devhubfd.cert.issuers",
+            "actions": [
+                "Extension/cert.issuers.onecert-public"
+            ],
+            "dependsOn": [
+                "devhub.frontdoor"
+            ]
+        },
+        {
+            "name": "devhubfd.cert.items",
+            "targetType": "ServiceResource",
+            "targetName": "devhubfd.cert.items",
+            "actions": [
+                "Extension/devhubfd.cert.items.ssl"
+            ],
+            "dependsOn": [
+                "devhubfd.cert.issuers"
+            ]
+        },
+        {
+            "name": "hcp.database.actiongrp",
+            "targetType": "ServiceResource",
+            "targetName": "hcp.database.actiongrp",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "mcs",
+            "targetType": "ServiceResource",
+            "targetName": "mcs",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "mcs-canary-on-prod",
+            "targetType": "ServiceResource",
+            "targetName": "mcs-canary-on-prod",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "oic",
+            "targetType": "ServiceResource",
+            "targetName": "oic",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "oic.cert.issuers",
+            "targetType": "ServiceResource",
+            "targetName": "oic.cert.issuers",
+            "actions": [
+                "Extension/cert.issuers.onecert-public"
+            ],
+            "dependsOn": [
+                "oic"
+            ]
+        },
+        {
+            "name": "oic.cert.items",
+            "targetType": "ServiceResource",
+            "targetName": "oic.cert.items",
+            "actions": [
+                "Extension/oic.cert.items.ssl"
+            ],
+            "dependsOn": [
+                "oic.cert.issuers"
+            ]
+        },
+        {
+            "name": "script",
+            "targetType": "ServiceResource",
+            "targetName": "script",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "base",
+                "oic"
+            ]
+        },
+        {
+            "name": "sms",
+            "targetType": "ServiceResource",
+            "targetName": "sms",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "ta",
+            "targetType": "ServiceResource",
+            "targetName": "ta",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "base"
+            ]
+        }
+    ]
+}

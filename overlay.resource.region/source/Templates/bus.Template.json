@@ -1,0 +1,306 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "type": "string"
+    },
+    "sku": {
+      "type": "string"
+    },
+    "zoneRedundant": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "node_provisioner_sb_namespace": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "2022-10-01-preview",
+      "name": "[parameters('name')]",
+      "type": "Microsoft.ServiceBus/namespaces",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "[parameters('sku')]"
+      },
+      "properties": {
+        "zoneRedundant": "[equals('true',parameters('zoneRedundant'))]",
+        "disableLocalAuth": true
+      }
+    },
+    {
+      "apiVersion": "2021-01-01-preview",
+      "name": "[concat(parameters('name'), '/managedcluster')]",
+      "type": "Microsoft.ServiceBus/namespaces/topics",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('name'))]"
+      ],
+      "properties": {
+        "requiresDuplicateDetection": true,
+        "duplicateDetectionHistoryTimeWindow": "PT20S"
+      }
+    },
+    {
+      "apiVersion": "2021-01-01-preview",
+      "name": "[concat(parameters('name'), '/ccp')]",
+      "type": "Microsoft.ServiceBus/namespaces/topics",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('name'))]"
+      ],
+      "properties": {
+        "requiresDuplicateDetection": true,
+        "duplicateDetectionHistoryTimeWindow": "PT20S"
+      }
+    },
+    {
+      "apiVersion": "2021-01-01-preview",
+      "name": "[concat(parameters('name'), '/agentpool')]",
+      "type": "Microsoft.ServiceBus/namespaces/topics",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('name'))]"
+      ],
+      "properties": {
+        "requiresDuplicateDetection": true,
+        "duplicateDetectionHistoryTimeWindow": "PT20S"
+      }
+    },
+    {
+      "apiVersion": "2021-01-01-preview",
+      "name": "[concat(parameters('name'), '/autoupgradingoperations')]",
+      "type": "Microsoft.ServiceBus/namespaces/topics",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('name'))]"
+      ],
+      "properties": {
+        "requiresDuplicateDetection": false,
+        "duplicateDetectionHistoryTimeWindow": "PT10M"
+      }
+    },
+    {
+      "apiVersion": "2021-01-01-preview",
+      "name": "[concat(parameters('name'), '/managedclusterk8sversionoutdated')]",
+      "type": "Microsoft.ServiceBus/namespaces/topics",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('name'))]"
+      ],
+      "properties": {
+        "requiresDuplicateDetection": true,
+        "duplicateDetectionHistoryTimeWindow": "P1D"
+      }
+    },
+    {
+      "apiVersion": "2021-01-01-preview",
+      "name": "[concat(parameters('name'), '/subscription')]",
+      "type": "Microsoft.ServiceBus/namespaces/topics",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('name'))]"
+      ],
+      "properties": {
+        "requiresDuplicateDetection": true,
+        "duplicateDetectionHistoryTimeWindow": "PT12H"
+      }
+    },
+    {
+      "apiVersion": "2021-01-01-preview",
+      "name": "[concat(parameters('name'), '/system')]",
+      "type": "Microsoft.ServiceBus/namespaces/topics",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('name'))]"
+      ],
+      "properties": {
+        "requiresDuplicateDetection": true,
+        "duplicateDetectionHistoryTimeWindow": "P7D"
+      }
+    },
+    {
+      "type": "Microsoft.ServiceBus/namespaces/queues",
+      "apiVersion": "2021-01-01-preview",
+      "name": "[concat(parameters('name'), '/fleetoperations')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('name'))]"
+      ],
+      "properties": {
+        "deadLetteringOnMessageExpiration": true,
+        "requiresDuplicateDetection": true,
+        "duplicateDetectionHistoryTimeWindow": "PT20S",
+        "maxDeliveryCount": 200,
+        "lockDuration": "PT1M"
+      }
+    },
+    {
+      "type": "Microsoft.ServiceBus/namespaces/queues",
+      "apiVersion": "2021-01-01-preview",
+      "name": "[concat(parameters('name'), '/fleetevents')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('name'))]"
+      ],
+      "properties": {
+        "deadLetteringOnMessageExpiration": true,
+        "requiresDuplicateDetection": true,
+        "duplicateDetectionHistoryTimeWindow": "PT20S",
+        "maxDeliveryCount": 200,
+        "lockDuration": "PT1M"
+      }
+    },
+    {
+      "type": "Microsoft.ServiceBus/namespaces/queues",
+      "apiVersion": "2021-01-01-preview",
+      "name": "[concat(parameters('name'), '/resourceprovider')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('name'))]"
+      ],
+      "properties": {
+        "deadLetteringOnMessageExpiration": true,
+        "requiresDuplicateDetection": true,
+        "duplicateDetectionHistoryTimeWindow": "PT12H",
+        "maxDeliveryCount": 20,
+        "lockDuration": "PT1M"
+      }
+    },
+    {
+      "type": "Microsoft.ServiceBus/namespaces/queues",
+      "apiVersion": "2021-01-01-preview",
+      "name": "[concat(parameters('name'), '/resourceproviderstable')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('name'))]"
+      ],
+      "properties": {
+        "deadLetteringOnMessageExpiration": true,
+        "requiresDuplicateDetection": true,
+        "duplicateDetectionHistoryTimeWindow": "PT12H",
+        "maxDeliveryCount": 20,
+        "lockDuration": "PT1M"
+      }
+    },
+    {
+      "type": "Microsoft.ServiceBus/namespaces/queues",
+      "apiVersion": "2021-01-01-preview",
+      "name": "[concat(parameters('name'), '/resourceprovidercanary')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('name'))]"
+      ],
+      "properties": {
+        "deadLetteringOnMessageExpiration": true,
+        "requiresDuplicateDetection": true,
+        "duplicateDetectionHistoryTimeWindow": "PT12H",
+        "maxDeliveryCount": 20,
+        "lockDuration": "PT1M"
+      }
+    },
+    {
+      "type": "Microsoft.ServiceBus/namespaces/queues",
+      "apiVersion": "2021-01-01-preview",
+      "name": "[concat(parameters('name'), '/autoupgradetasks')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('name'))]"
+      ],
+      "properties": {
+        "deadLetteringOnMessageExpiration": true,
+        "requiresDuplicateDetection": true,
+        "duplicateDetectionHistoryTimeWindow": "PT10M",
+        "maxDeliveryCount": 120,
+        "lockDuration": "PT5M"
+      }
+    },
+    {
+      "type": "Microsoft.ServiceBus/namespaces/queues",
+      "apiVersion": "2021-01-01-preview",
+      "name": "[concat(parameters('name'), '/deploymentsafeguards')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('name'))]"
+      ],
+      "properties": {
+        "deadLetteringOnMessageExpiration": true,
+        "requiresDuplicateDetection": true,
+        "duplicateDetectionHistoryTimeWindow": "PT20S",
+        "maxDeliveryCount": 20,
+        "lockDuration": "PT1M"
+      }
+    },
+    {
+      "type": "Microsoft.ServiceBus/namespaces/queues",
+      "apiVersion": "2021-01-01-preview",
+      "name": "[concat(parameters('name'), '/rl')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('name'))]"
+      ],
+      "properties": {
+        "deadLetteringOnMessageExpiration": true,
+        "requiresDuplicateDetection": true,
+        "duplicateDetectionHistoryTimeWindow": "P7D",
+        "maxDeliveryCount": 5,
+        "lockDuration": "PT1M"
+      }
+    },
+    {
+        "type": "Microsoft.ServiceBus/namespaces/queues",
+        "apiVersion": "2021-01-01-preview",
+        "name": "[concat(parameters('name'), '/servicebusrelayqueuedryrun')]",
+        "dependsOn": [
+            "[resourceId('Microsoft.ServiceBus/namespaces', parameters('name'))]"
+        ],
+        "properties": {
+            "deadLetteringOnMessageExpiration": true,
+            "requiresDuplicateDetection": true,
+            "duplicateDetectionHistoryTimeWindow": "PT12H",
+            "maxDeliveryCount": 20,
+            "lockDuration": "PT1M"
+        }
+    },
+    {
+        "type": "Microsoft.ServiceBus/namespaces/queues",
+        "apiVersion": "2021-01-01-preview",
+        "name": "[concat(parameters('name'), '/servicebusrelayqueuedryruncanary')]",
+        "dependsOn": [
+            "[resourceId('Microsoft.ServiceBus/namespaces', parameters('name'))]"
+        ],
+        "properties": {
+            "deadLetteringOnMessageExpiration": true,
+            "requiresDuplicateDetection": true,
+            "duplicateDetectionHistoryTimeWindow": "PT12H",
+            "maxDeliveryCount": 20,
+            "lockDuration": "PT1M"
+        }
+    },
+    {
+        "type": "Microsoft.ServiceBus/namespaces/queues",
+        "apiVersion": "2021-01-01-preview",
+        "name": "[concat(parameters('name'), '/servicebusrelayqueuedryrunstable')]",
+        "dependsOn": [
+            "[resourceId('Microsoft.ServiceBus/namespaces', parameters('name'))]"
+        ],
+        "properties": {
+            "deadLetteringOnMessageExpiration": true,
+            "requiresDuplicateDetection": true,
+            "duplicateDetectionHistoryTimeWindow": "PT12H",
+            "maxDeliveryCount": 20,
+            "lockDuration": "PT1M"
+        }
+    },
+    {
+      "apiVersion": "2022-10-01-preview",
+      "name": "[parameters('node_provisioner_sb_namespace')]",
+      "type": "Microsoft.ServiceBus/namespaces",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "[parameters('sku')]"
+      },
+      "properties": {
+        "zoneRedundant": "[equals('true',parameters('zoneRedundant'))]",
+        "disableLocalAuth": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,254 @@
+{
+    "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/ServiceModel.json",
+    "contentVersion": "0.0.0.1",
+    "serviceMetadata": {
+        "serviceGroup": "{service_group_name}",
+        "environment": "{CLOUDENV}.{DEPLOYENV}"
+    },
+    "serviceResourceGroupDefinitions": [
+        {
+            "name": "group-definition",
+            "serviceResourceDefinitions": [
+                {
+                    "name": "arn.actiongrp",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\arn.Template.json",
+                            "parametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.arn.Parameters.json"
+                        }
+                    }
+                },
+                {
+                    "name": "base",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\base.Template.json"
+                        },
+                        "extension": {
+                            "RolloutParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.dns.Parameters.json",
+                            "allowedTypes": [
+                                {
+                                    "Type": "Microsoft.Azure.Networking.Dns/DelegateChildZoneExtension"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "bus.actiongrp",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\bus.Template.json",
+                            "parametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.bus.Parameters.json"
+                        }
+                    }
+                },
+                {
+                    "name": "devhub.frontdoor",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\devhub.frontdoor.Template.json",
+                            "parametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.devhub.frontdoor.Parameters.json"
+                        }
+                    }
+                },
+                {
+                    "name": "hcp.database.actiongrp",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\hcp.database.Template.json",
+                            "parametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.hcp.database.Parameters.json"
+                        }
+                    }
+                },
+                {
+                    "name": "mcs",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\mcs.Template.json",
+                            "parametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.mcs.Parameters.json"
+                        }
+                    }
+                },
+                {
+                    "name": "mcs-canary-on-prod",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\mcs-canary-on-prod.Template.json",
+                            "parametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.mcs-canary-on-prod.Parameters.json"
+                        }
+                    }
+                },
+                {
+                    "name": "oic",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\oic.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "ta",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\ta.Template.json",
+                            "parametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.ta.Parameters.json"
+                        }
+                    }
+                },
+                {
+                    "name": "sms",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\sms.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "cert.issuers",
+                    "composedOf": {
+                        "extension": {
+                            "rolloutParametersPath": "Parameters\\cert_issuers.Parameters.json"
+                        }
+                    }
+                },
+                {
+                    "name": "cert.items",
+                    "composedOf": {
+                        "extension": {
+                            "rolloutParametersPath": "Parameters\\cert_items.Parameters.json"
+                        }
+                    }
+                },
+                {
+                    "name": "script",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\CustomScript-linux.Template.json"
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "serviceResourceGroups": [
+        {
+            "azureResourceGroupName": "{resource_name_prefix}overlay-global",
+            "instanceOf": "group-definition",
+            "azureSubscriptionId": "{overlay_resources_subscription_id}",
+            "location": "{global_default_location}",
+            "scopeTags": [
+                {
+                    "name": "{CLOUDENV}.{DEPLOYENV}"
+                }
+            ],
+            "serviceResources": [
+                {
+                    "name": "arn.actiongrp",
+                    "instanceOf": "arn.actiongrp"
+                },
+                {
+                    "name": "base",
+                    "instanceOf": "base",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.base.Parameters.json"
+                },
+                {
+                    "name": "bus.actiongrp",
+                    "instanceOf": "bus.actiongrp"
+                },
+                {
+                    "name": "devhub.frontdoor",
+                    "instanceOf": "devhub.frontdoor"
+                },
+                {
+                    "name": "devhubfd.cert.issuers",
+                    "instanceOf": "cert.issuers",
+                    "scopeTags": [
+                        {
+                            "name": "component.devhubfd"
+                        }
+                    ]
+                },
+                {
+                    "name": "devhubfd.cert.items",
+                    "instanceOf": "cert.items",
+                    "scopeTags": [
+                        {
+                            "name": "component.devhubfd"
+                        }
+                    ]
+                },
+                {
+                    "name": "hcp.database.actiongrp",
+                    "instanceOf": "hcp.database.actiongrp"
+                },
+                {
+                    "name": "mcs",
+                    "instanceOf": "mcs"
+                },
+                {
+                    "name": "oic",
+                    "instanceOf": "oic",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.oic.Parameters.json"
+                },
+                {
+                    "name": "ta",
+                    "instanceOf": "ta"
+                },
+                {
+                    "name": "sms",
+                    "instanceOf": "sms",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.sms.Parameters.json"
+                },
+                {
+                    "name": "oic.cert.issuers",
+                    "instanceOf": "cert.issuers",
+                    "scopeTags": [
+                        {
+                            "name": "component.oic"
+                        }
+                    ]
+                },
+                {
+                    "name": "oic.cert.items",
+                    "instanceOf": "cert.items",
+                    "scopeTags": [
+                        {
+                            "name": "component.oic"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "azureResourceGroupName": "{resource_name_prefix}mcs-canary-on-prod",
+            "instanceOf": "group-definition",
+            "azureSubscriptionId": "{overlay_resources_subscription_id}",
+            "location": "{global_default_location}",
+            "scopeTags": [
+                {
+                    "name": "{CLOUDENV}.{DEPLOYENV}"
+                }
+            ],
+            "serviceResources": [
+                {
+                    "name": "mcs-canary-on-prod",
+                    "instanceOf": "mcs-canary-on-prod"
+                }
+            ]
+        },
+        {
+            "instanceOf": "group-definition",
+            "azureSubscriptionId": "{deploybox_subscription_id}",
+            "azureResourceGroupName": "{resource_name_prefix}deploybox-{rollout_name}-{system:normalized_build_version}",
+            "location": "{deploybox_location}",
+            "serviceResources": [
+                {
+                    "name": "script",
+                    "instanceOf": "script",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.CustomScript-linux.Parameters.json"
+                }
+            ]
+        }
+    ]
+}

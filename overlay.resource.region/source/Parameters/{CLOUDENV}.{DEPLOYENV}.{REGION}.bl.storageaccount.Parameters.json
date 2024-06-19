@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "storageaccount_name": {
+            "value": "{resource_name_prefix_nodash}aksblp{region_short_name}"
+        },
+        "storage_account_sku": {
+            "value": "{bl_storage_account_sku}"
+        },
+        "keyvault_asignee_id": {
+            "value": "{azure_keyvault_objectid}"
+        },
+        "ev2_extension_operator_objectid": {
+            "value": "{ev2_extension_operator_objectid}"
+        }
+    }
+}

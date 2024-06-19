@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "hcp_trafficmanager_name": {
+            "value": "{hcp_trafficmanager_name}"
+        },
+        "hcp_region": {
+            "value": "{domain_region_prefix}{REGION}"
+        },
+        "hcp_domain_dnszone_name": {
+            "value": "hcp.{domain_deployenv}"
+        },
+        "trafficmanager_resource_group_name": {
+            "value": "{resource_name_prefix}overlay-{REGION}"
+        }
+    }
+}

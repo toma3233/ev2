@@ -1,0 +1,37 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "value": "{arn_eventgriddomain_name}"
+    },
+    "location": {
+      "value": "{REGION}"
+    },
+    "arn_metric_alerts_enabled": {
+      "value": "{arn_metric_alerts_enabled}"
+    },
+    "entityAlerts": {
+      "value": [
+        {
+          "severity": 2,
+          "name": "Event Grid Domain Entity High Delivery Attempt Fail Count",
+          "condition_name": "DeliveryAttemptFailCount",
+          "threshold": 1000
+        },
+        {
+          "severity": 3,
+          "name": "Event Grid Domain Entity High Delivery Attempt Fail Count",
+          "condition_name": "DeliveryAttemptFailCount",
+          "threshold": 100
+        }
+      ]
+    },
+    "resourceGroupNameGlobal": {
+      "value": "{resource_name_prefix_global}overlay-global"
+    },
+    "entityActionGroupName": {
+      "value": "{resource_name_prefix_global}eventgriddomain-entity-action-group"
+    }
+  }
+}

@@ -1,0 +1,94 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resource_name_prefix_nodash": {
+            "type": "String"
+        },
+        "oic_cdn_endpoint_name": {
+            "type": "string"
+        },
+        "oic_domain_dnszone_name": {
+            "type": "string"
+        },
+        "oic_storage_account_blob_hostname": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "cdn_profile_name": "[concat(parameters('resource_name_prefix_nodash'),'aksoic')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Cdn/profiles/endpoints",
+            "apiVersion": "2020-09-01",
+            "name": "[concat(variables('cdn_profile_name'),'/',parameters('oic_cdn_endpoint_name'))]",
+            "location": "global",
+            "properties": {
+                "originHostHeader": "[parameters('oic_storage_account_blob_hostname')]",
+                "isHttpAllowed": false,
+                "isHttpsAllowed": true,
+                "queryStringCachingBehavior": "IgnoreQueryString",
+                "contentTypesToCompress": [
+                    "text/javascript",
+                    "application/javascript"
+                ],
+                "isCompressionEnabled": true,
+                "origins": [
+                    {
+                        "name": "origin1",
+                        "properties": {
+                            "hostName": "[parameters('oic_storage_account_blob_hostname')]",
+                            "httpsPort": 443
+                        }
+                    }
+                ],
+                "deliveryPolicy": {
+                    "description": "disable caching for OIDC documents - we need this to allow document update take effect immediately",
+                    "rules": [
+                        {
+                            "name": "oidc_documents_no_cache",
+                            "order": "1",
+                            "actions": [
+                                {
+                                    "name": "CacheExpiration",
+                                    "parameters": {
+                                        "cacheBehavior": "BypassCache",
+                                        "cacheType": "All",
+                                        "cacheDuration": null,
+                                        "@odata.type": "#Microsoft.Azure.Cdn.Models.DeliveryRuleCacheExpirationActionParameters"
+                                    }
+                                }
+                            ],
+                            "conditions": [
+                                {
+                                    "name": "RequestMethod",
+                                    "parameters": {
+                                        "matchValues": [
+                                            "GET"
+                                        ],
+                                        "operator": "Equal",
+                                        "negateCondition": false,
+                                        "transforms": [],
+                                        "@odata.type": "#Microsoft.Azure.Cdn.Models.DeliveryRuleRequestMethodConditionParameters"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/dnszones/CNAME",
+            "name": "[concat(parameters('oic_domain_dnszone_name'), '/oidc')]",
+            "apiVersion": "2016-04-01",
+            "properties": {
+                "TTL": 3600,
+                "CNAMERecord": {
+                    "cname": "[reference(resourceId('Microsoft.Cdn/profiles/endpoints', variables('cdn_profile_name'), parameters('oic_cdn_endpoint_name')), '2020-09-01').hostName]"
+                }
+            }
+        }
+    ]
+}

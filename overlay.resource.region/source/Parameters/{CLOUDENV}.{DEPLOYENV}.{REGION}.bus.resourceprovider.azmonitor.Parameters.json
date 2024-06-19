@@ -1,0 +1,52 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "value": "{bus_namespace_name}"
+    },
+    "location": {
+      "value": "{REGION}"
+    },
+    "bus_resourceprovider_alert_level": {
+      "value": "{bus_resourceprovider_alert_level}"
+    },
+    "bus_resourceprovider_alert_levels_sev3": {
+      "value": {
+        "level1": 240,
+        "level2": 560,
+        "level3": 1000
+      }
+    },
+    "bus_resourceprovider_alert_levels_sev2": {
+      "value": {
+        "level1": 300,
+        "level2": 700,
+        "level3": 1250
+      }
+    },
+    "metric_alerts_enabled": {
+      "value": "{metric_alerts_enabled}"
+    },
+    "alertNames": {
+      "value": [
+        "ResourceProvider Active Message Count SEV3",
+        "ResourceProvider Active Message Count SEV2",
+        "ResourceProvider DLQ Message Count"
+      ]
+    },
+    "metricsAlertSeverities": {
+      "value": [
+        3,
+        2,
+        3
+      ]
+    },
+    "resourceGroupNameGlobal": {
+      "value": "{resource_name_prefix_global}overlay-global"
+    },
+    "actionGroupName": {
+      "value": "{resource_name_prefix_global}resourceprovider-action-group"
+    }
+  }
+}

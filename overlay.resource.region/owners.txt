@@ -1,0 +1,4 @@
+; resource buildout
+maurgi
+aksdevinfra
+

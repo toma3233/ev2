@@ -1,0 +1,7 @@
+ExtractAdditionalVarFromJson: true
+SecretFiles:
+  "icm.pfx.raw": "{resource_name_prefix}aksol-ev2ext/ev2-ext-icm-reader"
+Steps:
+- Script: ensure_package jq
+  Retry: true
+- Script: bash run.sh

@@ -1,0 +1,36 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "diagnostics_enabled": {
+            "value": "{diagnostics_enabled}"
+        },
+        "resource_name_prefix": {
+            "value": "{resource_name_prefix}"
+        },
+        "cosmosdb_account_name": {
+            "value": "{resource_name_prefix}aksrp-{REGION}"
+        },
+        "rp_cosmosdb_zone_redundant": {
+            "value": "{rp_cosmosdb_zone_redundant}"
+        },
+        "autoscale_max_throughput": {
+            "value": 1000
+        },
+        "msi_operator_resource_id": {
+            "value": "{msi_operator_resource_id}"
+        },
+        "ev2_extension_operator_objectid": {
+            "value": "{ev2_extension_operator_objectid}"
+        },
+        "nsp_database_name": {
+            "value": "nspdb"
+        },
+        "nsp_container_name": {
+            "value": "nspcontainer"
+        },
+        "log_analytics_account_name": {
+            "value": "{log_analytics_account_name}"
+        }
+    }
+}

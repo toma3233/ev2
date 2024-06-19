@@ -1,0 +1,3 @@
+default: '!az-cli*,!jumpbox*,!vhd'
+e2e: '!az-cli*,!jumpbox*,!vhd'
+overlay.resource: overlay.resource.*,health.*

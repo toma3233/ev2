@@ -1,0 +1,80 @@
+{
+    "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/scopeBindings.json",
+    "contentVersion": "1.0.0.0",
+    "scopeBindings": [
+        {
+            "scopeTagName": "common",
+            "bindings": [
+                {
+                    "find": "__ACCOUNT__",
+                    "replaceWith": "{geneva_account}"
+                },
+                {
+                    "find": "__ENDPOINT__",
+                    "replaceWith": "{geneva_account_endpoint}"
+                },
+                {
+                    "find": "__DURATION_WAIT_V2__",
+                    "replaceWith": "{health_check_duration_wait_v2}"
+                },
+                {
+                    "find": "__DURATION_ELASTIC_V2__",
+                    "replaceWith": "{health_check_duration_elastic_v2}"
+                },
+                {
+                    "find": "__DURATION_MONITOR_V2__",
+                    "replaceWith": "0"
+                },
+                {
+                    "find": "__RESOURCE_TYPE__",
+                    "replaceWith": "{health_check_resource_type}"   
+                },
+                {
+                    "find": "__VERSION__",
+                    "replaceWith": "{health_check_version}"   
+                },
+                {
+                    "find": "__DURATION_WAIT__",
+                    "replaceWith": "backward compatible, to remove"
+                },
+                {
+                    "find": "__DURATION_ELASTIC__",
+                    "replaceWith": "backward compatible, to remove"
+                },
+                {
+                    "find": "__DURATION_MONITOR__",
+                    "replaceWith": "backward compatible, to remove"
+                },
+                {
+                    "find": "__RELEASE_DEPLOY_ID__",
+                    "replaceWith": "backward compatible, to remove"
+                },
+                {
+                    "find": "__RELEASE_ATTEMPT_NUMBER__",
+                    "replaceWith": "backward compatible, to remove"
+                },
+                {
+                    "find": "__CSE_PIPELINE_VAR__",
+                    "replaceWith": ""
+                },
+                {
+                    "find": "__CSE_ADDITIONAL_VAR__",
+                    "replaceWith": "backward compatible, to remove"
+                }
+            ]
+        },
+        {
+            "scopeTagName": "{CLOUDENV}.{DEPLOYENV}.{REGION}",
+            "bindings": [
+                {
+                    "find": "__DEPLOY_ENV__",
+                    "replaceWith": "{DEPLOYENV}"
+                },
+                {
+                    "find": "__LOCATION__",
+                    "replaceWith": "{region_location}"
+                }
+            ]
+        }
+    ]
+}

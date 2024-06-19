@@ -1,0 +1,189 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resource_name_prefix": {
+            "type": "string"
+        },
+        "primary_location": {
+            "type": "string"
+        },
+        "dnc_db_account_name": {
+            "type": "string"
+        },
+        "dnc_db_primary_zone_redundant": {
+            "type": "string"
+        },
+        "msi_operator_resource_id": {
+            "type": "string"
+        },
+        "ev2_extension_operator_objectid": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "dnc_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'dnc')]",
+        "tenant_id": "[subscription().tenantid]",
+        "dnc_keyvault_name": "[concat(parameters('resource_name_prefix'),'aks','dnc',parameters('primary_location'))]"
+    },
+    "resources": [
+        {
+            "name": "[variables('dnc_user_assigned_identity_name')]",
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+            "apiVersion": "2018-11-30",
+            "location": "[parameters('primary_location')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts",
+            "name": "[parameters('dnc_db_account_name')]",
+            "apiVersion": "2020-04-01",
+            "kind": "GlobalDocumentDB",
+            "location": "[parameters('primary_location')]",
+            "properties": {
+                "publicNetworkAccess": "Enabled",
+                "capabilities": [
+                    {
+                        "name": "EnableTable"
+                    }
+                ],
+                "consistencyPolicy": {
+                    "defaultConsistencyLevel": "Session",
+                    "maxIntervalInSeconds": 5,
+                    "maxStalenessPrefix": 100
+                },
+                "locations": [
+                    {
+                        "locationName": "[parameters('primary_location')]",
+                        "failoverPriority": 0,
+                        "isZoneRedundant": "[equals('true',parameters('dnc_db_primary_zone_redundant'))]"
+                    }
+                ],
+                 "backupPolicy": {
+                    "type": "Periodic",
+                    "periodicModeProperties": {
+                        "backupIntervalInMinutes": 240,
+                        "backupRetentionIntervalInHours": 720
+                    }
+                },
+                "databaseAccountOfferType": "Standard",
+                "enableAutomaticFailover": false,
+                "ipRules": [
+                    {
+                        "ipAddressOrRange": "0.0.0.0"
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/tables",
+            "apiVersion": "2020-04-01",
+            "name": "[concat(parameters('dnc_db_account_name'), '/ipallocations')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('dnc_db_account_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "ipallocations"
+                },
+                "options": {}
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/tables/throughputSettings",
+            "apiVersion": "2020-04-01",
+            "name": "[concat(parameters('dnc_db_account_name'), '/ipallocations/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/tables', parameters('dnc_db_account_name'), 'ipallocations')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('dnc_db_account_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "throughput": 400,
+                    "autoscaleSettings": {
+                        "maxThroughput": 4000
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/tables",
+            "apiVersion": "2020-04-01",
+            "name": "[concat(parameters('dnc_db_account_name'), '/tokeninfo')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('dnc_db_account_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "tokeninfo"
+                },
+                "options": {}
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/tables/throughputSettings",
+            "apiVersion": "2020-04-01",
+            "name": "[concat(parameters('dnc_db_account_name'), '/tokeninfo/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/tables', parameters('dnc_db_account_name'), 'tokeninfo')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('dnc_db_account_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "throughput": 400,
+                    "autoscaleSettings": {
+                        "maxThroughput": 4000
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2019-09-01",
+            "name": "[variables('dnc_keyvault_name')]",
+            "location": "[parameters('primary_location')]",
+            "properties": {
+                "enableSoftDelete": true,
+                "sku": {
+                    "family": "A",
+                    "name": "standard"
+                },
+                "tenantId": "[variables('tenant_id')]",
+                "accessPolicies": [
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[reference(parameters('msi_operator_resource_id'), '2018-11-30').principalId]",
+                        "permissions": {
+                            "secrets": [
+                                "get",
+                                "set",
+                                "list"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', variables('dnc_user_assigned_identity_name')), '2018-11-30').principalId]",
+                        "permissions": {
+                            "secrets": [
+                                "get"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[parameters('ev2_extension_operator_objectid')]",
+                        "permissions": {
+                            "certificates": [
+                                "create",
+                                "get",
+                                "setissuers",
+                                "update"
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

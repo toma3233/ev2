@@ -1,0 +1,15 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "storageaccount_name": {
+            "value": "{resource_name_prefix_nodash}akssb{REGION}"
+        },
+        "storage_account_sku": {
+            "value": "{bus_storage_account_sku}"
+        },
+        "bus_failover_enabled": {
+            "value": "{bus_failover_enabled}"
+        }
+    }
+}

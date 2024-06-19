@@ -1,0 +1,7 @@
+Template:
+  - customscript-linux.CLOUDENV.DEPLOYENV.REGION
+VariableGroup:
+  Variables:
+    rollout_name: aro.resource.region
+
+AutoSelector: true

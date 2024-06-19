@@ -1,0 +1,35 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "metadata": {
+        "description": "Log Analytics workspace to store logs from Overlay Azure Resources (DiagnosticsSettings)"
+    },
+    "parameters": {
+        "resource_name_prefix": {
+            "type": "string"
+        },
+        "diagnostics_enabled": {
+            "type": "string"
+        },
+        "log_analytics_account_name": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "location": "[resourceGroup().location]"
+    },
+    "resources": [
+        {
+            "condition": "[equals(parameters('diagnostics_enabled'),'true')]",
+            "type": "Microsoft.OperationalInsights/workspaces",
+            "apiVersion": "2021-06-01",
+            "name": "[parameters('log_analytics_account_name')]",
+            "location": "[variables('location')]",
+            "properties": {
+                "sku": {
+                    "name": "Standalone"
+                }
+            }
+        }
+    ]
+}

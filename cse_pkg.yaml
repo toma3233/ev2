@@ -1,0 +1,5 @@
+# Define ev2 component and images mapping
+security.trustedaccess.image:
+- trustedaccess-auth
+- trustedaccess-discovery
+- trustedaccess-metadata

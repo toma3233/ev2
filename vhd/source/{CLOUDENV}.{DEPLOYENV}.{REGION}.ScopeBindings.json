@@ -1,0 +1,19 @@
+{
+    "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/scopeBindings.json",
+    "contentVersion": "1.0.0.0",
+    "scopeBindings": [
+        {
+            "scopeTagName": "common",
+            "bindings": [
+                {
+                    "find": "__CSE_PIPELINE_VAR__",
+                    "replaceWith": ""
+                },
+                {
+                    "find": "__CSE_ADDITIONAL_VAR__",
+                    "replaceWith": "{cse_additional_var}"
+                }
+            ]
+        }
+    ]
+}

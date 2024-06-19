@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appName": {
+            "value": "{resource_name_prefix}AKS-HCP-{REGION}"
+        },
+        "publisher": {
+            "value": "{hcp_publisher}"
+        },
+        "deploy": {
+            "value": "{hcp_appDeploy}"
+        },
+        "ownerIds": {
+            "value": "{hcp_sp_owners}"
+        }
+    }
+}

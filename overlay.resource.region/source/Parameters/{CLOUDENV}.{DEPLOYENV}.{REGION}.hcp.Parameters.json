@@ -1,0 +1,36 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "deploy_hcp_endpoint": {
+            "value": "{hcp_deploy_trafficmanager_endpoint}"
+        },
+        "endpoint_suffix": {
+            "value": ".{REGION}.{cloud_dns_suffix}"
+        },
+        "ev2_extension_operator_objectid": {
+            "value": "{ev2_extension_operator_objectid}"
+        },
+        "hcp_keyvault_name": {
+            "value": "{hcp_keyvault_name}"
+        },
+        "hcp_trafficmanager_name": {
+            "value": "{hcp_trafficmanager_name}"
+        },
+        "hcp_trafficmanager_relative_name": {
+            "value": "{hcp_trafficmanager_relative_name}"
+        },
+        "jitgroup_objectid": {
+            "value": "{jitgroup_objectid}"
+        },
+        "resource_name_prefix": {
+            "value": "{resource_name_prefix}"
+        },
+        "service_cluster_name": {
+            "value": "{service_cluster_name}"
+        },
+        "backup_service_cluster_name": {
+            "value": "{backup_service_cluster_name}"
+        }
+    }
+}

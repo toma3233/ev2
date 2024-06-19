@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "value": "{bus_namespace_name}"
+    },
+    "location": {
+      "value": "{REGION}"
+    },
+    "metric_alerts_enabled": {
+      "value": "{metric_alerts_enabled}"
+    },
+    "resourceGroupNameGlobal": {
+      "value": "{resource_name_prefix_global}overlay-global"
+    },
+    "actionGroupName": {
+      "value": "{resource_name_prefix_global}fleetoperations-action-group"
+    }
+  }
+}

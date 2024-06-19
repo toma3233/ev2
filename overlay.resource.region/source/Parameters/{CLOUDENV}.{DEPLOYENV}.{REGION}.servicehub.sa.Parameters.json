@@ -1,0 +1,12 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "storageaccount_name": {
+            "value": "{resource_name_prefix_nodash}shusa{region_short_name}"
+        },
+        "storage_sku": {
+            "value": "{most_reliable_storage_sku}"
+        }
+    }
+}

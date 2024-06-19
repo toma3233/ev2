@@ -1,0 +1,12 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "action_group_name": {
+        "value": "hcpdbactiongroup"
+      },
+      "action_group_short_name": {
+        "value": "hcpsqlactalt"
+      }
+    }
+  }

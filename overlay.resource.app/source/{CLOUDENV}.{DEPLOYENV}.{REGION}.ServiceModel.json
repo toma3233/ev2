@@ -1,0 +1,64 @@
+{
+    "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/ServiceModel.json",
+    "contentVersion": "0.0.0.1",
+    "serviceMetadata": {
+        "serviceGroup": "{service_group_name}",
+        "environment": "{CLOUDENV}.{DEPLOYENV}.{REGION}"
+    },
+    "serviceResourceGroupDefinitions": [
+        {
+            "name": "group-definition",
+            "serviceResourceDefinitions": [
+                {
+                    "name": "arm.hcp.app",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\hcp.app.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.msi-connector-svc.app",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\msi-connector-svc.app.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.signer.app",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\signer.app.Template.json"
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "serviceResourceGroups": [
+        {
+            "azureResourceGroupName": "{resource_name_prefix_global}identity-global",
+            "azureSubscriptionId": "{identity_resources_subscription_id}",
+            "location": "{global_default_location}",
+            "instanceOf": "group-definition",
+            "serviceResources": [
+                {
+                    "name": "hcp.app",
+                    "instanceOf": "arm.hcp.app",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.hcp.app.Parameters.json"
+                },
+                {
+                    "name": "msi-connector-svc.app",
+                    "instanceOf": "arm.msi-connector-svc.app",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.msi-connector-svc.app.Parameters.json"
+                },
+                {
+                    "name": "signer.app",
+                    "instanceOf": "arm.signer.app",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.signer.app.Parameters.json"
+                }
+            ]
+        }
+    ]
+}

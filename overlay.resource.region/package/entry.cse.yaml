@@ -1,0 +1,517 @@
+VariableGroup:
+  Variables:
+    ACR_ACSDEPLOYMENT_RESOURCE_GROUP: "{resource_name_prefix}rp-common"
+    ACR_ACSDEPLOYMENT_SUB_ID: "{global_subscription_id}"
+    ARN_EG_NAME: "{resource_name_prefix}aksarnegd{REGION}"
+    ARN_EVENTGRIDDOMAIN_ID: "/subscriptions/{overlay_resources_subscription_id}/resourceGroups/{OVERLAY_RESOURCE_GROUP_NAME}/providers/Microsoft.EventGrid/domains/{resource_name_prefix}aksarnegd{REGION}"
+    EVENTGRID_DATA_SENDER_ROLE: "d5a91429-5739-47e2-a06b-3470a27159e7"
+    HCP_SQL_AUDIT_STORAGE_NAME: "{resource_name_prefix_nodash}akssa{REGION}"
+    HCP_DBNAME: "regionaldb"
+    HCP_DB_ROLE: "db_owner" #NOTE@ismille: Currently hcp uses sqldbuser or dbadmin for regional db connection, we will provision comparable owner roles first and fix permissions scope later
+    HCP_REGIONALSQLNAME: "{resource_name_prefix}{REGION}-regional"
+    HCP_REGIONAL_SQL_SUBSCRIPTION_ID: "{overlay_resources_subscription_id}"
+    HCP_REGIONAL_SQL_RESOURCE_GROUP_NAME: "{resource_name_prefix}overlay-{REGION}"
+    OVERLAY_RESOURCE_GROUP_NAME: "{resource_name_prefix}overlay-{REGION}"
+    SERVICEHUB_RESOURCE_GROUP_NAME: "{resource_name_prefix}servicehub-{REGION}"
+    SERVICEHUB_RESOURCE_GROUP: "/subscriptions/{overlay_resources_subscription_id}/resourceGroups/{SERVICEHUB_RESOURCE_GROUP_NAME}"
+    RP_DBNAME: "regionaldb"
+    RP_DB_ROLE: "db_owner" #NOTE@ismille: these roles may change in the future
+    RP_SECTORSQLNAME: "{REGION}-regional"
+    RP_SQL_SUBSCRIPTION_ID: "{overlay_resources_subscription_id}"
+    RP_SQL_RESOURCE_GROUP_NAME: "{resource_name_prefix}overlay-{REGION}"
+    REGIONAL_STORAGE_ID: "/subscriptions/{overlay_resources_subscription_id}/resourceGroups/{OVERLAY_RESOURCE_GROUP_NAME}/providers/Microsoft.Storage/storageAccounts/{resource_name_prefix_nodash}akstgl{REGION}"
+    REGION_SUBSCRIPTION_ID: "{region_subscription_id}"
+    STORAGE_BLOB_DATA_READER_ROLE: "2a2b9908-6ea1-4ae2-8e65-a410df84e7d1"
+    STORAGE_BLOB_DATA_CONTRIBUTOR_ROLE: "ba92f5b4-2d11-453d-a403-e96b0029c9fe"
+    STORAGE_ACCOUNT_CONTRIBUTOR_ROLE: "17d1049b-9a84-46fb-8f53-869881c3d3ab"
+    STORAGE_ACCOUNT_KEY_OPERATOR_ROLE: "81a9662b-bebf-436f-a333-f67b29880f12"
+    TAG_CONTRIBUTOR_ROLE: "4a9ae827-6dc8-4573-8ac7-8239d42aa03f"
+    EVENT_HUBS_DATA_SENDER_ROLE: "2b629674-e913-4c01-ae53-ef4638d8f975"
+    EVENT_HUBS_DATA_RECEIVER_ROLE: "a638d3c7-ab3a-418d-83e6-5f17a39d4fde"
+    DNS_ZONE_CONTRIBUTOR_ROLE: "befefa01-2a29-4197-83a8-272ff33ce314"
+    DNS_ZONE_ID: "/subscriptions/{region_subscription_id}/resourceGroups/{resource_name_prefix}hcp-underlay-{REGION}/providers/Microsoft.Network/dnszones/{REGION}.{domain_cx_root}"
+    OM_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "{resource_name_prefix_nodash}etcdbk{REGION}"
+    OM_ETCD_RESOURCE_GROUP_NAME: "{resource_name_prefix}overlay-{REGION}"
+    OM_ETCD_STORAGE_ACCOUNT_SUBSCRIPTION_ID: "{overlay_resources_subscription_id}"
+    OM_LEGACY_ETCD_RESOURCE_GROUP_NAME: "{resource_name_prefix}overlay-{REGION}"
+    OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "{resource_name_prefix_nodash}etcd{REGION}"
+    OM_DEPLOY_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT: "true"
+    OM_LEGACY_STORAGE_ACCOUNT_REGION_SUBSCRIPTION_ID: "{overlay_resources_subscription_id}"
+    SERVICEBUS_NAMESPACE_NAME: "{resource_name_prefix}akssvcbus-{REGION}"
+    NODEPROVISIONER_NAMESPACE_NAME: "{resource_name_prefix}nodeprovisionersvcbus-{REGION}"
+    COSTANALYSIS_NAMESPACE_PREFIX: "/subscriptions/{overlay_resources_subscription_id}/resourceGroups/{OVERLAY_RESOURCE_GROUP_NAME}/providers/Microsoft.EventHub/namespaces/{resource_name_prefix}akseh-{REGION}"
+    COSTANALYSIS_DATA_EVENTHUB: "{COSTANALYSIS_NAMESPACE_PREFIX}/eventhubs/cost-analysis-primary"
+    COSTANALYSIS_DATA_EVENTHUB_UNPARTIITONED: "{COSTANALYSIS_NAMESPACE_PREFIX}/eventhubs/cost-analysis"
+    COSTANALYSIS_RESPONSE_EVENTHUB: "{COSTANALYSIS_NAMESPACE_PREFIX}/eventhubs/pav2-response-primary"
+    COSTANALYSIS_RESPONSE_EVENTHUB_UNPARTITIONED: "{COSTANALYSIS_NAMESPACE_PREFIX}/eventhubs/pav2-response"
+    # This is the same as BL_PAV2_OBJECTID in all environments except MC
+    # and FF prod.
+    # https://eng.ms/docs/cloud-ai-platform/commerce-ecosystems/commerce-platform-experiences/star-assets-saas-api-recurrence-pav2-airs-and-sponsorship/push-agent-v2/push-agent-documents-and-tsgs/onboarding/pav2aadappid
+    COSTANALYSIS_PAV2_OBJECTID: ""
+    BL_PAV2_OBJECTID: ""
+    ZONE_REDUNDANT: "true"
+    RESOURCE_SUFFIX: ""
+  Match:
+    Key: CLOUDENV
+    Values:
+      gb:
+        Variables:
+          BL_PAV2_OBJECTID: "41181ad2-1829-4a61-9feb-f976788a495d" #PAv2 first party app in AME
+          COSTANALYSIS_PAV2_OBJECTID: "41181ad2-1829-4a61-9feb-f976788a495d" #PAv2 first party app in AME
+        Match:
+          Key: DEPLOYENV
+          Values:
+            test:
+              Variables:
+                BL_PAV2_OBJECTID: "38a1ad03-90aa-4f98-9ba9-8d24509db898" # PAv2-Test first party app in MSIT
+                COSTANALYSIS_PAV2_OBJECTID: "38a1ad03-90aa-4f98-9ba9-8d24509db898" # PAv2-Test first party app in MSIT
+                HCP_DBNAME: "regionaldb"
+                HCP_REGIONALSQLNAME: "{resource_name_prefix}eastus2-regional"
+                RP_SECTORSQLNAME: "{resource_name_prefix}eastus2-regional"
+            int:
+              Variables:
+                SIG_SUBSCRIPTION_ID: "109a5e88-712a-48ae-9078-9ca8b3c81345"
+                ACR_ACSDEPLOYMENT_RESOURCE_GROUP: "rp-common-intv2"
+                HCP_DBNAME: "regionaldb{REGION}"
+                HCP_REGIONALSQLNAME: "acs-{REGION}-intv2"
+                RP_DBNAME: "acs"
+                RP_SECTORSQLNAME: "acs-{REGION}-intv2"
+                OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdintv2{REGION}"
+                DNS_ZONE_ID: "/subscriptions/{region_subscription_id}/resourceGroups/hcp-underlay-intv2-{REGION}/providers/Microsoft.Network/dnszones/{REGION}.{domain_cx_root}"
+                BL_PAV2_OBJECTID: "22d8fef6-b57f-4dd0-9a17-619a51687125" # PAv2-Test first party app in ame
+                COSTANALYSIS_PAV2_OBJECTID: "22d8fef6-b57f-4dd0-9a17-619a51687125" # PAv2-Test first party app in ame
+              Match:
+                Key: REGION
+                Values:
+                  eastus2euap:
+                    Variables:
+                      HCP_DBNAME: "regionaldb"
+                      HCP_REGIONALSQLNAME: "int-eastus2euap-regional"
+                      RP_SECTORSQLNAME: "int-eastus2euap-regional"
+                      OM_DEPLOY_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT: "false"
+                      HCP_TARGETSQLNAME: "int-eastus2euap-regional-target"
+            dev:
+              Variables:
+            staging:
+              Variables:
+                SIG_SUBSCRIPTION_ID: "109a5e88-712a-48ae-9078-9ca8b3c81345"
+                ACR_ACSDEPLOYMENT_SUB_ID: "a6cec963-c286-421a-b449-e842b26cee9a" # Azure Container Service - Prod
+                HCP_DBNAME: "regionaldbwestus2"
+                HCP_REGIONALSQLNAME: "acs-{REGION}-staging"
+                RP_DBNAME: "acs"
+                RP_SECTORSQLNAME: "acs-{REGION}-staging"
+                OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdstgwestus2"
+                DNS_ZONE_ID: "/subscriptions/{region_subscription_id}/resourceGroups/hcp-underlay-stg-{REGION}/providers/Microsoft.Network/dnszones/{REGION}.{domain_cx_root}"
+            prod:
+              Variables:
+                SIG_SUBSCRIPTION_ID: "109a5e88-712a-48ae-9078-9ca8b3c81345"
+                ACR_ACSDEPLOYMENT_SUB_ID: "a6cec963-c286-421a-b449-e842b26cee9a" # Azure Container Service - Prod
+              Match:
+                Key: REGION
+                Values:
+                  australiacentral:
+                    Variables:
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdaustraliacentral"
+                      ZONE_REDUNDANT: "false"
+                  australiacentral2:
+                    Variables:
+                      ZONE_REDUNDANT: "false"
+                  australiaeast:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-australiaeast"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-australiasector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdaustraliaeast"
+                  australiasoutheast:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-australiaeast"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-australiasector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdaustraliasoutheast"
+                      ZONE_REDUNDANT: "false"
+                  brazilsouth:
+                    Variables:
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdbrazilsouth"
+                  brazilsoutheast:
+                    Variables:
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdbrazilsoutheast"
+                      ZONE_REDUNDANT: "false"
+                  canadaeast:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-canadaeast"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-canadasector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "hcp0001canadaeastsvc"
+                      ZONE_REDUNDANT: "false"
+                  canadacentral:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-canadaeast"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-canadasector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "hcp0001canadacentralsvc"
+                  centralindia:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-southindia"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-indiasector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdcentralindia"
+                  centralus:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-eastus2"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-ussector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "hcp0001centralussvc"
+                  centraluseuap:
+                    Variables:
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdcentraluseuap"
+                      ZONE_REDUNDANT: "false"
+                  eastasia:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-eastasia"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-asiasector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdeastasia"
+                  eastus:
+                    Variables:
+                      HCP_REGIONALSQLNAME: "aks-{REGION}-regional"
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-eastus2"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-ussector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "hcp0001eastussvc"
+                  eastus2:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-eastus2"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-ussector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdeastus2"
+                  eastus2euap:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-westcentralus"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-uscanary"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdeastus2euap"
+                      HCP_TARGETSQLNAME: "aks-{REGION}-regional"
+                      HCP_SQL_AUDIT_STORAGE_NAME: "{resource_name_prefix_nodash}sa{REGION}"
+                  francecentral:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-francecentral"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-francesector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdfrancecentral"
+                  francesouth:
+                    Variables:
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdfrancesouth"
+                      ZONE_REDUNDANT: "false"
+                  germanynorth:
+                    Variables:
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdgermanynorth"
+                      ZONE_REDUNDANT: "false"
+                  germanywestcentral:
+                    Variables:
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdgermanywestcentral"
+                  japaneast:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-japaneast"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-japansector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdjapaneast"
+                  japanwest:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-japaneast"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-japansector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdjapanwest"
+                      ZONE_REDUNDANT: "false"
+                  jioindiacentral:
+                    Variables:
+                      ZONE_REDUNDANT: "false"
+                  jioindiawest:
+                    Variables:
+                      ZONE_REDUNDANT: "false"
+                  koreacentral:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-koreacentral"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-koreasector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdkoreacentral"
+                  koreasouth:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-koreacentral"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-koreasector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdkoreasouth"
+                      ZONE_REDUNDANT: "false"
+                  malaysiasouth:
+                    Variables:
+                      ZONE_REDUNDANT: "false"
+                  northcentralus:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-eastus2"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-ussector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdnorthcentralus"
+                      ZONE_REDUNDANT: "false"
+                  northeurope:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-westeurope"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-europesector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdnortheurope"
+                  norwayeast:
+                    Variables:
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdnorwayeast"
+                  norwaywest:
+                    Variables:
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdnorwaywest"
+                      ZONE_REDUNDANT: "false"
+                  southafricanorth:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-southafricanorth"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-africasector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdsouthafricanorth"
+                  southafricawest:
+                    Variables:
+                      ZONE_REDUNDANT: "false"
+                  southcentralus:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-eastus2"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-ussector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdsouthcentralus"
+                  southeastasia:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-eastasia"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-asiasector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdsoutheastasia"
+                  southindia:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-southindia"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-indiasector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdsouthindia"
+                      ZONE_REDUNDANT: "false"
+                  swedensouth:
+                    Variables:
+                      ZONE_REDUNDANT: "false"
+                  switzerlandnorth:
+                    Variables:
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdswitzerlandnorth"
+                  switzerlandwest:
+                    Variables:
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdswitzerlandwest"
+                      ZONE_REDUNDANT: "false"
+                  uaecentral:
+                    Variables:
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcduaecentral"
+                      ZONE_REDUNDANT: "false"
+                  uaenorth:
+                    Variables:
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcduaenorth"
+                  uksouth:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-ukwest"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-uksector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcduksouth"
+                  ukwest:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-ukwest"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-uksector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdukwest"
+                      ZONE_REDUNDANT: "false"
+                  westcentralus:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-westcentralus"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-uscanary"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdwestcentralus"
+                      ZONE_REDUNDANT: "false"
+                  westeurope:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-westeurope"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-europesector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "hcp0001westeuropesvc"
+                  westus:
+                    Variables:
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-eastus2"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-ussector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdwestus"
+                      ZONE_REDUNDANT: "false"
+                  westus2:
+                    Variables:
+                      HCP_REGIONALSQLNAME: "aks-{REGION}-regional"
+                      RP_DBNAME: "acs"
+                      RP_SECTORSQLNAME: "acs-eastus2"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-ussector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      OM_LEGACY_ETCD_BACKUP_STORAGE_ACCOUNT_NAME: "etcdwestus2"
+      mc:
+        Match:
+          Key: DEPLOYENV
+          Values:
+            int:
+              Variables:
+                BL_PAV2_OBJECTID: "4ea0e29e-f7ae-4d4e-a885-efabf5ef0646" # int-aksoverlay-msi-operator
+                COSTANALYSIS_PAV2_OBJECTID: "4ea0e29e-f7ae-4d4e-a885-efabf5ef0646" # int-aksoverlay-msi-operator
+                RP_SECTORSQLNAME: "int-acs-chinaeast2-rp-primary"
+                RP_DBNAME: "acsrpdb"
+                RP_SQL_RESOURCE_GROUP_NAME: "int-sql-chinaintsector"
+                ZONE_REDUNDANT: "false"
+            prod:
+              Variables:
+                BL_PAV2_OBJECTID: "b557b23c-fc16-47fc-93f7-1747212a2d1b" # PAv2SP-MC - PAv2 Service Principal Object ID
+                COSTANALYSIS_PAV2_OBJECTID: "822b26e9-9b2a-4e2b-9a3e-0fa52c3382fb" # Push Agent V2 - MC
+              Match:
+                Key: REGION
+                Values:
+                  chinanorth2:
+                    Variables:
+                      RP_SECTORSQLNAME: "hcp-chinaeast2-rp-primary"
+                      RP_DBNAME: "acsrpdb"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-chinasector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      ZONE_REDUNDANT: "false"
+                  chinaeast2:
+                    Variables:
+                      RP_SECTORSQLNAME: "hcp-chinaeast2-rp-primary"
+                      RP_DBNAME: "acsrpdb"
+                      RP_SQL_RESOURCE_GROUP_NAME: "sql-chinasector"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      ZONE_REDUNDANT: "false"
+                  chinaeast3:
+                    Variables:
+                      ZONE_REDUNDANT: "false"
+      ff:
+        Match:
+          Key: DEPLOYENV
+          Values:
+            int:
+              Variables:
+                BL_PAV2_OBJECTID: "9db5f06b-1139-465a-9ad9-155f8b6e42f2" # int-aksoverlay-msi-operator
+                COSTANALYSIS_PAV2_OBJECTID: "9db5f06b-1139-465a-9ad9-155f8b6e42f2" # int-aksoverlay-msi-operator
+                HCP_REGIONALSQLNAME: "int-usgovvirginia-regional"
+                RP_SECTORSQLNAME: "int-hcp-usgovvirginia-rp-primary"
+                RP_DBNAME: "acsrpdb"
+                RP_SQL_RESOURCE_GROUP_NAME: "int-sql-usgovintsector"
+                ZONE_REDUNDANT: "false"
+              Match:
+                Key: REGION
+                Values:
+                  usgovvirginia:
+                    Variables:
+                      region_short_name: virginia
+            prod:
+              Variables:
+                BL_PAV2_OBJECTID: "347577e9-2d24-401f-93ba-eabb0eaf6f06" # PAv2SP-FF - PAv2 Service Principal Object ID
+                COSTANALYSIS_PAV2_OBJECTID: "fba8edf9-db3c-4820-a5a7-48ddd2e344ce" # Push Agent V2 - FF
+                ZONE_REDUNDANT: "false"
+              Match:
+                Key: REGION
+                Values:
+                  usgovvirginia:
+                    Variables:
+                      RP_SECTORSQLNAME: "hcp-usgovvirginia-rp-primary"
+                      RP_DBNAME: "acsrpdb"
+                      RP_SQL_SUBSCRIPTION_ID: "{global_subscription_id}"
+                      ZONE_REDUNDANT: "true"
+      ex:
+        Variables:
+          BL_PAV2_OBJECTID: "94b5963e-775e-4906-a0bb-f16316620750" # PAv2SP-USNat - PAv2 Service Principal Object ID
+          COSTANALYSIS_PAV2_OBJECTID: "0f3446e0-5a0b-47d2-a8df-24748e561342" # Push Agent V2 (First Party) - USNat
+          ZONE_REDUNDANT: "false"
+      rx:
+        Variables:
+          BL_PAV2_OBJECTID: "c86685ec-c856-47d0-ab70-1839eb6424f8" # PAv2SP-USSec - PAv2 Service Principal Object ID
+          COSTANALYSIS_PAV2_OBJECTID: "4d194b3f-891d-4fc6-a5a5-fa950d7cc6e7" #  Push Agent V2 (First Party) - USSec
+          ZONE_REDUNDANT: "false"
+Steps:
+  - Script: ensure_package jq
+    Retry: true
+  - Script: ensure_azlogin "${OVERLAY_RESOURCES_SUBSCRIPTION_ID}"
+    Retry: true
+  - Script: |
+      function call() {
+        echo "--------------------------------"
+        echo "Run '$@' begin"
+        $@
+        echo "Run '$@' end"
+        echo "--------------------------------"
+      }
+
+      echo "Run overlay.resource.region script for ${CLOUDENV}.${DEPLOYENV}.${REGION} begin"
+
+      call bash msi-assignment.sh
+      call bash common.cleanup.sh
+      call bash common.sql.sh
+      call bash arn.sh
+      call bash autoupgrader.sh
+      call bash billing.sh
+      call bash bl.create-role-assignments.sh
+      call bash bl.create-billing-tables-and-queues.sh
+      call bash devhub.sh
+      call bash dnc.sh
+      call bash dnc-acrpull.sh
+      call bash dpl.sh
+      call bash eventgrid.sh
+      call bash flt.sh
+      call bash grd.sh
+      call bash hcp.sh
+      call bash jitcontroller.sh
+      call bash jithandler.sh
+      call bash map.sh
+      call bash mcs.sh
+      call bash mc-backfill.sh
+      call bash mc-reconcile.sh
+      call bash msi-svc.sh
+      call bash obo.sh
+      call bash oic.sh
+      call bash om.sh
+      call bash pc.sh
+      call bash pool-controller.sh
+      call bash qw.sh
+      call bash releasetracker.sh
+      call bash progressiverollout.sh
+      call bash servicebusrelay.sh
+      call bash regionallooper.sh
+      call bash rl.sh
+      call bash rp.sh
+      call bash moveetcdstg.sh
+      call bash addonacr.sh
+      call bash costanalysis.sh
+      call bash nodeprovisioner.sh
+      call bash servicehub.sh
+      call bash featurebilling.sh
+
+      echo "Run overlay.resource.region script for ${CLOUDENV}.${DEPLOYENV}.${REGION} end"
+    Retry: true

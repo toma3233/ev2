@@ -1,0 +1,113 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "resource_name_prefix": {
+      "type": "string"
+    },
+    "vault_name": {
+      "type": "string"
+    },
+    "sku_name": {
+      "type": "string"
+    },
+    "ev2_extension_operator_objectid": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "location": "[resourceGroup().location]",
+    "tenant_id": "[subscription().tenantid]",
+    "connector_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'msi-feature-connector')]",
+    "zen_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'zen')]",
+    "connector_svc_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'msi-feature-connector-svc')]",
+    "refresher_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'msi-feature-refresher')]",
+    "deployer_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'deployer')]",
+    "deployer_svc_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'deployer-svc')]"
+  },
+  "resources": [
+    {
+      "name": "[variables('connector_user_assigned_identity_name')]",
+      "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+      "apiVersion": "2018-11-30",
+      "location": "[variables('location')]",
+      "properties": {}
+    },
+    {
+      "name": "[variables('zen_user_assigned_identity_name')]",
+      "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+      "apiVersion": "2018-11-30",
+      "location": "[variables('location')]",
+      "properties": {}
+    },
+    {
+      "name": "[variables('connector_svc_user_assigned_identity_name')]",
+      "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+      "apiVersion": "2018-11-30",
+      "location": "[variables('location')]",
+      "properties": {}
+    },
+    {
+      "name": "[variables('refresher_user_assigned_identity_name')]",
+      "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+      "apiVersion": "2018-11-30",
+      "location": "[variables('location')]",
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "2019-09-01",
+      "name": "[parameters('vault_name')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "enableSoftDelete": true,
+        "sku": {
+          "family": "A",
+          "name": "[parameters('sku_name')]"
+        },
+        "tenantId": "[variables('tenant_id')]",
+        "accessPolicies": [
+          {
+            "tenantId": "[variables('tenant_id')]",
+            "objectId": "[reference(variables('refresher_user_assigned_identity_name'), '2018-11-30').principalId]",
+            "permissions": {
+              "secrets": [
+                "get"
+              ]
+            }
+          },
+          {
+            "tenantId": "[variables('tenant_id')]",
+            "objectId": "[parameters('ev2_extension_operator_objectid')]",
+            "permissions": {
+              "certificates": [
+                "create",
+                "get",
+                "setissuers",
+                "update"
+              ]
+            }
+          },
+          {
+            "tenantId": "[variables('tenant_id')]",
+            "objectId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', variables('deployer_user_assigned_identity_name')), '2018-11-30').principalId]",
+            "permissions": {
+              "secrets": [
+                "get"
+              ]
+            }
+          },
+          {
+            "tenantId": "[variables('tenant_id')]",
+            "objectId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', variables('deployer_svc_user_assigned_identity_name')), '2018-11-30').principalId]",
+            "permissions": {
+              "secrets": [
+                "get"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

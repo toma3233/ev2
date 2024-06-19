@@ -1,0 +1,39 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploy_networking_resources": {
+      "value": "{devhub_deploy_networking_config}"
+    },
+    "resource_name_prefix": {
+      "value": "{resource_name_prefix}"
+    },
+    "vault_name": {
+      "value": "{resource_name_prefix}aksdh{REGION}"
+    },
+    "vault_sku_name": {
+      "value": "standard"
+    },
+    "ev2_extension_operator_objectid": {
+      "value": "{ev2_extension_operator_objectid}"
+    },
+    "msi_operator_resource_id": {
+      "value": "{msi_operator_resource_id}"
+    },
+    "endpoint_suffix": {
+      "value": ".{REGION}.{cloud_dns_suffix}"
+    },
+    "devhub_trafficmanager_name": {
+      "value": "{devhub_trafficmanager_name}"
+    },
+    "devhub_trafficmanager_relative_name": {
+      "value": "{devhub_trafficmanager_relative_name}"
+    },
+    "service_cluster_name": {
+      "value": "{service_cluster_name}"
+    },
+    "backup_service_cluster_name": {
+      "value": "{backup_service_cluster_name}"
+    }
+  }
+}

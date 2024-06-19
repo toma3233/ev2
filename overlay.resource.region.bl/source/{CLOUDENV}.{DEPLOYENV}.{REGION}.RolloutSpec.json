@@ -1,0 +1,32 @@
+{
+    "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/rolloutSpecification.json",
+    "contentVersion": "1.0.0.0",
+    "rolloutMetadata": {
+        "serviceModelPath": "{CLOUDENV}.{DEPLOYENV}.{REGION}.ServiceModel.json",
+        "scopeBindingsPath": "{CLOUDENV}.{DEPLOYENV}.{REGION}.ScopeBindings.json",
+        "name": "overlay.resource.region.bl",
+        "rolloutType": "Major",
+        "buildSource": {
+            "parameters": {
+                "versionFile": "buildver.txt"
+            }
+        },
+        "notification": {
+            "email": {
+                "to": "{notification_email}"
+            }
+        }
+    },
+    "orchestratedSteps": [
+        {
+            "name": "bl.pav2.onboard",
+            "targetType": "ServiceResource",
+            "targetName": "bl.pav2.onboard",
+            "actions": [
+                "Extension/ManageStorageAccount",
+                "Extension/SetSasDefinition",
+                "Extension/PAv2AddAccountOperation"
+            ]
+        }
+    ]
+}

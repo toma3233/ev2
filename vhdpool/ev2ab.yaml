@@ -1,0 +1,28 @@
+Template:
+  - customscript-linux.CLOUDENV.DEPLOYENV.REGION
+  - rolloutspec.CLOUDENV.DEPLOYENV.REGION
+VariableGroup:
+  Variables:
+    rollout_name: vhdpool
+  Match:
+    Key: CLOUDENV
+    Values:
+      gb:
+        Match:
+          Key: DEPLOYENV
+          Values:
+            test:
+              Match:
+                Key: REGION
+                Values:
+                  eastus:
+                  westus2:
+                  eastus2euap:
+                  australiaeast:
+                  australiacentral:
+                  japaneast:
+                  brazilsouth:
+                  centraluseuap:
+                  canadaeast: # redundant placeholder regions for future testing task use
+                  southeastasia:
+AutoSelector: true

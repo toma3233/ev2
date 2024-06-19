@@ -1,0 +1,98 @@
+Template:
+  - customscript-linux.CLOUDENV.DEPLOYENV.REGION
+VariableGroup:
+  Variables:
+    # config shared between configs
+    rollout_name: overlay.resource.app
+
+    hcp_publisher: "MSAzureCloud.onmicrosoft.com"
+    hcp_appDeploy: "yes"
+    hcp_sp_owners: "a23e4c2a-dedc-4eec-baee-b55da8e88fae,32dcba9f-9780-4db0-91e4-4e23b154fc2e"
+    # weinongw@ame.gbl #thgamble@ame.gbl
+
+    msi_connector_svc_publisher: "MSAzureCloud.onmicrosoft.com"
+    msi_connector_svc_appDeploy: "yes"
+    msi_connector_svc_sp_owners: "a23e4c2a-dedc-4eec-baee-b55da8e88fae,b4f09dbd-e114-41ff-9c16-37b712de387c"
+    # weinongw@ame.gbl #bahe@ame.gbl
+
+    signer_publisher: "MSAzureCloud.onmicrosoft.com"
+    signer_appDeploy: "yes"
+    signer_sp_owners: "a23e4c2a-dedc-4eec-baee-b55da8e88fae,b4f09dbd-e114-41ff-9c16-37b712de387c"
+    # weinongw@ame.gbl #bahe@ame.gbl
+
+    identity_resources_subscription_id: "{overlay_resources_subscription_id}"
+  Match:
+    Key: CLOUDENV
+    Values:
+      gb:
+        Variables:
+          hcp_publisher: "MSAzureCloud.onmicrosoft.com"
+          signer_publisher: "MSAzureCloud.onmicrosoft.com"
+          msi_connector_svc_publisher: "MSAzureCloud.onmicrosoft.com"
+        Match:
+          Key: DEPLOYENV
+          Values:
+            test:
+              Variables:
+                hcp_appDeploy: "no"
+                signer_appDeploy: "no"
+                msi_connector_svc_appDeploy: "no"
+            int:
+              Variables:
+                signer_appDeploy: "no"
+                msi_connector_svc_appDeploy: "no"
+            staging:
+              Variables:
+                signer_appDeploy: "yes"
+                msi_connector_svc_appDeploy: "yes"
+            prod:
+               Variables:
+                 signer_appDeploy: "yes"
+                 msi_connector_svc_appDeploy: "yes"
+      ff:
+        Variables:
+          hcp_publisher: "USGovCloud.onmicrosoft.com"
+          hcp_sp_owners: "" # no owners for ff
+
+          msi_connector_svc_publisher: "USGovCloud.onmicrosoft.com"
+          msi_connector_svc_sp_owners: "" # no owners for ff
+
+          signer_publisher: "USGovCloud.onmicrosoft.com"
+          signer_sp_owners: "" # no owners for ff
+      mc:
+        Variables:
+          hcp_publisher: "ChinaGovCloud.partner.onmschina.cn"
+          hcp_sp_owners: "" # no owners for mc
+
+          msi_connector_svc_publisher: "ChinaGovCloud.partner.onmschina.cn"
+          msi_connector_svc_sp_owners: "" # no owners for mc
+
+          signer_publisher: "ChinaGovCloud.partner.onmschina.cn"
+          signer_sp_owners: "" # no owners for mc
+      ex:
+        Variables:
+          hcp_publisher: "msusnatcloud.onms.eaglex.ic.gov"
+          hcp_sp_owners: "7a571318-24f9-429c-8f8c-6c9f814428b7,15010fe0-03ca-4a33-8c05-6c8f8c2987af"
+          # wizimmer@exme #dabowe@exme
+
+          msi_connector_svc_publisher: "msusnatcloud.onms.eaglex.ic.gov"
+          msi_connector_svc_sp_owners: "7a571318-24f9-429c-8f8c-6c9f814428b7,15010fe0-03ca-4a33-8c05-6c8f8c2987af"
+          # wizimmer@exme #dabowe@exme
+
+          signer_publisher: "msusnatcloud.onms.eaglex.ic.gov"
+          signer_sp_owners: "7a571318-24f9-429c-8f8c-6c9f814428b7,15010fe0-03ca-4a33-8c05-6c8f8c2987af"
+          # wizimmer@exme #dabowe@exme
+      rx:
+        Variables:
+          hcp_publisher: "msusseccloud.onms.microsoft.scloud"
+          hcp_sp_owners: "22b6dc70-35be-4d98-888d-a20c2148e4dc,5d3d8787-22cc-41dc-8293-736e341c7089"
+          # wizimmer@rxme #dabowe@rxme
+
+          msi_connector_svc_publisher: "msusseccloud.onms.microsoft.scloud"
+          msi_connector_svc_sp_owners: "22b6dc70-35be-4d98-888d-a20c2148e4dc,5d3d8787-22cc-41dc-8293-736e341c7089"
+          # wizimmer@exme #dabowe@exme
+
+          signer_publisher: "msusseccloud.onms.microsoft.scloud"
+          signer_sp_owners: "22b6dc70-35be-4d98-888d-a20c2148e4dc,5d3d8787-22cc-41dc-8293-736e341c7089"
+          # wizimmer@exme #dabowe@exme
+AutoSelector: true

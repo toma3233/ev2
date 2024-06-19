@@ -1,0 +1,23 @@
+{
+  "mdmHealthChecks": [
+    {
+      "name": "check",
+      "monitoringAccountName": "aksdevinfra{MONITOR_CLOUDENV}{MONITOR_DEPLOYENV}",
+      "mdmGlobalHealthEndPoint": "{geneva_global_endpoint}",
+      "waitBeforeMonitorTimeInMinutes": "{MONITOR_WAIT_TIME}",
+      "maxElasticDurationInMinutes": "1260",
+      "monitorTimeInMinutes": "0",
+      "healthResources": [
+        {
+          "name": "aks-runner-v2",
+          "resourceType": "aks-runner-v2",
+          "dimensions": {
+            "monitor.Tenant": "aksdevinfra{MONITOR_CLOUDENV}{MONITOR_DEPLOYENV}",
+            "deploy_env": "{DEPLOYENV}",
+            "region": "{REGION}"
+          }
+        }
+      ]
+    }
+  ]
+}

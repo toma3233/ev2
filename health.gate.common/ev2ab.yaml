@@ -1,0 +1,100 @@
+Template:
+  - rolloutspec.CLOUDENV.DEPLOYENV.REGION
+VariableGroup:
+  Variables:
+    rollout_name: health.gate.common
+    geneva_global_endpoint: "https://global.prod.microsoftmetrics.com"
+    MONITOR_CLOUDENV: "{CLOUDENV}"
+    MONITOR_DEPLOYENV: "{DEPLOYENV}"
+    MONITOR_WAIT_TIME: 60
+  Match:
+    Key: CLOUDENV
+    Values:
+      gb:
+        Variables:
+          MONITOR_SUBSCRIPTION: 89954b57-27c4-4d64-8594-881007d7ade6
+        Match:
+          Key: DEPLOYENV
+          Values:
+            int:
+              Variables:
+                MONITOR_SUBSCRIPTION: ef2e6c4f-1b6c-4f2f-baac-aeef2a210580
+            staging:
+              Variables:
+                MONITOR_DEPLOYENV: prod
+                MONITOR_WAIT_TIME: 240
+            prod:
+              Match:
+                Key: REGION
+                Values:
+                  eastus2euap:
+                    Variables:
+                      MONITOR_WAIT_TIME: 240
+                  westcentralus:
+                    Variables:
+                      MONITOR_WAIT_TIME: 240
+                  uksouth:
+                    Variables:
+                      MONITOR_WAIT_TIME: 240
+                  eastus:
+                    Variables:
+                      MONITOR_WAIT_TIME: 240
+                  eastasia:
+                    Variables:
+                      MONITOR_WAIT_TIME: 240
+                  northeurope:
+                    Variables:
+                      MONITOR_WAIT_TIME: 240
+                  westeurope:
+                    Variables:
+                      MONITOR_WAIT_TIME: 240
+      ff:
+        Match:
+          Key: DEPLOYENV
+          Values:
+            int:
+              Variables:
+                MONITOR_SUBSCRIPTION: 70465ab6-3d9d-4eeb-9658-a5f969a07276
+            prod:
+              Variables:
+                MONITOR_SUBSCRIPTION: ddacec29-86ab-46e4-8720-791f73a0876b
+              Match:
+                Key: REGION
+                Values:
+                  usgovtexas:
+                    Variables:
+                      MONITOR_WAIT_TIME: 240
+                  usgovvirginia:
+                    Variables:
+                      MONITOR_WAIT_TIME: 240
+      mc:
+        Match:
+          Key: DEPLOYENV
+          Values:
+            int:
+              Variables:
+                MONITOR_SUBSCRIPTION: 7ff8885e-a99f-47ed-8684-c543dff80e9c
+            prod:
+              Variables:
+                MONITOR_SUBSCRIPTION: a562d3c5-0c2d-47bc-9b0d-66f2ddad7638
+              Match:
+                Key: REGION
+                Values:
+                  chinanorth2:
+                    Variables:
+                      MONITOR_WAIT_TIME: 240
+                  chinaeast2:
+                    Variables:
+                      MONITOR_WAIT_TIME: 240
+                  chinaeast3:
+                    Variables:
+                      MONITOR_WAIT_TIME: 240
+      ex:
+        Variables:
+          MONITOR_CLOUDENV: gb
+          MONITOR_SUBSCRIPTION: 6143d9c8-32a1-458c-b1a2-ab17cf1ca93d
+      rx:
+        Variables:
+          MONITOR_CLOUDENV: gb
+          MONITOR_SUBSCRIPTION: e9265454-2083-4e20-b8a1-b8bcfcdb4f72
+AutoSelector: true

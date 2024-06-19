@@ -1,0 +1,211 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "profile_name": {
+      "type": "string"
+    },
+    "endpoint_name": {
+      "type": "string"
+    },
+    "sku_name": {
+      "type": "string",
+      "defaultValue": "Standard_AzureFrontDoor",
+      "allowedValues": [
+        "Standard_AzureFrontDoor",
+        "Premium_AzureFrontDoor"
+      ]
+    },
+    "deploy_profile": {
+      "type": "string",
+      "allowedValues": [
+        "true",
+        "false"
+      ]
+    },
+    "waf_mode": {
+      "type": "string",
+      "defaultValue": "Prevention",
+      "metadata": {
+        "description": "The mode that the WAF should be deployed using. In 'Prevention' mode, the WAF will block requests it detects as malicious. In 'Detection' mode, the WAF will not block requests and will simply log the request."
+      },
+      "allowedValues": [
+        "Detection",
+        "Prevention"
+      ]
+    },
+    "waf_managed_rule_sets": {
+      "type": "array",
+      "defaultValue": [
+        {
+          "ruleSetType": "Microsoft_DefaultRuleSet",
+          "ruleSetVersion": "1.1"
+        }
+      ],
+      "metadata": {
+        "description": "The list of managed rule sets to configure on the WAF."
+      }
+    },
+    "vault_name": {
+      "type": "string"
+    },
+    "ev2_extension_operator_objectid": {
+      "type": "string"
+    },
+    "jitgroup_objectid": {
+      "type": "string"
+    },
+    "frontdoor_object_id": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "location": "[resourceGroup().location]",
+    "tenant_id": "[subscription().tenantid]",
+    "waf_policy_name": "devhubfdwafpolicy",
+    "security_policy_name": "devhubfdsecpolicy"
+  },
+  "resources": [
+    {
+      "condition": "[equals(parameters('deploy_profile'), 'true')]",
+      "type": "Microsoft.Cdn/profiles",
+      "apiVersion": "2021-06-01",
+      "name": "[parameters('profile_name')]",
+      "location": "global",
+      "sku": {
+        "name": "[parameters('sku_name')]"
+      }
+    },
+    {
+      "condition": "[equals(parameters('deploy_profile'), 'true')]",
+      "type": "Microsoft.Cdn/profiles/afdEndpoints",
+      "apiVersion": "2021-06-01",
+      "name": "[concat(parameters('profile_name'), '/', parameters('endpoint_name'))]",
+      "location": "global",
+      "properties": {
+        "enabledState": "Enabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles', parameters('profile_name'))]"
+      ]
+    },
+    {
+      "condition": "[equals(parameters('deploy_profile'), 'true')]",
+      "type": "Microsoft.Network/FrontDoorWebApplicationFirewallPolicies",
+      "apiVersion": "2020-11-01",
+      "name": "[variables('waf_policy_name')]",
+      "location": "global",
+      "sku": {
+        "name": "[parameters('sku_name')]"
+      },
+      "properties": {
+        "policySettings": {
+          "enabledState": "Enabled",
+          "mode": "[parameters('waf_mode')]"
+        },
+        "managedRules": {
+          "managedRuleSets": "[parameters('waf_managed_rule_sets')]"
+        }
+      }
+    },
+    {
+      "condition": "[equals(parameters('deploy_profile'), 'true')]",
+      "type": "Microsoft.Cdn/profiles/securityPolicies",
+      "apiVersion": "2021-06-01",
+      "name": "[concat(parameters('profile_name'), '/', variables('security_policy_name'))]",
+      "properties": {
+        "parameters": {
+          "type": "WebApplicationFirewall",
+          "wafPolicy": {
+            "id": "[resourceId('Microsoft.Network/FrontDoorWebApplicationFirewallPolicies', variables('waf_policy_name'))]"
+          },
+          "associations": [
+            {
+              "domains": [
+                {
+                  "id": "[resourceId('Microsoft.Cdn/profiles/afdEndpoints', parameters('profile_name'), parameters('endpoint_name'))]"
+                }
+              ],
+              "patternsToMatch": [
+                "/*"
+              ]
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/FrontDoorWebApplicationFirewallPolicies', variables('waf_policy_name'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "2019-09-01",
+      "name": "[parameters('vault_name')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "enableSoftDelete": true,
+        "sku": {
+          "family": "A",
+          "name": "standard"
+        },
+        "tenantId": "[variables('tenant_id')]",
+        "accessPolicies": [
+          {
+            "tenantId": "[variables('tenant_id')]",
+            "objectId": "[parameters('ev2_extension_operator_objectid')]",
+            "permissions": {
+              "certificates": [
+                "create",
+                "get",
+                "setissuers",
+                "update"
+              ]
+            }
+          },
+          {
+            "tenantId": "[variables('tenant_id')]",
+            "objectId": "[parameters('jitgroup_objectid')]",
+            "permissions": {
+              "secrets": [
+                "list"
+              ],
+              "certificates": [
+                "delete",
+                "get",
+                "list",
+                "listissuers"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "condition": "[and(not(equals(parameters('frontdoor_object_id'), '')), equals(parameters('deploy_profile'), 'true'))]",
+      "type": "Microsoft.KeyVault/vaults/accessPolicies",
+      "apiVersion": "2021-11-01-preview",
+      "name": "[concat(parameters('vault_name'), '/add')]",
+      "properties": {
+        "accessPolicies": [
+          {
+            "tenantId": "[variables('tenant_id')]",
+            "objectId": "[parameters('frontdoor_object_id')]",
+            "permissions": {
+              "secrets": [
+                "get",
+                "list"
+              ],
+              "certificates": [
+                "get",
+                "list"
+              ]
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.KeyVault/vaults', parameters('vault_name'))]"
+      ]
+    }
+  ]
+}

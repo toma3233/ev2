@@ -1,0 +1,299 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "acr_default_registry_name": {
+            "type": "string"
+        },
+        "acr_ccp_registry_name": {
+            "type": "string"
+        },
+        "acr_addon_charts_registry_name": {
+            "type": "string"
+        },
+        "acr_addon_testcharts_registry_name": {
+            "type": "string"
+        },
+        "acr_addon_adapter_charts_registry_name": {
+            "type": "string"
+        },
+        "domain_dnszone_name": {
+            "type": "string"
+        },
+        "aksapp_dnszone_name": {
+            "type": "string"
+        },
+        "acr_addon_testcharts_zone_redundancy": {
+            "type": "string",
+            "allowedValues": [
+                "true",
+                "false"
+            ],
+            "metadata": {
+                "description": "Enable or disable zone redundancy for testcharts ACR"
+            }
+        }
+    },
+    "variables": {
+        "location": "[resourceGroup().location]",
+        "rp_component_code": "rp",
+        "rp_domain_dnszone_name": "[concat(variables('rp_component_code'), '.', parameters('domain_dnszone_name'))]",
+        "ig_component_code": "ig",
+        "ig_domain_dnszone_name": "[concat(variables('ig_component_code'), '.', parameters('domain_dnszone_name'))]",
+        "hcp_component_code": "hcp",
+        "hcp_domain_dnszone_name": "[concat(variables('hcp_component_code'), '.', parameters('domain_dnszone_name'))]",
+        "oic_component_code": "oic",
+        "oic_domain_dnszone_name": "[concat(variables('oic_component_code'), '.', parameters('domain_dnszone_name'))]",
+        "devhub_component_code": "devhub",
+        "devhub_domain_dnszone_name": "[concat(variables('devhub_component_code'), '.', parameters('domain_dnszone_name'))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.ContainerRegistry/registries",
+            "apiVersion": "2023-11-01-preview",
+            "name": "[parameters('acr_default_registry_name')]",
+            "location": "[variables('location')]",
+            "sku": {
+                "name": "Premium",
+                "tier": "Premium"
+            },
+            "properties": {
+                "adminUserEnabled": false
+            }
+        },
+        {
+            "type": "Microsoft.ContainerRegistry/registries",
+            "apiVersion": "2023-11-01-preview",
+            "name": "[parameters('acr_ccp_registry_name')]",
+            "location": "[variables('location')]",
+            "sku": {
+                "name": "Premium",
+                "tier": "Premium"
+            },
+            "properties": {
+                "adminUserEnabled": true
+            }
+        },
+        {
+            "type": "Microsoft.ContainerRegistry/registries",
+            "apiVersion": "2023-11-01-preview",
+            "name": "[parameters('acr_addon_charts_registry_name')]",
+            "location": "[variables('location')]",
+            "sku": {
+                "name": "Premium",
+                "tier": "Premium"
+            },
+            "properties": {
+                "adminUserEnabled": true,
+                "anonymousPullEnabled": true
+            }
+        },
+        {
+            "type": "Microsoft.ContainerRegistry/registries",
+            "apiVersion": "2023-11-01-preview",
+            "name": "[parameters('acr_addon_testcharts_registry_name')]",
+            "location": "[variables('location')]",
+            "sku": {
+                "name": "Premium",
+                "tier": "Premium"
+            },
+            "properties": {
+                "adminUserEnabled": true,
+                "anonymousPullEnabled": true,
+                "zoneRedundancy": "[if(equals(parameters('acr_addon_testcharts_zone_redundancy'), 'false'), 'Disabled', 'Enabled')]"
+            }
+        },
+        {
+            "type": "Microsoft.ContainerRegistry/registries",
+            "apiVersion": "2023-11-01-preview",
+            "name": "[parameters('acr_addon_adapter_charts_registry_name')]",
+            "location": "[variables('location')]",
+            "sku": {
+                "name": "Premium",
+                "tier": "Premium"
+            },
+            "properties": {
+                "adminUserEnabled": true
+            }
+        },
+        {
+            "type": "Microsoft.Network/dnszones",
+            "apiVersion": "2017-09-01",
+            "name": "[parameters('aksapp_dnszone_name')]",
+            "location": "global",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/dnszones",
+            "apiVersion": "2017-09-01",
+            "name": "[parameters('domain_dnszone_name')]",
+            "location": "global",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/dnszones",
+            "apiVersion": "2017-09-01",
+            "name": "[variables('rp_domain_dnszone_name')]",
+            "location": "global",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/dnszones",
+            "apiVersion": "2017-09-01",
+            "name": "[variables('ig_domain_dnszone_name')]",
+            "location": "global",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/dnszones/NS",
+            "apiVersion": "2016-04-01",
+            "name": "[concat(parameters('domain_dnszone_name'), '/', variables('rp_component_code'))]",
+            "properties": {
+                "TTL": 3600,
+                "NSRecords": [
+                    {
+                        "nsdname": "[reference(variables('rp_domain_dnszone_name')).nameServers[0]]"
+                    },
+                    {
+                        "nsdname": "[reference(variables('rp_domain_dnszone_name')).nameServers[1]]"
+                    },
+                    {
+                        "nsdname": "[reference(variables('rp_domain_dnszone_name')).nameServers[2]]"
+                    },
+                    {
+                        "nsdname": "[reference(variables('rp_domain_dnszone_name')).nameServers[3]]"
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[parameters('domain_dnszone_name')]",
+                "[variables('rp_domain_dnszone_name')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/dnszones/NS",
+            "apiVersion": "2016-04-01",
+            "name": "[concat(parameters('domain_dnszone_name'), '/', variables('ig_component_code'))]",
+            "properties": {
+                "TTL": 3600,
+                "NSRecords": [
+                    {
+                        "nsdname": "[reference(variables('ig_domain_dnszone_name')).nameServers[0]]"
+                    },
+                    {
+                        "nsdname": "[reference(variables('ig_domain_dnszone_name')).nameServers[1]]"
+                    },
+                    {
+                        "nsdname": "[reference(variables('ig_domain_dnszone_name')).nameServers[2]]"
+                    },
+                    {
+                        "nsdname": "[reference(variables('ig_domain_dnszone_name')).nameServers[3]]"
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[parameters('domain_dnszone_name')]",
+                "[variables('ig_domain_dnszone_name')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/dnszones",
+            "apiVersion": "2017-09-01",
+            "name": "[variables('hcp_domain_dnszone_name')]",
+            "location": "global",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/dnszones/NS",
+            "apiVersion": "2016-04-01",
+            "name": "[concat(parameters('domain_dnszone_name'), '/', variables('hcp_component_code'))]",
+            "properties": {
+                "TTL": 3600,
+                "NSRecords": [
+                    {
+                        "nsdname": "[reference(variables('hcp_domain_dnszone_name')).nameServers[0]]"
+                    },
+                    {
+                        "nsdname": "[reference(variables('hcp_domain_dnszone_name')).nameServers[1]]"
+                    },
+                    {
+                        "nsdname": "[reference(variables('hcp_domain_dnszone_name')).nameServers[2]]"
+                    },
+                    {
+                        "nsdname": "[reference(variables('hcp_domain_dnszone_name')).nameServers[3]]"
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[parameters('domain_dnszone_name')]",
+                "[variables('hcp_domain_dnszone_name')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/dnszones",
+            "apiVersion": "2017-09-01",
+            "name": "[variables('oic_domain_dnszone_name')]",
+            "location": "global",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/dnszones/NS",
+            "apiVersion": "2016-04-01",
+            "name": "[concat(parameters('domain_dnszone_name'), '/', variables('oic_component_code'))]",
+            "properties": {
+                "TTL": 3600,
+                "NSRecords": [
+                    {
+                        "nsdname": "[reference(variables('oic_domain_dnszone_name')).nameServers[0]]"
+                    },
+                    {
+                        "nsdname": "[reference(variables('oic_domain_dnszone_name')).nameServers[1]]"
+                    },
+                    {
+                        "nsdname": "[reference(variables('oic_domain_dnszone_name')).nameServers[2]]"
+                    },
+                    {
+                        "nsdname": "[reference(variables('oic_domain_dnszone_name')).nameServers[3]]"
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[parameters('domain_dnszone_name')]",
+                "[variables('oic_domain_dnszone_name')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/dnszones",
+            "apiVersion": "2017-09-01",
+            "name": "[variables('devhub_domain_dnszone_name')]",
+            "location": "global",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/dnszones/NS",
+            "apiVersion": "2016-04-01",
+            "name": "[concat(parameters('domain_dnszone_name'), '/', variables('devhub_component_code'))]",
+            "properties": {
+                "TTL": 3600,
+                "NSRecords": [
+                    {
+                        "nsdname": "[reference(variables('devhub_domain_dnszone_name'), '2017-09-01').nameServers[0]]"
+                    },
+                    {
+                        "nsdname": "[reference(variables('devhub_domain_dnszone_name'), '2017-09-01').nameServers[1]]"
+                    },
+                    {
+                        "nsdname": "[reference(variables('devhub_domain_dnszone_name'), '2017-09-01').nameServers[2]]"
+                    },
+                    {
+                        "nsdname": "[reference(variables('devhub_domain_dnszone_name'), '2017-09-01').nameServers[3]]"
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[parameters('domain_dnszone_name')]",
+                "[variables('devhub_domain_dnszone_name')]"
+            ]
+        }
+    ]
+}

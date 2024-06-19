@@ -1,0 +1,78 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "bus_action_group": {
+            "value": [
+                {
+                    "name": "{resource_name_prefix}resourceprovider-action-group",
+                    "short_name": "rsprvdract",
+                    "email": [
+                        {
+                            "name": "aksAtlanta",
+                            "emailAddress": "aksatlanta@microsoft.com",
+                            "useCommonAlertSchema": true
+                        }
+                    ]
+                },
+                {
+                    "name": "{resource_name_prefix}fleetoperations-action-group",
+                    "short_name": "fltopsact",
+                    "email": []
+                },
+                {
+                    "name": "{resource_name_prefix}bus-namespace-action-group",
+                    "short_name": "busnsact",
+                    "email": [
+                        {
+                            "name": "aksAtlanta",
+                            "emailAddress": "aksatlanta@microsoft.com",
+                            "useCommonAlertSchema": true
+                        },
+                        {
+                            "name": "stephaneErbrech",
+                            "emailAddress": "stephane.erbrech@microsoft.com",
+                            "useCommonAlertSchema": true
+                        },
+                        {
+                            "name": "yeWang",
+                            "emailAddress": "ye.wang@microsoft.com",
+                            "useCommonAlertSchema": true
+                        },
+                        {
+                            "name": "induSridhar",
+                            "emailAddress": "indusridhar@microsoft.com",
+                            "useCommonAlertSchema": true
+                        }
+                    ]
+                },
+                {
+                    "name": "{resource_name_prefix}bus-entity-action-group",
+                    "short_name": "busenact",
+                    "email": [
+                        {
+                            "name": "aksAtlanta",
+                            "emailAddress": "aksatlanta@microsoft.com",
+                            "useCommonAlertSchema": true
+                        },
+                        {
+                            "name": "stephaneErbrech",
+                            "emailAddress": "stephane.erbrech@microsoft.com",
+                            "useCommonAlertSchema": true
+                        },
+                        {
+                            "name": "yeWang",
+                            "emailAddress": "ye.wang@microsoft.com",
+                            "useCommonAlertSchema": true
+                        },
+                        {
+                            "name": "induSridhar",
+                            "emailAddress": "indusridhar@microsoft.com",
+                            "useCommonAlertSchema": true
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

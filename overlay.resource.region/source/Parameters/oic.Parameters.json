@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resource_name_prefix_nodash": {
+            "value": "<resource_name_prefix_nodash>"
+        },
+        "resource_name_prefix": {
+            "value": "<resource_name_prefix>"
+        },
+        "ev2_extension_operator_objectid": {
+            "value": "<ev2_extension_operator_objectid>"
+        },
+        "jitgroup_objectid": {
+            "value": "<jitgroup_objectid>"
+        },
+        "storage_sku": {
+            "value": "<most_reliable_storage_sku>"
+        },
+        "trafficmanager_name": {
+            "value": "<oic_trafficmanager_name>"
+        },
+        "trafficmanager_relative_name": {
+            "value": "<oic_trafficmanager_relative_name>"
+        },
+        "primary_target": {
+            "value": "<oic_primary_target>"
+        },
+        "allow_blob_public_access":{
+            "value": "<oic_allow_blob_public_access>"
+        }
+    }
+}

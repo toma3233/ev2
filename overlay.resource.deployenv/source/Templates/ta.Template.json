@@ -1,0 +1,47 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "domain_dnszone_name": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "ta_dnszone_label": "trustedaccess",
+        "ta_domain_dnszone_name": "[concat(variables('ta_dnszone_label'), '.', parameters('domain_dnszone_name'))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/dnszones",
+            "apiVersion": "2017-09-01",
+            "name": "[variables('ta_domain_dnszone_name')]",
+            "location": "global",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/dnszones/NS",
+            "apiVersion": "2016-04-01",
+            "name": "[concat(parameters('domain_dnszone_name'), '/', variables('ta_dnszone_label'))]",
+            "properties": {
+                "TTL": 7200,
+                "NSRecords": [
+                    {
+                        "nsdname": "[reference(variables('ta_domain_dnszone_name')).nameServers[0]]"
+                    },
+                    {
+                        "nsdname": "[reference(variables('ta_domain_dnszone_name')).nameServers[1]]"
+                    },
+                    {
+                        "nsdname": "[reference(variables('ta_domain_dnszone_name')).nameServers[2]]"
+                    },
+                    {
+                        "nsdname": "[reference(variables('ta_domain_dnszone_name')).nameServers[3]]"
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[variables('ta_domain_dnszone_name')]"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,177 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploy_networking_resources": {
+      "type": "string",
+      "allowedValues": [
+        "true",
+        "false"
+      ]
+    },
+    "resource_name_prefix": {
+      "type": "string"
+    },
+    "vault_name": {
+      "type": "string"
+    },
+    "vault_sku_name": {
+      "type": "string"
+    },
+    "ev2_extension_operator_objectid": {
+      "type": "string"
+    },
+    "msi_operator_resource_id": {
+      "type": "string"
+    },
+    "endpoint_suffix": {
+      "type": "string"
+    },
+    "devhub_trafficmanager_name": {
+      "type": "string"
+    },
+    "devhub_trafficmanager_relative_name": {
+      "type": "string"
+    },
+    "service_cluster_name": {
+      "type": "string"
+    },
+    "backup_service_cluster_name": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "location": "[resourceGroup().location]",
+    "tenant_id": "[subscription().tenantid]",
+    "devhub_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'devhub')]",
+    "deployer_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'deployer')]",
+    "deployer_svc_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'deployer-svc')]",
+    "primary_devhub_target": "[concat('aksdevhub-', parameters('service_cluster_name'), parameters('endpoint_suffix'))]",
+    "backup_devhub_target": "[concat('aksdevhub-', parameters('backup_service_cluster_name'), parameters('endpoint_suffix'))]"
+  },
+  "resources": [
+    {
+      "name": "[variables('devhub_user_assigned_identity_name')]",
+      "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+      "apiVersion": "2018-11-30",
+      "location": "[variables('location')]",
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "2019-09-01",
+      "name": "[parameters('vault_name')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "enableSoftDelete": true,
+        "sku": {
+          "family": "A",
+          "name": "[parameters('vault_sku_name')]"
+        },
+        "tenantId": "[variables('tenant_id')]",
+        "accessPolicies": [
+          {
+            "tenantId": "[variables('tenant_id')]",
+            "objectId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', variables('devhub_user_assigned_identity_name')), '2018-11-30').principalId]",
+            "permissions": {
+              "secrets": [
+                "get"
+              ]
+            }
+          },
+          {
+            "tenantId": "[variables('tenant_id')]",
+            "objectId": "[parameters('ev2_extension_operator_objectid')]",
+            "permissions": {
+              "certificates": [
+                "create",
+                "get",
+                "setissuers",
+                "update"
+              ]
+            }
+          },
+          {
+            "tenantId": "[variables('tenant_id')]",
+            "objectId": "[reference(parameters('msi_operator_resource_id'), '2018-11-30').principalId]",
+            "permissions": {
+              "secrets": [
+                "get",
+                "set",
+                "list"
+              ]
+            }
+          },
+          {
+            "tenantId": "[variables('tenant_id')]",
+            "objectId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', variables('deployer_user_assigned_identity_name')), '2018-11-30').principalId]",
+            "permissions": {
+              "secrets": [
+                "get"
+              ]
+            }
+          },
+          {
+            "tenantId": "[variables('tenant_id')]",
+            "objectId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', variables('deployer_svc_user_assigned_identity_name')), '2018-11-30').principalId]",
+            "permissions": {
+              "secrets": [
+                "get"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "condition": "[equals(parameters('deploy_networking_resources'), 'true')]",
+      "type": "Microsoft.Network/trafficManagerProfiles",
+      "apiVersion": "2017-05-01",
+      "name": "[parameters('devhub_trafficmanager_name')]",
+      "location": "global",
+      "properties": {
+        "trafficRoutingMethod": "Priority",
+        "dnsConfig": {
+          "relativeName": "[parameters('devhub_trafficmanager_relative_name')]",
+          "ttl": 300
+        },
+        "monitorConfig": {
+          "protocol": "HTTP",
+          "port": 8080,
+          "path": "/healthz",
+          "intervalInSeconds": 30,
+          "toleratedNumberOfFailures": 3,
+          "timeoutInSeconds": 10
+        }
+      }
+    },
+    {
+      "condition": "[equals(parameters('deploy_networking_resources'), 'true')]",
+      "type": "Microsoft.Network/trafficManagerProfiles/externalEndpoints",
+      "name": "[concat(parameters('devhub_trafficmanager_name'), '/primary')]",
+      "apiVersion": "2017-05-01",
+      "properties": {
+        "endpointStatus": "Enabled",
+        "target": "[variables('primary_devhub_target')]",
+        "priority": 10
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/trafficManagerProfiles', parameters('devhub_trafficmanager_name'))]"
+      ]
+    },
+    {
+      "condition": "[and(equals(parameters('deploy_networking_resources'), 'true'), not(equals(parameters('backup_service_cluster_name'), '')))]",
+      "type": "Microsoft.Network/trafficManagerProfiles/externalEndpoints",
+      "name": "[concat(parameters('devhub_trafficmanager_name'), '/backup')]",
+      "apiVersion": "2017-05-01",
+      "properties": {
+        "endpointStatus": "Enabled",
+        "target": "[variables('backup_devhub_target')]",
+        "priority": 20
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/trafficManagerProfiles', parameters('devhub_trafficmanager_name'))]"
+      ]
+    }
+  ]
+}

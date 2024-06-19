@@ -1,0 +1,42 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "maintenanceconfigagent_msi_name": {
+            "value": "{resource_name_prefix}maintenanceconfigagent"
+        },
+        "eventhub_namespace": {
+            "value": "{resource_name_prefix}aksmcs{REGION}"
+        },
+        "eventhub_name": {
+            "value": "eventhub"
+        },
+        "eventhub_authorizationrules_name": {
+            "value": "listen"
+        },
+        "mcs_eventhub_zone_redundant": {
+            "value": "{mcs_eventhub_zone_redundant}"
+        },
+        "storageaccount_name": {
+            "value": "{resource_name_prefix_nodash}aksmcs{REGION}"
+        },
+        "storageaccount_container_name": {
+            "value": "leasercheckpointer"
+        },
+        "regional_vault_name": {
+            "value": "{resource_name_prefix}aksmcs{REGION}"
+        },
+        "jitgroup_objectid": {
+            "value": "{jitgroup_objectid}"
+        },
+        "ev2_extension_operator_objectid": {
+            "value": "{ev2_extension_operator_objectid}"
+        },
+        "identity_resource_group_name": {
+            "value": "{resource_name_prefix}overlay-{REGION}"
+        },
+        "storage_account_sku": {
+            "value": "{mcs_storage_account_sku}"
+        }
+    }
+}

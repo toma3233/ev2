@@ -1,0 +1,15 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "arn_eventgriddomain_name": {
+            "value": "{arn_eventgriddomain_name}"
+        },
+        "arn_eventgriddomain_maintenance_topic": {
+            "value": "{arn_eventgriddomain_maintenance_topic}"
+        },
+        "arn_eventgriddomain_enabled": {
+            "value": "{arn_eventgriddomain_enabled}"
+        }
+    }
+}

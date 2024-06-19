@@ -1,0 +1,36 @@
+{
+    "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/rolloutSpecification.json",
+    "contentVersion": "1.0.0.0",
+    "rolloutMetadata": {
+        "serviceModelPath": "{CLOUDENV}.{DEPLOYENV}.{REGION}.ServiceModel.json",
+        "scopeBindingsPath": "{CLOUDENV}.{DEPLOYENV}.{REGION}.ScopeBindings.json",
+        "name": "{rollout_name}",
+        "rolloutType": "Major",
+        "buildSource": {
+            "parameters": {
+                "versionFile": "buildver.txt"
+            }
+        },
+        "rolloutPolicyReferences": [
+            {
+              "name": "healthCheckAutoRestartPolicy",
+              "version": "1.3.0"
+            }
+        ],
+        "notification": {
+            "email": {
+                "to": "{notification_email}"
+            }
+        }
+    },
+    "orchestratedSteps": [
+        {
+            "name": "DefaultStep",
+            "targetType": "ServiceResource",
+            "targetName": "DefaultServiceResource",
+            "actions": [
+              "mdmHealthCheck/check"
+            ]
+          }
+    ]
+}

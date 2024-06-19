@@ -1,0 +1,7 @@
+Template:
+  - customscript-linux.CLOUDENV.DEPLOYENV.REGION
+  - rolloutspec.CLOUDENV.DEPLOYENV.REGION
+VariableGroup:
+  Variables:
+    rollout_name: security.trustedaccess.service
+AutoSelector: true

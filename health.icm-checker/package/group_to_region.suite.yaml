@@ -1,0 +1,12 @@
+gb.prod.1: centraluseuap,eastus2euap
+gb.prod.2: westcentralus
+gb.prod.2-1: eastasia
+gb.prod.3: uksouth
+gb.prod.4: eastus
+gb.prod.5: australiacentral,australiaeast,brazilsouth,canadacentral,centralindia,eastus2,francecentral,germanywestcentral,israelcentral,italynorth,japaneast,jioindiawest,koreacentral,malaysiasouth,mexicocentral,northcentralus,northeurope,norwayeast,qatarcentral,southafricanorth,swedencentral,switzerlandnorth,taiwannorth,uaenorth,ukwest,westus2
+gb.prod.6: australiacentral2,australiasoutheast,austriaeast,belgiumcentral,brazilsoutheast,canadaeast,centralus,chilecentral,francesouth,germanynorth,israelnorthwest,japanwest,jioindiacentral,koreasouth,malaysiawest,newzealandnorth,norwaywest,polandcentral,southafricawest,southcentralus,southeastasia,southindia,spaincentral,swedensouth,switzerlandwest,taiwannorthwest,uaecentral,westeurope,westus,westus3
+ff.prod.1: usgovtexas
+ff.prod.2: usgovarizona,usgovvirginia
+mc.prod.1: chinanorth2
+mc.prod.2: chinaeast2,chinanorth3
+mc.prod.3: chinaeast3

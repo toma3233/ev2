@@ -1,0 +1,122 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "costanalysis_msi_name": {
+            "type": "string"
+        },
+        "eventhub_namespace": {
+            "type": "string"
+        },
+        "data_eventhub_name": {
+            "type": "string"
+        },
+        "data_eventhub_name_unpartitioned": {
+            "type": "string"
+        },
+        "response_eventhub_name": {
+            "type": "string"
+        },
+        "response_eventhub_name_unpartitioned": {
+            "type": "string"
+        },
+        "costanalysis_eventhub_zone_redundant": {
+            "type": "string"
+        }
+    },
+    "resources": [
+        {
+            "name": "[parameters('costanalysis_msi_name')]",
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+            "apiVersion": "2018-11-30",
+            "location": "[resourceGroup().location]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces",
+            "apiVersion": "2021-11-01",
+            "name": "[parameters('eventhub_namespace')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Standard",
+                "tier": "Standard",
+                "capacity": 1
+            },
+            "properties": {
+                "isAutoInflateEnabled": false,
+                "maximumThroughputUnits": 0,
+                "zoneRedundant": "[equals('true',parameters('costanalysis_eventhub_zone_redundant'))]"
+            }
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs",
+            "apiVersion": "2021-11-01",
+            "name": "[concat(parameters('eventhub_namespace'), '/', parameters('data_eventhub_name'))]",
+            "properties": {
+                "messageRetentionInDays": 7,
+                "partitionCount": 16
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('eventhub_namespace'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs/consumergroups",
+            "apiVersion": "2021-11-01",
+            "name": "[concat(parameters('eventhub_namespace'), '/' ,parameters('data_eventhub_name'), '/pav2')]",
+            "properties": {
+                "userMetadata": "for PAV2 reader"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('eventhub_namespace'), parameters('data_eventhub_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs",
+            "apiVersion": "2021-11-01",
+            "name": "[concat(parameters('eventhub_namespace'), '/', parameters('data_eventhub_name_unpartitioned'))]",
+            "properties": {
+                "messageRetentionInDays": 7,
+                "partitionCount": 1
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('eventhub_namespace'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs/consumergroups",
+            "apiVersion": "2021-11-01",
+            "name": "[concat(parameters('eventhub_namespace'), '/' ,parameters('data_eventhub_name_unpartitioned'), '/pav2')]",
+            "properties": {
+                "userMetadata": "for PAV2 reader"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('eventhub_namespace'), parameters('data_eventhub_name_unpartitioned'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs",
+            "apiVersion": "2021-11-01",
+            "name": "[concat(parameters('eventhub_namespace'), '/' ,parameters('response_eventhub_name'))]",
+            "properties": {
+                "messageRetentionInDays": 7,
+                "partitionCount": 8
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('eventhub_namespace'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs",
+            "apiVersion": "2021-11-01",
+            "name": "[concat(parameters('eventhub_namespace'), '/' ,parameters('response_eventhub_name_unpartitioned'))]",
+            "properties": {
+                "messageRetentionInDays": 7,
+                "partitionCount": 1
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('eventhub_namespace'))]"
+            ]
+        }
+    ]
+}

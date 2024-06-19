@@ -1,0 +1,114 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "arn_metric_alerts_enabled": {
+      "type": "string",
+      "defaultValue": "false"
+    },
+    "entityAlerts": {
+      "type": "array",
+      "defaultValue": []
+    },
+    "windowSize": {
+      "type": "string",
+      "defaultValue": "PT30M",
+      "allowedValues": [
+        "PT1M",
+        "PT5M",
+        "PT15M",
+        "PT30M",
+        "PT1H",
+        "PT6H",
+        "PT12H",
+        "PT24H"
+      ]
+    },
+    "evaluationFrequency": {
+      "type": "string",
+      "defaultValue": "PT1M",
+      "allowedValues": [
+        "PT1M",
+        "PT5M",
+        "PT15M",
+        "PT30M",
+        "PT1H"
+      ]
+    },
+    "resourceGroupNameGlobal": {
+      "type": "string"
+    },
+    "entityActionGroupName": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "entity_action_group_id": "[resourceId(parameters('resourceGroupNameGlobal'), 'microsoft.insights/actionGroups', parameters('entityActionGroupName'))]",
+    "copy": [
+      {
+        "name": "entity_alerts",
+        "count": "[length(parameters('entityAlerts'))]",
+        "input": {
+          "name": "[concat(parameters('entityAlerts')[copyIndex('entity_alerts')]['name'], ' SEV', parameters('entityAlerts')[copyIndex('entity_alerts')]['severity'])]",
+          "description": "[concat('[SEV', parameters('entityAlerts')[copyIndex('entity_alerts')]['severity'], '][', parameters('location'), ']', parameters('entityAlerts')[copyIndex('entity_alerts')]['name'], ' > ', parameters('entityAlerts')[copyIndex('entity_alerts')]['threshold'])]",
+          "severity": "[parameters('entityAlerts')[copyIndex('entity_alerts')]['severity']]",
+          "action_group_id": "[variables('entity_action_group_id')]",
+          "data_type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
+          "criteria": [
+            {
+              "threshold": "[parameters('entityAlerts')[copyIndex('entity_alerts')]['threshold']]",
+              "name": "Metric1",
+              "metricNamespace": "Microsoft.EventGrid/domains",
+              "metricName": "[parameters('entityAlerts')[copyIndex('entity_alerts')]['condition_name']]",
+              "operator": "GreaterThan",
+              "timeAggregation": "Average",
+              "skipMetricValidation": false,
+              "criterionType": "StaticThresholdCriterion"
+            }
+          ]
+        }
+      }
+    ],
+    "alerts": "[variables('entity_alerts')]"
+  },
+  "resources": [
+    {
+      "condition": "[equals('true',parameters('arn_metric_alerts_enabled'))]",
+      "name": "[variables('alerts')[copyIndex()]['name']]",
+      "type": "Microsoft.Insights/metricAlerts",
+      "location": "global",
+      "apiVersion": "2018-03-01",
+      "tags": {},
+      "properties": {
+        "description": "[variables('alerts')[copyIndex()]['description']]",
+        "severity": "[variables('alerts')[copyIndex()]['severity']]",
+        "enabled": true,
+        "scopes": [
+          "[resourceId('Microsoft.EventGrid/domains', parameters('name'))]"
+        ],
+        "evaluationFrequency": "[parameters('evaluationFrequency')]",
+        "windowSize": "[parameters('windowSize')]",
+        "criteria": {
+          "odata.type": "[variables('alerts')[copyIndex()]['data_type']]",
+          "allOf": "[variables('alerts')[copyIndex()]['criteria']]"
+        },
+        "actions": [
+          {
+            "actionGroupId": "[variables('alerts')[copyIndex()]['action_group_id']]"
+          }
+        ]
+      },
+      "copy": {
+        "name": "alertCopy",
+        "count": "[length(variables('alerts'))]"
+      }
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "domain_region": {
+            "value": "<domain_region_prefix><REGION>"
+        },
+        "domain_dnszone_name": {
+            "value": "oic.<domain_deployenv>"
+        },
+        "trafficmanager_resource_group_name": {
+            "value": "<resource_name_prefix>overlay-<REGION>"
+        },
+        "trafficmanager_name": {
+            "value": "<oic_trafficmanager_name>"
+        }
+    }
+}

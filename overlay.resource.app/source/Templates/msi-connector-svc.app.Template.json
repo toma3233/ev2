@@ -1,0 +1,221 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "metadata": {
+        "comments": "Application for use by AKS msi-connector-svc and it's consumers"
+    },
+    "parameters": {
+        "deploy": {
+            "type": "string",
+            "allowedValues": [
+                "yes",
+                "no"
+            ],
+            "metadata": {
+                "description": "Specify conditionally deploy all resources or not."
+            },
+            "defaultValue": "no"
+        },
+        "appName": {
+            "type": "string",
+            "metadata": {
+                "description": "Unique name of application to create. This is a user assigned unique identifier for an AAD application in the ARM world."
+            }
+        },
+        "publisher": {
+            "type": "string",
+            "defaultValue": "MSAzureCloud.onmicrosoft.com"
+        },
+        "ownerIds": {
+            "type": "string"
+        },
+        "permissionsAsked": {
+            "type": "array",
+            "metadata": {},
+            "defaultValue": [
+                {
+                    // Microsoft Graph
+                    "resourceAppId": "00000003-0000-0000-c000-000000000000",
+                    "resourceAccess": [
+                        {
+                            "id": "e1fe6dd8-ba31-4d61-89e7-88639da4683d",
+                            // User.Read
+                            "type": "Scope"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "variables": {
+        "msiConnectorSVCAppURI": "[concat('https://', parameters('publisher'), '/', parameters('appName'))]",
+        "msiConnectorSVCAppRedirectUri": "[concat('https://', parameters('appName'))]",
+        "msiConnectorGUID": "[guid(resourceGroup().id)]",
+        "owners": "[split(parameters('ownerIDs'), ',')]"
+    },
+    "resources": [
+        {
+            "condition": "[equals(parameters('deploy'),'yes')]",
+            "type": "Microsoft.Identity/applications",
+            "apiVersion": "2020-03-31-preview",
+            "name": "[parameters('appName')]",
+            "properties": {
+                "displayName": "[parameters('appName')]",
+                // This is mandatory parameter while app creation
+                "uniqueName": "[parameters('appName')]",
+                // This is mandatory parameter while app creation
+                "publisher": "[parameters('publisher')]",
+                "identifierUris": [
+                    "[variables('msiConnectorSVCAppURI')]"
+                ],
+                "info": {},
+                "keyCredentials": [],
+                "api": {
+                    "knownClientApplications": [],
+                    "oauth2PermissionScopes": [
+                        {
+                            "adminConsentDescription": "Allow the application to access aks msi-connector-svc on behalf of the signed-in user.",
+                            "adminConsentDisplayName": "Access aks msi-connector-svc",
+                            "id": "[variables('msiConnectorGUID')]",
+                            "isEnabled": true,
+                            "type": "User",
+                            "userConsentDescription": "Allow the application to access aks msi-connector-svc on your behalf.",
+                            "userConsentDisplayName": "Access aks msi-connector-svc",
+                            "value": "user_impersonation"
+                        }
+                    ],
+                    "preAuthorizedApplications": []
+                },
+                "web": {
+                    "homePageUrl": null,
+                    "logoutUrl": null,
+                    "redirectUris": [
+                        "[variables('msiConnectorSVCAppRedirectUri')]"
+                    ]
+                },
+                "publicClient": {
+                    "redirectUris": []
+                },
+                "requiredResourceAccess": "[parameters('permissionsAsked')]",
+                "serviceManagementReference": "f1d1800e-d38e-41f2-b63c-72d59ecaf9c0",
+                "optionalClaims": {
+                    "idToken": [],
+                    "accessToken": [
+                        {
+                            "name": "groups",
+                            "source": null,
+                            "essential": false,
+                            "additionalProperties": []
+                        },
+                        {
+                            "name": "xms_mirid",
+                            "source": null,
+                            "essential": false,
+                            "additionalProperties": []
+                        }
+                    ],
+                    "saml2Token": []
+                },
+                "signInAudience": "AzureADMyOrg"
+            }
+        },
+        {
+            "type": "Microsoft.Identity/applications/owners",
+            // NOTE: empty owners (in sov clouds) causes weird issue.
+            "condition": "[and(equals(parameters('deploy'),'yes'), not(empty(variables('owners'))))]",
+            "apiVersion": "2020-03-31-preview",
+            "name": "[concat(parameters('appName'), '/', variables('owners')[copyIndex()])]",
+            // owners name must be the object ID of the owner. This must be an AAD user. Security Groups are not supported.
+            "dependsOn": [
+                "[parameters('appName')]"
+            ],
+            "properties": {
+                "id": "[variables('owners')[copyIndex()]]"
+            },
+            "copy": {
+                "name": "ownercopy",
+                "count": "[length(variables('owners'))]"
+            }
+        },
+        {
+            "condition": "[equals(parameters('deploy'),'yes')]",
+            "name": "spProvisioning",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "properties": {
+                "mode": "Incremental",
+                "expressionEvaluationOptions": {
+                    "scope": "inner"
+                },
+                "parameters": {
+                    "appName": {
+                        "value": "[parameters('appName')]"
+                    },
+                    "publisher": {
+                        "value": "[parameters('publisher')]"
+                    },
+                    "appId": {
+                        // An "if" below prevents the evaluation of reference when deployment is not to be done
+                        // Otherwise the evaluation of reference may fail if the application being rederenced does not exist
+                        "value": "[if(equals(parameters('deploy'),'yes'), reference(resourceId('Microsoft.Identity/applications', parameters('appName')), '2020-03-31-preview').appId, 'sp_placeholder')]"
+                    }
+                },
+                "template": {
+                    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "appName": {
+                            "type": "string"
+                        },
+                        "appId": {
+                            "type": "string"
+                        },
+                        "publisher": {
+                            "type": "string"
+                        }
+                    },
+                    "variables": {
+                        "appIdUri": "[concat('https://', parameters('publisher'), '/', parameters('appName'))]"
+                    },
+                    "resources": [
+                        {
+                            "type": "Microsoft.Identity/servicePrincipals",
+                            "apiVersion": "2020-03-31-preview",
+                            "name": "[parameters('appId')]",
+                            // *IMPORTANT* servicePrincipals name must be the appId value this service principal represents
+                            "properties": {
+                                "appId": "[parameters('appId')]",
+                                // This is mandatory parameter while servicePrincipal creation
+                                "accountEnabled": "true",
+                                "alternativeNames": [],
+                                "appRoleAssignmentRequired": false,
+                                "servicePrincipalNames": [
+                                    "[variables('appIdUri')]",
+                                    "[parameters('appId')]"
+                                ],
+                                "tags": [
+                                    "ARMTemplate"
+                                ]
+                            }
+                        }
+                    ],
+                    "outputs": {
+                        // Output the AppId and ServicePrincipal Object Id
+                        // These will be included in outputs by outer template
+                        "appId": {
+                            "type": "string",
+                            "value": "[parameters('appId')]"
+                        }
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {
+        "appId": {
+            "type": "string",
+            // 'If' condition below to avoid evaluation of reference as nested template isn't deployed when deployment == no
+            "value": "[if(equals(parameters('deploy'),'yes'), reference('spProvisioning').outputs.appId.value, '')]"
+        }
+    }
+}

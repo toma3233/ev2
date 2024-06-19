@@ -1,0 +1,68 @@
+{
+    "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/rolloutParameters.json",
+    "contentVersion": "1.0.0.0",
+    "extensions": [
+        {
+            "name": "oic.cert.items.ssl",
+            "type": "Microsoft.KeyVault.DataPlane/CreateCertificate",
+            "version": "2020-03-01",
+            "connectionProperties": {
+                "maxExecutionTime": "PT20M",
+                "authentication": {
+                    "type": "AadApplicationAuthentication",
+                    "reference": {
+                        "provider": "AzureKeyVault",
+                        "parameters": {
+                            "secretId": "__EV2_EXTENSION_OPERATOR_APPCERTIFICATE__"
+                        }
+                    },
+                    "properties": {
+                        "applicationId": "__EV2_EXTENSION_OPERATOR_APPID__"
+                    }
+                }
+            },
+            "payloadProperties": {
+                "vaultBaseUrl": {
+                    "value": "__CERT_TARGET_KEYVAULT_URI__"
+                },
+                "certificateName": {
+                    "value": "ssl"
+                },
+                "policy": {
+                    "value": "'''{\"key_props\":{\"exportable\":true,\"kty\":\"RSA\",\"key_size\":2048,\"reuse_key\":false},\"secret_props\":{\"contentType\":\"application/x-pkcs12\"},\"x509_props\":{\"subject\":\"CN=__OIDC_DOCUMENT_CERT_DOMAIN__\",\"validity_months\":12},\"lifetime_actions\":[{\"trigger\":{\"lifetime_percentage\":24},\"action\":{\"action_type\":\"AutoRenew\"}}],\"issuer\":{\"name\":\"OneCertV2-PublicCA\"}}"
+                }
+            }
+        },
+        {
+            "name": "devhubfd.cert.items.ssl",
+            "type": "Microsoft.KeyVault.DataPlane/CreateCertificate",
+            "version": "2020-03-01",
+            "connectionProperties": {
+                "maxExecutionTime": "PT20M",
+                "authentication": {
+                    "type": "AadApplicationAuthentication",
+                    "reference": {
+                        "provider": "AzureKeyVault",
+                        "parameters": {
+                            "secretId": "__EV2_EXTENSION_OPERATOR_APPCERTIFICATE__"
+                        }
+                    },
+                    "properties": {
+                        "applicationId": "__EV2_EXTENSION_OPERATOR_APPID__"
+                    }
+                }
+            },
+            "payloadProperties": {
+                "vaultBaseUrl": {
+                    "value": "__CERT_TARGET_KEYVAULT_URI__"
+                },
+                "certificateName": {
+                    "value": "ssl"
+                },
+                "policy": {
+                    "value": "'''{\"key_props\":{\"exportable\":true,\"kty\":\"RSA\",\"key_size\":2048,\"reuse_key\":false},\"secret_props\":{\"contentType\":\"application/x-pkcs12\"},\"x509_props\":{\"subject\":\"CN=fd.devhub.__CERT_DOMAIN_BASE__\",\"validity_months\":12},\"lifetime_actions\":[{\"trigger\":{\"lifetime_percentage\":24},\"action\":{\"action_type\":\"AutoRenew\"}}],\"issuer\":{\"name\":\"OneCertV2-PublicCA\"}}"
+                }
+            }
+        }
+    ]
+}

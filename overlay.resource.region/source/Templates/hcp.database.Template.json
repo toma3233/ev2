@@ -1,0 +1,541 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "server_name_prefix": {
+      "type": "string"
+    },
+    "primary_location": {
+      "type": "string"
+    },
+    "administrator_login": {
+      "type": "string",
+      "defaultValue": "sqldbuser"
+    },
+    "administrator_login_password": {
+      "type": "securestring",
+      "defaultValue": "[base64(concat('Pwd', substring(newGuid(),0, 10), '!'))]"
+    },
+    "databases_acsrpdb_name": {
+      "type": "string"
+    },
+    "service_level_objective": {
+      "type": "string"
+    },
+    "elastic_pool_prefix": {
+      "type": "string"
+    },
+    "elastic_pool_suffix": {
+      "type": "string",
+      "defaultValue": "-pool"
+    },
+    "elastic_pool_sku_name": {
+      "type": "string",
+      "defaultValue": "PremiumPool"
+    },
+    "elastic_pool_capacity": {
+      "type": "string",
+      "defaultValue": "125"
+    },
+    "zone_redundant_enabled": {
+      "type": "string",
+      "defaultValue": "false"
+    },
+    "service_databases": {
+      "type": "array",
+      "defaultValue": []
+    },
+    "storage_sku": {
+      "type": "string",
+      "defaultValue": "Standard_ZRS",
+      "allowedValues": [
+        "Standard_ZRS",
+        "Standard_LRS"
+      ]
+    },
+    "storage_name": {
+      "type": "string"
+    },
+    "alert_name": {
+      "type": "array",
+      "defaultValue": []
+    },
+    "alert_description": {
+      "type": "array",
+      "defaultValue": []
+    },
+    "alert_severity": {
+      "type": "int",
+      "defaultValue": 3,
+      "allowedValues": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "metric_name": {
+      "type": "array",
+      "defaultValue": []
+    },
+    "operator": {
+      "type": "string",
+      "defaultValue": "GreaterThan",
+      "allowedValues": [
+        "Equals",
+        "GreaterThan",
+        "GreaterThanOrEqual",
+        "LessThan",
+        "LessThanOrEqual"
+      ]
+    },
+    "alert_sensitivity": {
+      "type": "string"
+    },
+    "number_of_evaluation_periods": {
+      "type": "string"
+    },
+    "min_failing_periods_to_alert": {
+      "type": "string"
+    },
+    "time_aggregation": {
+      "type": "array",
+      "defaultValue": []
+    },
+    "window_size": {
+      "type": "string",
+      "defaultValue": "PT5M",
+      "allowedValues": [
+        "PT1M",
+        "PT5M",
+        "PT15M",
+        "PT30M",
+        "PT1H",
+        "PT6H",
+        "PT12H",
+        "PT24H"
+      ]
+    },
+    "evaluation_frequency": {
+      "type": "string",
+      "defaultValue": "PT1M",
+      "allowedValues": [
+        "PT1M",
+        "PT5M",
+        "PT15M",
+        "PT30M",
+        "PT1H"
+      ]
+    },
+    "resource_group_name_global": {
+      "type": "string"
+    },
+    "metric_alerts_enabled": {
+      "type": "string",
+      "defaultValue": "true"
+    },
+    "use_vcore_sku": {
+      "type": "string",
+      "defaultValue": "false"
+    },
+    "vcore_sku_name": {
+      "type": "string",
+      "defaultValue": "BC_Gen5"
+    },
+    "vcore_sku_tier": {
+      "type": "string",
+      "defaultValue": "BusinessCritical"
+    },
+    "vcore_sku_family": {
+      "type": "string",
+      "defaultValue": "Gen5"
+    },
+    "vcore_sku_capacity": {
+      "type": "string",
+      "defaultValue": "2"
+    },
+    "msi_operator_resource_id": {
+        "type": "string"
+    }
+  },
+  "variables": {
+    "primary_server_name": "[parameters('server_name_prefix')]",
+    "stripped_storage_name": "[replace(parameters('storage_name'), '-', '')]",
+    "edition": "[if(startsWith(parameters('service_level_objective'), 'P'), 'Premium', 'Standard')]",
+    "elastic_pool_name": "[concat(parameters('elastic_pool_prefix'), parameters('elastic_pool_suffix'))]",
+    "elastic_pool_capacity": "[int(parameters('elastic_pool_capacity'))]",
+    "requested_backup_redundancy": "[if(equals(parameters('zone_redundant_enabled'), 'true'), 'Zone', 'Local')]",
+    "action_group_name": "hcpdbactiongroup",
+  },
+  "resources": [
+    {
+      "condition": "[equals('false',parameters('use_vcore_sku'))]",
+      "type": "Microsoft.Sql/servers/databases",
+      "name": "[concat(variables('primary_server_name'), '/', parameters('databases_acsrpdb_name'))]",
+      "apiVersion": "2021-02-01-preview",
+      "location": "[parameters('primary_location')]",
+      "sku": {
+        "name": "[parameters('service_level_objective')]"
+      },
+      "properties": {
+        "requestedBackupStorageRedundancy": "[variables('requested_backup_redundancy')]",
+        "zoneRedundant": "[and(equals('true', parameters('zone_redundant_enabled')), startsWith(parameters('service_level_objective'), 'P'))]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('primary_server_name'))]"
+      ]
+    },
+    {
+      "condition": "[equals('true',parameters('use_vcore_sku'))]",
+      "type": "Microsoft.Sql/servers/databases",
+      "apiVersion": "2023-05-01-preview",
+      "name": "[concat(variables('primary_server_name'), '/', parameters('databases_acsrpdb_name'))]",
+      "location": "[parameters('primary_location')]",
+      "sku": {
+        "name": "[parameters('vcore_sku_name')]",
+        "tier": "[parameters('vcore_sku_tier')]",
+        "family": "[parameters('vcore_sku_family')]",
+        "capacity": "[int(parameters('vcore_sku_capacity'))]"
+      },
+      "kind": "v12.0,user,vcore",
+      "properties": {
+        "collation": "SQL_Latin1_General_CP1_CI_AS",
+        "maxSizeBytes": 536870912000,
+        "catalogCollation": "SQL_Latin1_General_CP1_CI_AS",
+        "requestedBackupStorageRedundancy": "[variables('requested_backup_redundancy')]",
+        "zoneRedundant": "[and(equals('true', parameters('zone_redundant_enabled')), startsWith(parameters('vcore_sku_tier'), 'B'))]",
+        "licenseType": "LicenseIncluded",
+        "readScale": "Enabled",
+        "availabilityZone": "NoPreference"
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('stripped_storage_name')]",
+      "apiVersion": "2022-09-01",
+      "location": "[parameters('primary_location')]",
+      "sku": {
+        "name": "[parameters('storage_sku')]"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "networkAcls": {
+          "bypass": "AzureServices",
+          "defaultAction": "Allow"
+        },
+        "allowBlobPublicAccess": false,
+        "allowSharedKeyAccess": false
+      },
+      "resources": [
+        {
+          "type": "blobServices",
+          "name": "default",
+          "apiVersion": "2022-09-01",
+          "properties": {
+            "lastAccessTimeTrackingPolicy": {
+              "enabled": true
+            }
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Storage/storageAccounts', variables('stripped_storage_name'))]"
+          ]
+        },
+        {
+          "type": "managementPolicies",
+          "apiVersion": "2022-09-01",
+          "name": "default",
+          "properties": {
+            "policy": {
+              "rules": [
+                {
+                  "definition": {
+                    "actions": {
+                      "baseBlob": {
+                        "delete": {
+                          "daysAfterCreationGreaterThan": 90
+                        }
+                      }
+                    },
+                    "filters": {
+                      "blobTypes": [
+                        "appendBlob"
+                      ]
+                    }
+                  },
+                  "enabled": true,
+                  "name": "[concat(variables('stripped_storage_name'), '_delete_rule')]",
+                  "type": "Lifecycle"
+                }
+              ]
+            }
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Storage/storageAccounts', variables('stripped_storage_name'))]",
+            "[concat(resourceId('Microsoft.Storage/storageAccounts', variables('stripped_storage_name')), '/blobServices/default')]"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Microsoft.Sql/servers",
+      "name": "[variables('primary_server_name')]",
+      "apiVersion": "2023-08-01-preview",
+      "location": "[parameters('primary_location')]",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "administrators": {
+            "administratorType": "activeDirectory",
+            "login": "[last(split(parameters('msi_operator_resource_id'), '/'))]",
+            "sid": "[reference(parameters('msi_operator_resource_id'), '2023-01-31').principalId]",
+            "azureADOnlyAuthentication": true
+        }
+      },
+      "resources": [
+        {
+          "type": "administrators",
+          "apiVersion": "2023-05-01-preview",
+          "name": "ActiveDirectory",
+          "dependsOn": [
+              "[variables('primary_server_name')]"
+          ],
+          "properties": {
+              "administratorType": "ActiveDirectory",
+              "login": "[last(split(parameters('msi_operator_resource_id'), '/'))]",
+              "sid": "[reference(parameters('msi_operator_resource_id'), '2023-01-31').principalId]"
+          }
+        },
+        {
+          "type": "azureADOnlyAuthentications",
+          "apiVersion": "2023-05-01-preview",
+          "name": "Default",
+          "dependsOn": [
+              "[variables('primary_server_name')]"
+          ],
+          "properties": {
+              "azureADOnlyAuthentication": true
+          }
+        },
+      ]
+    },
+    {
+      "apiVersion": "2021-02-01-preview",
+      "dependsOn": [
+        "[concat('Microsoft.Sql/servers/', variables('primary_server_name'))]"
+      ],
+      "type": "Microsoft.Sql/servers/elasticPools",
+      "name": "[concat(variables('primary_server_name'), '/', variables('elastic_pool_name'))]",
+      "location": "[parameters('primary_location')]",
+      "sku": {
+        "name": "[parameters('elastic_pool_sku_name')]",
+        "capacity": "[variables('elastic_pool_capacity')]"
+      },
+      "properties": {
+        "zoneRedundant": "[and(equals('true', parameters('zone_redundant_enabled')), startsWith(parameters('elastic_pool_sku_name'), 'P'))]"
+      }
+    },
+    {
+      "type": "Microsoft.Sql/servers/databases",
+      "name": "[concat(variables('primary_server_name'), '/', parameters('service_databases')[copyIndex()])]",
+      "apiVersion": "2021-02-01-preview",
+      "location": "[parameters('primary_location')]",
+      "properties": {
+        "zoneRedundant": "[and(equals('true', parameters('zone_redundant_enabled')), startsWith(parameters('service_level_objective'), 'P'))]",
+        "requestedBackupStorageRedundancy": "[variables('requested_backup_redundancy')]",
+        "elasticPoolId": "[resourceId('Microsoft.Sql/servers/elasticPools', variables('primary_server_name'), variables('elastic_pool_name'))]"
+      },
+      "sku": {
+        "name": "ElasticPool",
+        "tier": "[variables('edition')]",
+        "capacity": 0
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Sql/servers/', variables('primary_server_name'))]",
+        "[concat('Microsoft.Sql/servers/', variables('primary_server_name') ,'/elasticPools/', variables('elastic_pool_name'))]"
+      ],
+      "copy": {
+        "name": "addDatabasesInElasticPool",
+        "count": "[length(parameters('service_databases'))]"
+      }
+    },
+    {
+      "type": "Microsoft.Sql/servers/firewallRules",
+      "apiVersion": "2021-02-01-preview",
+      "name": "[concat(variables('primary_server_name'), '/AllowAllWindowsAzureIps')]",
+      "location": "[parameters('primary_location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Sql/servers', variables('primary_server_name'))]"
+      ],
+      "properties": {
+        "startIpAddress": "0.0.0.0",
+        "endIpAddress": "0.0.0.0"
+      }
+    },
+    {
+      "condition": "[and(equals('true',parameters('metric_alerts_enabled')), equals('false', parameters('use_vcore_sku')))]",
+      "name": "[parameters('alert_name')[copyIndex()]]",
+      "type": "Microsoft.Insights/metricAlerts",
+      "location": "Global",
+      "apiVersion": "2018-03-01",
+      "properties": {
+        "description": "[concat(parameters('alert_description')[copyIndex()], parameters('primary_location'))]",
+        "severity": "[parameters('alert_severity')]",
+        "enabled": true,
+        "scopes": [
+          "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Sql/servers/', variables('primary_server_name'), '/databases/',parameters('databases_acsrpdb_name'))]"
+        ],
+        "evaluationFrequency": "[parameters('evaluation_frequency')]",
+        "windowSize": "[parameters('window_size')]",
+        "criteria": {
+          "odata.type": "Microsoft.Azure.Monitor.MultipleResourceMultipleMetricCriteria",
+          "allOf": [
+            {
+              "name": "1st criterion",
+              "criterionType": "DynamicThresholdCriterion",
+              "metricNamespace": "Microsoft.Sql/servers/databases",
+              "metricName": "[parameters('metric_name')[copyIndex()]]",
+              "operator": "[parameters('operator')]",
+              "alertSensitivity": "[parameters('alert_sensitivity')]",
+              "failingPeriods": {
+                "numberOfEvaluationPeriods": "[parameters('number_of_evaluation_periods')]",
+                "minFailingPeriodsToAlert": "[parameters('min_failing_periods_to_alert')]"
+              },
+              "timeAggregation": "[parameters('time_aggregation')[copyIndex()]]"
+            }
+          ]
+        },
+        "autoMitigate": true,
+        "targetResourceType": "Microsoft.Sql/servers/databases",
+        "actions": [
+          {
+            "actionGroupId": "[resourceId(parameters('resource_group_name_global'), 'microsoft.insights/actionGroups', variables('action_group_name'))]"
+          }
+        ],
+        "copy": {
+          "name": "propertyNameCopy",
+          "count": "[length(parameters('alert_description'))]"
+        }
+      },
+      "copy": {
+        "name": "alertNameCopy",
+        "count": "[length(parameters('alert_name'))]"
+      }
+    },
+    {
+      "condition": "[and(equals('true',parameters('metric_alerts_enabled')), equals('false', parameters('use_vcore_sku')))]",
+      "type": "Microsoft.Insights/metricAlerts",
+      "name": "SQL DTU Percentage Average",
+      "location": "Global",
+      "apiVersion": "2018-03-01",
+      "properties": {
+        "description": "[concat('[SEV 2] SQL DTU Average > 80 for 6h in ', variables('primary_server_name'), '/', parameters('databases_acsrpdb_name'))]",
+        "severity": 2,
+        "enabled": true,
+        "scopes": [
+          "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Sql/servers/', variables('primary_server_name'), '/databases/',parameters('databases_acsrpdb_name'))]"
+        ],
+        "evaluationFrequency": "PT15M",
+        "windowSize": "PT6H",
+        "criteria": {
+          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
+          "allOf": [
+            {
+              "name": "SQL DTU Percentage",
+              "metricName": "dtu_consumption_percent",
+              "criterionType": "StaticThresholdCriterion",
+              "operator": "GreaterThan",
+              "threshold": 80,
+              "timeAggregation": "Average",
+              "metricNamespace": "Microsoft.Sql/servers/databases"
+            }
+          ]
+        },
+        "autoMitigate": false,
+        "targetResourceType": "Microsoft.Sql/servers/databases",
+        "actions": [
+          {
+            "actionGroupId": "[resourceId(parameters('resource_group_name_global'), 'microsoft.insights/actionGroups', variables('action_group_name'))]"
+          }
+        ]
+      }
+    },
+    {
+      "condition": "[and(equals('true',parameters('metric_alerts_enabled')), equals('false', parameters('use_vcore_sku')))]",
+      "type": "Microsoft.Insights/metricAlerts",
+      "name": "SQL DTU Percentage Maximum",
+      "location": "Global",
+      "apiVersion": "2018-03-01",
+      "properties": {
+        "description": "[concat('[SEV 2] SQL DTU Average > 90 for last 15min in ', variables('primary_server_name'), '/', parameters('databases_acsrpdb_name'))]",
+        "severity": 2,
+        "enabled": true,
+        "scopes": [
+          "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Sql/servers/', variables('primary_server_name'), '/databases/',parameters('databases_acsrpdb_name'))]"
+        ],
+        "evaluationFrequency": "PT1M",
+        "windowSize": "PT15M",
+        "criteria": {
+          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
+          "allOf": [
+            {
+              "name": "SQL DTU Percentage",
+              "metricName": "dtu_consumption_percent",
+              "criterionType": "StaticThresholdCriterion",
+              "operator": "GreaterThan",
+              "threshold": 90,
+              "timeAggregation": "Average",
+              "metricNamespace": "Microsoft.Sql/servers/databases"
+            }
+          ]
+        },
+        "autoMitigate": false,
+        "targetResourceType": "Microsoft.Sql/servers/databases",
+        "actions": [
+          {
+            "actionGroupId": "[resourceId(parameters('resource_group_name_global'), 'microsoft.insights/actionGroups', variables('action_group_name'))]"
+          }
+        ]
+      }
+    },
+    {
+      "condition": "[and(equals('true',parameters('metric_alerts_enabled')), equals('false', parameters('use_vcore_sku')))]",
+      "type": "Microsoft.Insights/metricAlerts",
+      "name": "SQL Deadlocks detected",
+      "location": "Global",
+      "apiVersion": "2018-03-01",
+      "properties": {
+        "description": "[concat('SQL Deadlocks detected in ', variables('primary_server_name'), parameters('primary_location'))]",
+        "severity": 2,
+        "enabled": true,
+        "scopes": [
+          "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Sql/servers/', variables('primary_server_name'), '/databases/',parameters('databases_acsrpdb_name'))]"
+        ],
+        "evaluationFrequency": "PT15M",
+        "windowSize": "PT1H",
+        "criteria": {
+          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
+          "allOf": [
+            {
+              "name": "SQL Deadlocks",
+              "metricName": "deadlock",
+              "criterionType": "StaticThresholdCriterion",
+              "operator": "GreaterThan",
+              "threshold": 1,
+              "timeAggregation": "Count",
+              "metricNamespace": "Microsoft.Sql/servers/databases"
+            }
+          ]
+        },
+        "autoMitigate": true,
+        "targetResourceType": "Microsoft.Sql/servers/databases",
+        "actions": [
+          {
+            "actionGroupId": "[resourceId(parameters('resource_group_name_global'), 'microsoft.insights/actionGroups', variables('action_group_name'))]"
+          }
+        ]
+      }
+    }
+  ]
+}

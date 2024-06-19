@@ -1,0 +1,29 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "bus_action_group": {
+            "type": "array"
+        }
+    },
+    "resources": [
+        {
+            "type": "microsoft.insights/actionGroups",
+            "apiVersion": "2021-09-01",
+            "name": "[parameters('bus_action_group')[copyIndex()]['name']]",
+            "location": "global",
+            "properties": {
+                "groupShortName": "[parameters('bus_action_group')[copyIndex()]['short_name']]",
+                "enabled": true,
+                "scopes": [
+                    "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().Id)]"
+                ],
+                "emailReceivers": "[parameters('bus_action_group')[copyIndex()]['email']]"
+            },
+            "copy": {
+                "name": "actionGroupsCopy",
+                "count": "[length(parameters('bus_action_group'))]"
+            }
+        }
+    ]
+}

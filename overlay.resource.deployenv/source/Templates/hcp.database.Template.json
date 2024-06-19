@@ -1,0 +1,39 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "action_group_name": {
+            "type": "string",
+            "metadata": {
+                "description": "Unique name (within the Resource Group) for the Action group."
+            }
+        },
+        "action_group_short_name": {
+            "type": "string",
+            "metadata": {
+                "description": "Short name (maximum 12 characters) for the Action group."
+            }
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Insights/actionGroups",
+            "apiVersion": "2021-09-01",
+            "name": "[parameters('action_group_name')]",
+            "location": "global",
+            "properties": {
+                "groupShortName": "[parameters('action_group_short_name')]",
+                "enabled": true,
+                "scopes": [ "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().Id)]" ],
+                "emailReceivers": [
+                    {
+                        "name": "aksAtlanta",
+                        "emailAddress": "aksatlanta@microsoft.com",
+                        "useCommonAlertSchema": true
+
+                    }
+                ]
+            }
+        }
+    ]
+}

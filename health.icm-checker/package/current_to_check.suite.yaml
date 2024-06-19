@@ -1,0 +1,15 @@
+gb.int.sov:
+gb.prod.1:
+gb.prod.2: gb.prod.1
+gb.prod.2-1: gb.prod.2
+gb.prod.3: gb.prod.2-1
+gb.prod.4: gb.prod.3
+gb.prod.5: gb.prod.4
+gb.prod.6: gb.prod.5
+gb.prod.sov: gb.prod.4
+ff.prod.1:
+ff.prod.2: ff.prod.1
+mc.prod.1:
+mc.prod.2: mc.prod.1
+mc.prod.3: mc.prod.2
+gb.prod.lx: ff.prod.1

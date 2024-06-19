@@ -1,0 +1,1107 @@
+{
+    "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/rolloutSpecification.json",
+    "contentVersion": "1.0.0.0",
+    "rolloutMetadata": {
+        "serviceModelPath": "{CLOUDENV}.{DEPLOYENV}.{REGION}.ServiceModel.json",
+        "scopeBindingsPath": "{CLOUDENV}.{DEPLOYENV}.{REGION}.ScopeBindings.json",
+        "name": "{rollout_name}",
+        "rolloutType": "Major",
+        "buildSource": {
+            "parameters": {
+                "versionFile": "buildver.txt"
+            }
+        },
+        "notification": {
+            "email": {
+                "to": "{notification_email}"
+            }
+        }
+    },
+    "orchestratedSteps": [
+        {
+            "name": "arn",
+            "targetType": "ServiceResource",
+            "targetName": "arn",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "arn.azmonitor",
+            "targetType": "ServiceResource",
+            "targetName": "arn.azmonitor",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "arn"
+            ]
+        },
+        {
+            "name": "au",
+            "targetType": "ServiceResource",
+            "targetName": "au",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "nodeprovisioner",
+            "targetType": "ServiceResource",
+            "targetName": "nodeprovisioner",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "bl.msi",
+            "targetType": "ServiceResource",
+            "targetName": "bl.msi",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "featurebl.msi",
+            "targetType": "ServiceResource",
+            "targetName": "featurebl.msi",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "bl.keyvault",
+            "targetType": "ServiceResource",
+            "targetName": "bl.keyvault",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "bl.msi",
+                "featurebl.msi"
+            ]
+        },
+        {
+            "name": "bl.storageAccount",
+            "targetType": "ServiceResource",
+            "targetName": "bl.storageAccount",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "bus",
+            "targetType": "ServiceResource",
+            "targetName": "bus",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "bus.namespace.azmonitor",
+            "targetType": "ServiceResource",
+            "targetName": "bus.namespace.azmonitor",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "bus"
+            ]
+        },
+        {
+            "name": "bus.resourceprovider.azmonitor",
+            "targetType": "ServiceResource",
+            "targetName": "bus.resourceprovider.azmonitor",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "bus"
+            ]
+        },
+        {
+            "name": "bus.fleetoperations.azmonitor",
+            "targetType": "ServiceResource",
+            "targetName": "bus.fleetoperations.azmonitor",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "bus"
+            ]
+        },
+        {
+            "name": "bus.secondary.ns",
+            "targetType": "ServiceResource",
+            "targetName": "bus.secondary.ns",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "ccpacr",
+            "targetType": "ServiceResource",
+            "targetName": "ccpacr",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "ccpingress",
+            "targetType": "ServiceResource",
+            "targetName": "ccpingress",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "ccpingress.cert.issuers",
+            "targetType": "ServiceResource",
+            "targetName": "ccpingress.cert.issuers",
+            "actions": [
+                "Extension/cert.issuers.onecert-public"
+            ],
+            "dependsOn": [
+                "ccpingress"
+            ]
+        },
+        {
+            "name": "ccpingress.cert.items",
+            "targetType": "ServiceResource",
+            "targetName": "ccpingress.cert.items",
+            "actions": [
+                "Extension/ccpingress.cert.items.https-server"
+            ],
+            "dependsOn": [
+                "ccpingress.cert.issuers"
+            ]
+        },
+        {
+            "name": "costanalysis",
+            "targetType": "ServiceResource",
+            "targetName": "costanalysis",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "cpc",
+            "targetType": "ServiceResource",
+            "targetName": "cpc",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "devhub",
+            "targetType": "ServiceResource",
+            "targetName": "devhub",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "dpl"
+            ]
+        },
+        {
+            "name": "devhub.kv",
+            "targetType": "ServiceResource",
+            "targetName": "devhub.kv",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "dpl"
+            ]
+        },
+        {
+            "name": "devhub.cert.issuers",
+            "targetType": "ServiceResource",
+            "targetName": "devhub.cert.issuers",
+            "actions": [
+                "Extension/cert.issuers.onecert-public",
+                "Extension/cert.issuers.onecert-private"
+            ],
+            "dependsOn": [
+                "devhub"
+            ]
+        },
+        {
+            "name": "devhub.cert.items",
+            "targetType": "ServiceResource",
+            "targetName": "devhub.cert.items",
+            "actions": [
+                "Extension/devhub.cert.items.ssl",
+                "Extension/devhub.cert.items.1p",
+                "Extension/devhub.cert.items.dh-oauth-info-encrypt"
+            ],
+            "dependsOn": [
+                "devhub.cert.issuers"
+            ]
+        },
+        {
+            "name": "devhubfd.cert.issuers",
+            "targetType": "ServiceResource",
+            "targetName": "devhubfd.cert.issuers",
+            "actions": [
+                "Extension/cert.issuers.onecert-public"
+            ],
+            "dependsOn": [
+                "devhub"
+            ]
+        },
+        {
+            "name": "devhubfd.cert.items",
+            "targetType": "ServiceResource",
+            "targetName": "devhubfd.cert.items",
+            "actions": [
+                "Extension/devhubfd.cert.items.ssl"
+            ],
+            "dependsOn": [
+                "devhubfd.cert.issuers"
+            ]
+        },
+        {
+            "name": "devhub.dnszone.records",
+            "targetType": "ServiceResource",
+            "targetName": "devhub.dnszone.records",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "devhub"
+            ]
+        },
+        {
+            "name": "devhub.frontdoor",
+            "targetType": "ServiceResource",
+            "targetName": "devhub.frontdoor",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "devhub.dnszone.records"
+            ]
+        },
+        {
+            "name": "diagnostics",
+            "targetType": "ServiceResource",
+            "targetName": "diagnostics",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "dnc",
+            "targetType": "ServiceResource",
+            "targetName": "dnc",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "dnc.cert.issuers",
+            "targetType": "ServiceResource",
+            "targetName": "dnc.cert.issuers",
+            "actions": [
+                "Extension/cert.issuers.onecert-private"
+            ],
+            "dependsOn": [
+                "dnc"
+            ]
+        },
+        {
+            "name": "dnc.cert.items",
+            "targetType": "ServiceResource",
+            "targetName": "dnc.cert.items",
+            "actions": [
+                "Extension/dnc.cert.items.pubsub"
+            ],
+            "dependsOn": [
+                "dnc.cert.issuers"
+            ]
+        },
+        {
+            "name": "dpl",
+            "targetType": "ServiceResource",
+            "targetName": "dpl",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "dpl.hcp-keyvault",
+            "targetType": "ServiceResource",
+            "targetName": "dpl.hcp-keyvault",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "dpl",
+                "hcp.hcp-keyvault"
+            ]
+        },
+        {
+            "name": "dpl.hcp-underlay-kv",
+            "targetType": "ServiceResource",
+            "targetName": "dpl.hcp-underlay-kv",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "dpl",
+                "hcp.hcp-underlay-kv"
+            ]
+        },
+        {
+            "name": "dpl.hcp-sector-kv",
+            "targetType": "ServiceResource",
+            "targetName": "dpl.hcp-sector-kv",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "dpl",
+                "rp.sectorkv"
+            ]
+        },
+        {
+            "name": "eg",
+            "targetType": "ServiceResource",
+            "targetName": "eg",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "dpl"
+            ]
+        },
+        {
+            "name": "eg.cert.issuers",
+            "targetType": "ServiceResource",
+            "targetName": "eg.cert.issuers",
+            "actions": [
+                "Extension/cert.issuers.onecert-private"
+            ],
+            "dependsOn": [
+                "eg"
+            ]
+        },
+        {
+            "name": "eg.cert.items",
+            "targetType": "ServiceResource",
+            "targetName": "eg.cert.items",
+            "actions": [
+                "Extension/eg.cert.items.eventgrid-publisher"
+            ],
+            "dependsOn": [
+                "eg.cert.issuers"
+            ]
+        },
+        {
+            "name": "flt",
+            "targetType": "ServiceResource",
+            "targetName": "flt",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "flt.cert.issuers",
+            "targetType": "ServiceResource",
+            "targetName": "flt.cert.issuers",
+            "actions": [
+                "Extension/cert.issuers.onecert-private"
+            ],
+            "dependsOn": [
+                "flt"
+            ]
+        },
+        {
+            "name": "flt.cert.items",
+            "targetType": "ServiceResource",
+            "targetName": "flt.cert.items",
+            "actions": [
+                "Extension/flt.cert.items.s2s"
+            ],
+            "dependsOn": [
+                "flt.cert.issuers"
+            ]
+        },
+        {
+            "name": "fms",
+            "targetType": "ServiceResource",
+            "targetName": "fms",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "dpl"
+            ]
+        },
+        {
+            "name": "fms.cert.issuers",
+            "targetType": "ServiceResource",
+            "targetName": "fms.cert.issuers",
+            "actions": [
+                "Extension/cert.issuers.onecert-private"
+            ],
+            "dependsOn": [
+                "fms"
+            ]
+        },
+        {
+            "name": "fms.cert.items",
+            "targetType": "ServiceResource",
+            "targetName": "fms.cert.items",
+            "actions": [
+                "Extension/fms.cert.items.s2s"
+            ],
+            "dependsOn": [
+                "fms.cert.issuers"
+            ]
+        },
+        {
+            "name": "fms.kv",
+            "targetType": "ServiceResource",
+            "targetName": "fms.kv",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "fms",
+                "rp"
+            ]
+        },
+        {
+            "name": "grd",
+            "targetType": "ServiceResource",
+            "targetName": "grd",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "grd.rp-keyvault",
+            "targetType": "ServiceResource",
+            "targetName": "grd.rp-keyvault",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "grd",
+                "rp"
+            ]
+        },
+        {
+            "name": "hcp",
+            "targetType": "ServiceResource",
+            "targetName": "hcp",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "hcp.cert.issuers",
+            "targetType": "ServiceResource",
+            "targetName": "hcp.cert.issuers",
+            "actions": [
+                "Extension/cert.issuers.onecert-private",
+                "Extension/cert.issuers.onecert-public"
+            ],
+            "dependsOn": [
+                "hcp"
+            ]
+        },
+        {
+            "name": "hcp.cert.items",
+            "targetType": "ServiceResource",
+            "targetName": "hcp.cert.items",
+            "actions": [
+                "Extension/hcp.cert.items.ssl",
+                "Extension/hcp.cert.items.encryption"
+            ],
+            "dependsOn": [
+                "hcp.cert.issuers"
+            ]
+        },
+        {
+            "name": "hcp.dnszone.records",
+            "targetType": "ServiceResource",
+            "targetName": "hcp.dnszone.records",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "hcp"
+            ]
+        },
+        {
+            "name": "hcp.database",
+            "targetType": "ServiceResource",
+            "targetName": "hcp.database",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "hcp.hcp-keyvault",
+            "targetType": "ServiceResource",
+            "targetName": "hcp.hcp-keyvault",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "hcp"
+            ]
+        },
+        {
+            "name": "hcp.hcp-underlay-kv",
+            "targetType": "ServiceResource",
+            "targetName": "hcp.hcp-underlay-kv",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "hcp"
+            ]
+        },
+        {
+            "name": "hcp.sectorkv",
+            "targetType": "ServiceResource",
+            "targetName": "hcp.sectorkv",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "hcp"
+            ]
+        },
+        {
+            "name": "ig",
+            "targetType": "ServiceResource",
+            "targetName": "ig",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "ig.cert.issuers",
+            "targetType": "ServiceResource",
+            "targetName": "ig.cert.issuers",
+            "actions": [
+                "Extension/cert.issuers.onecert-public"
+            ],
+            "dependsOn": [
+                "ig"
+            ]
+        },
+        {
+            "name": "ig.cert.items",
+            "targetType": "ServiceResource",
+            "targetName": "ig.cert.items",
+            "actions": [
+                "Extension/ig.cert.items.ssl"
+            ],
+            "dependsOn": [
+                "ig.cert.issuers"
+            ]
+        },
+        {
+            "name": "ig.dnszone.records",
+            "targetType": "ServiceResource",
+            "targetName": "ig.dnszone.records",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "ig"
+            ]
+        },
+        {
+            "name": "jit",
+            "targetType": "ServiceResource",
+            "targetName": "jit",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "mcs",
+            "targetType": "ServiceResource",
+            "targetName": "mcs",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "mcb",
+            "targetType": "ServiceResource",
+            "targetName": "mcb",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "mcr",
+            "targetType": "ServiceResource",
+            "targetName": "mcr",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "obo",
+            "targetType": "ServiceResource",
+            "targetName": "obo",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "dpl"
+            ]
+        },
+        {
+            "name": "obo.cert.issuers",
+            "targetType": "ServiceResource",
+            "targetName": "obo.cert.issuers",
+            "actions": [
+                "Extension/cert.issuers.onecert-private"
+            ],
+            "dependsOn": [
+                "obo"
+            ]
+        },
+        {
+            "name": "obo.cert.items",
+            "targetType": "ServiceResource",
+            "targetName": "obo.cert.items",
+            "actions": [
+                "Extension/obo.cert.items.s2s"
+            ],
+            "dependsOn": [
+                "obo.cert.issuers"
+            ]
+        },
+        {
+            "name": "oic",
+            "targetType": "ServiceResource",
+            "targetName": "oic",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "dpl"
+            ]
+        },
+        {
+            "name": "oic.cert.issuers",
+            "targetType": "ServiceResource",
+            "targetName": "oic.cert.issuers",
+            "actions": [
+                "Extension/cert.issuers.onecert-public"
+            ],
+            "dependsOn": [
+                "oic"
+            ]
+        },
+        {
+            "name": "oic.cert.items",
+            "targetType": "ServiceResource",
+            "targetName": "oic.cert.items",
+            "actions": [
+                "Extension/oic.cert.items.ssl"
+            ],
+            "dependsOn": [
+                "oic.cert.issuers"
+            ]
+        },
+        {
+            "name": "oic.dnszone.records",
+            "targetType": "ServiceResource",
+            "targetName": "oic.dnszone.records",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "oic"
+            ]
+        },
+        {
+            "name": "om.cert.issuers",
+            "targetType": "ServiceResource",
+            "targetName": "om.cert.issuers",
+            "actions": [
+                "Extension/cert.issuers.onecert-public"
+            ],
+            "dependsOn": [
+                "om"
+            ]
+        },
+        {
+            "name": "om.cert.items",
+            "targetType": "ServiceResource",
+            "targetName": "om.cert.items",
+            "actions": [
+                "Extension/om.cert.items.portalcert"
+            ],
+            "dependsOn": [
+                "om.cert.issuers"
+            ]
+        },
+        {
+            "name": "om",
+            "targetType": "ServiceResource",
+            "targetName": "om",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "dpl",
+                "rp"
+            ]
+        },
+        {
+            "name": "pc",
+            "targetType": "ServiceResource",
+            "targetName": "pc",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "progressiverollout",
+            "targetType": "ServiceResource",
+            "targetName": "progressiverollout",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "progressiverollout.issuers",
+            "targetType": "ServiceResource",
+            "targetName": "progressiverollout.issuers",
+            "actions": [
+                "Extension/cert.issuers.onecert-private"
+            ],
+            "dependsOn": [
+                "progressiverollout"
+            ]
+        },
+        {
+            "name": "progressiverollout.cert",
+            "targetType": "ServiceResource",
+            "targetName": "progressiverollout.cert",
+            "actions": [
+                "Extension/progressiverollout.cert"
+            ],
+            "dependsOn": [
+                "progressiverollout.issuers"
+            ]
+        },
+        {
+            "name": "qw",
+            "targetType": "ServiceResource",
+            "targetName": "qw",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "qw.sectorkv",
+            "targetType": "ServiceResource",
+            "targetName": "qw.sectorkv",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "qw",
+                "hcp.sectorkv"
+            ]
+        },
+        {
+            "name": "releasetracker",
+            "targetType": "ServiceResource",
+            "targetName": "releasetracker",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "rl",
+            "targetType": "ServiceResource",
+            "targetName": "rl",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "rp",
+            "targetType": "ServiceResource",
+            "targetName": "rp",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "bus"
+            ]
+        },
+        {
+            "name": "servicebusrelay",
+            "targetType": "ServiceResource",
+            "targetName": "servicebusrelay",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "dpl"
+            ]
+        },
+        {
+            "name": "servicehub.msi",
+            "targetType": "ServiceResource",
+            "targetName": "servicehub.msi",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "servicehub.sa",
+            "targetType": "ServiceResource",
+            "targetName": "servicehub.sa",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "rp.hcp-keyvault",
+            "targetType": "ServiceResource",
+            "targetName": "rp.hcp-keyvault",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "rp",
+                "hcp"
+            ]
+        },
+        {
+            "name": "rp.hcp-underlay-kv",
+            "targetType": "ServiceResource",
+            "targetName": "rp.hcp-underlay-kv",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "dpl.hcp-underlay-kv",
+                "rp"
+            ]
+        },
+        {
+            "name": "rp.redis",
+            "targetType": "ServiceResource",
+            "targetName": "rp.redis",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "rp"
+            ]
+        },        
+        {
+            "name": "rp.sectorkv",
+            "targetType": "ServiceResource",
+            "targetName": "rp.sectorkv",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "rp",
+                "qw.sectorkv"
+            ]
+        },
+        {
+            "name": "rp.cert.issuers",
+            "targetType": "ServiceResource",
+            "targetName": "rp.cert.issuers",
+            "actions": [
+                "Extension/cert.issuers.onecert-private",
+                "Extension/cert.issuers.onecert-public"
+            ],
+            "dependsOn": [
+                "rp"
+            ]
+        },
+        {
+            "name": "rp.cert.items",
+            "targetType": "ServiceResource",
+            "targetName": "rp.cert.items",
+            "actions": [
+                "Extension/rp.cert.items.s2s",
+                "Extension/rp.cert.items.ssl"
+            ],
+            "dependsOn": [
+                "rp.cert.issuers"
+            ]
+        },
+        {
+            "name": "rp.cosmosdb",
+            "targetType": "ServiceResource",
+            "targetName": "rp.cosmosdb",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "diagnostics",
+                "om"
+            ]
+        },
+        {
+            "name": "rp.dnszone.records",
+            "targetType": "ServiceResource",
+            "targetName": "rp.dnszone.records",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "rp"
+            ]
+        },
+        {
+            "name": "script",
+            "targetType": "ServiceResource",
+            "targetName": "script",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "bl.msi",
+                "bl.keyvault",
+                "bl.storageAccount",
+                "bus",
+                "costanalysis",
+                "devhub",
+                "dpl",
+                "dnc",
+                "eg",
+                "flt",
+                "hcp",
+                "hcp.database",
+                "jit",
+                "mcb",
+                "mcr",
+                "obo",
+                "oic",
+                "om",
+                "progressiverollout",
+                "releasetracker",
+                "rl",
+                "rp",
+                "servicehub.msi",
+                "servicehub.sa",
+                "sg",
+                "svcacr",
+                "ta",
+                "tgl",
+                "featurebl.msi"
+            ]
+        },
+        {
+            "name": "sg",
+            "targetType": "ServiceResource",
+            "targetName": "sg",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "svcacr",
+            "targetType": "ServiceResource",
+            "targetName": "svcacr",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "ta",
+            "targetType": "ServiceResource",
+            "targetName": "ta",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "ta.cert.issuers",
+            "targetType": "ServiceResource",
+            "targetName": "ta.cert.issuers",
+            "actions": [
+                "Extension/cert.issuers.onecert-public"
+            ],
+            "dependsOn": [
+                "ta"
+            ]
+        },
+        {
+            "name": "ta.cert.items",
+            "targetType": "ServiceResource",
+            "targetName": "ta.cert.items",
+            "actions": [
+                "Extension/ta.cert.items.https-server"
+            ],
+            "dependsOn": [
+                "ta.cert.issuers"
+            ]
+        },
+        {
+            "name": "ta.dnszone.records",
+            "targetType": "ServiceResource",
+            "targetName": "ta.dnszone.records",
+            "actions": [
+                "Deploy"
+            ],
+            "dependsOn": [
+                "ta"
+            ]
+        },
+        {
+            "name": "tgl",
+            "targetType": "ServiceResource",
+            "targetName": "tgl",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "zen",
+            "targetType": "ServiceResource",
+            "targetName": "zen",
+            "actions": [
+                "Deploy"
+            ]
+        },
+        {
+            "name": "zen.cert.issuers",
+            "targetType": "ServiceResource",
+            "targetName": "zen.cert.issuers",
+            "actions": [
+                "Extension/cert.issuers.onecert-private",
+                "Extension/cert.issuers.onecert-public"
+            ],
+            "dependsOn": [
+                "zen"
+            ]
+        },
+        {
+            "name": "zen.cert.items",
+            "targetType": "ServiceResource",
+            "targetName": "zen.cert.items",
+            "actions": [
+                "Extension/zen.cert.items.public-ca-cert",
+                "Extension/zen.cert.items.private-ca-cert"
+            ],
+            "dependsOn": [
+                "zen.cert.issuers"
+            ]
+        }
+    ]
+}

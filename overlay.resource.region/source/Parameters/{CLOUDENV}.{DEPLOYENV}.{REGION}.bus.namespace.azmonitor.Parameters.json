@@ -1,0 +1,74 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "value": "{bus_namespace_name}"
+    },
+    "location": {
+      "value": "{REGION}"
+    },
+    "metric_alerts_enabled": {
+      "value": "{metric_alerts_enabled}"
+    },
+    "entityAlerts": {
+      "value": [
+        {
+          "severity": 2,
+          "name": "ServiceBus Entity High Active Message Count",
+          "condition_name": "ActiveMessages",
+          "threshold": 100000
+        },
+        {
+          "severity": 3,
+          "name": "ServiceBus Entity High Active Message Count",
+          "condition_name": "ActiveMessages",
+          "threshold": 80000
+        },
+        {
+          "severity": 2,
+          "name": "ServiceBus Entity High Total Size",
+          "condition_name": "Size",
+          "threshold": 800000000
+        },
+        {
+          "severity": 3,
+          "name": "ServiceBus Entity High Total Size",
+          "condition_name": "Size",
+          "threshold": 500000000
+        }
+      ]
+    },
+    "namespaceAlerts": {
+      "value": [
+        {
+          "severity": 2,
+          "name": "ServiceBus Namespace High Server Errors",
+          "condition_name": "ServerErrors",
+          "threshold": 500
+        },
+        {
+          "severity": 3,
+          "name": "ServiceBus Namespace High Server Errors",
+          "condition_name": "ServerErrors",
+          "threshold": 200
+        },
+        {
+          "severity": 3,
+          "name": "ServiceBus Namespace High Throttled Requests",
+          "condition_name": "ThrottledRequests",
+          "threshold": 10
+        }
+      ]
+    },
+    "resourceGroupNameGlobal": {
+      "value": "{resource_name_prefix_global}overlay-global"
+    },
+    "namespaceActionGroupName": {
+      "value": "{resource_name_prefix_global}bus-namespace-action-group"
+    },
+    "entityActionGroupName": {
+      "value": "{resource_name_prefix_global}bus-entity-action-group"
+    }
+  }
+}

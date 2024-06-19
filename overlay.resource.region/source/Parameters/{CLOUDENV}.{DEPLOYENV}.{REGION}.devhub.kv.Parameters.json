@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploy_access_policies": {
+      "value": "{devhub_deploy_networking_config}"
+    },
+    "vault_name": {
+      "value": "{devhub_global_kv_name}"
+    },
+    "resource_name_prefix": {
+      "value": "{resource_name_prefix}"
+    },
+    "regional_resource_group": {
+      "value": "{resource_name_prefix}overlay-{REGION}"
+    },
+    "msi_operator_resource_id": {
+      "value": "{msi_operator_resource_id}"
+    }
+  }
+}

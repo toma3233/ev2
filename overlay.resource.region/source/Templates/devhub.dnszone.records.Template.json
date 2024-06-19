@@ -1,0 +1,75 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploy_dns_config": {
+      "type": "string",
+      "allowedValues": [
+        "true",
+        "false"
+      ]
+    },
+    "devhub_trafficmanager_name": {
+      "type": "string"
+    },
+    "devhub_region": {
+      "type": "string"
+    },
+    "devhub_domain_dnszone_name": {
+      "type": "string"
+    },
+    "trafficmanager_resource_group_name": {
+      "type": "string"
+    },
+    "frontdoor_profile_name": {
+      "type": "string"
+    },
+    "frontdoor_endpoint_name": {
+      "type": "string"
+    },
+    "frontdoor_regional_endpoint_name": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "devhub_frontdoor_cname": "fd"
+  },
+  "resources": [
+    {
+      "condition": "[equals(parameters('deploy_dns_config'),'true')]",
+      "type": "Microsoft.Network/dnszones/CNAME",
+      "name": "[concat(parameters('devhub_domain_dnszone_name'), '/', parameters('devhub_region'))]",
+      "apiVersion": "2016-04-01",
+      "properties": {
+        "TTL": 3600,
+        "CNAMERecord": {
+          "cname": "[if(equals(parameters('deploy_dns_config'),'true'), reference(resourceId(parameters('trafficmanager_resource_group_name'), 'Microsoft.Network/trafficManagerProfiles', parameters('devhub_trafficmanager_name')), '2018-04-01').dnsConfig.fqdn, json('null'))]"
+        }
+      }
+    },
+    {
+      "condition": "[equals(parameters('deploy_dns_config'),'true')]",
+      "type": "Microsoft.Network/dnszones/CNAME",
+      "apiVersion": "2016-04-01",
+      "name": "[concat(parameters('devhub_domain_dnszone_name'), '/', variables('devhub_frontdoor_cname'))]",
+      "properties": {
+        "TTL": 3600,
+        "CNAMERecord": {
+          "cname": "[if(equals(parameters('deploy_dns_config'),'true'), reference(resourceId('Microsoft.Cdn/profiles/afdEndpoints', parameters('frontdoor_profile_name'), parameters('frontdoor_endpoint_name')), '2021-06-01').hostName, json('null'))]"
+        }
+      }
+    },
+    {
+      "condition": "[equals(parameters('deploy_dns_config'),'true')]",
+      "type": "Microsoft.Network/dnszones/CNAME",
+      "name": "[concat(parameters('devhub_domain_dnszone_name'), '/', parameters('frontdoor_regional_endpoint_name'))]",
+      "apiVersion": "2016-04-01",
+      "properties": {
+        "TTL": 3600,
+        "CNAMERecord": {
+          "cname": "[if(equals(parameters('deploy_dns_config'),'true'), reference(resourceId(parameters('trafficmanager_resource_group_name'), 'Microsoft.Network/trafficManagerProfiles', parameters('devhub_trafficmanager_name')), '2018-04-01').dnsConfig.fqdn, json('null'))]"
+        }
+      }
+    }
+  ]
+}

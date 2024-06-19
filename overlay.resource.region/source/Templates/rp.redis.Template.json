@@ -1,0 +1,151 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resource_name_prefix": {
+            "type": "string"
+        },
+        "overlay_resources_subscription_id": {
+            "type": "string"
+        },
+        "identity_resource_group_name": {
+            "type": "string"
+        },
+        "diagnostics_enabled": {
+            "type": "string"
+        },
+        "redis_enabled": {
+            "type": "string"
+        },
+        "log_analytics_account_name": {
+            "type": "string"
+        },
+        "zone_redundant_enabled": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "tenant_id": "[subscription().tenantid]",
+        "location": "[resourceGroup().location]",
+        "rp_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'resource-provider')]",
+        "regional_cache_name": "[concat(parameters('resource_name_prefix'),'aks-rp-rediscache-', variables('location'))]"
+    },
+    "resources": [
+        {
+            "condition": "[and(equals(parameters('redis_enabled'),'true'), equals(parameters('zone_redundant_enabled'),'true'))]",
+            "type": "Microsoft.Cache/Redis",
+            "apiVersion": "2023-08-01",
+            "name": "[variables('regional_cache_name')]",
+            "location": "[variables('location')]",
+            "zones": [
+                "1",
+                "2",
+                "3"
+            ],
+            "properties": {
+                "redisVersion": "6.0",
+                "sku": {
+                    "name": "Premium",
+                    "family": "P",
+                    "capacity": 1
+                },
+                "enableNonSslPort": false,
+                "publicNetworkAccess": "Enabled",
+                "redisConfiguration": {
+                    "maxmemory-reserved": "642",
+                    "maxfragmentationmemory-reserved": "642",
+                    "aad-enabled": "True",
+                    "maxmemory-delta": "642"
+                },
+                "replicasPerMaster": 3,
+                "replicasPerPrimary": 3,
+                "updateChannel": "Stable"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('redis_enabled'),'true'), equals(parameters('zone_redundant_enabled'),'false'))]",
+            "type": "Microsoft.Cache/Redis",
+            "apiVersion": "2023-08-01",
+            "name": "[variables('regional_cache_name')]",
+            "location": "[variables('location')]",
+            "properties": {
+                "redisVersion": "6.0",
+                "sku": {
+                    "name": "Premium",
+                    "family": "P",
+                    "capacity": 1
+                },
+                "enableNonSslPort": false,
+                "publicNetworkAccess": "Enabled",
+                "redisConfiguration": {
+                    "maxmemory-reserved": "642",
+                    "maxfragmentationmemory-reserved": "642",
+                    "aad-enabled": "True",
+                    "maxmemory-delta": "642"
+                },
+                "replicasPerMaster": 3,
+                "replicasPerPrimary": 3,
+                "updateChannel": "Stable"
+            }
+        },
+        {
+            "condition": "[equals(parameters('redis_enabled'),'true')]",
+            "type": "Microsoft.Cache/Redis/accessPolicyAssignments",
+            "apiVersion": "2023-08-01",
+            "name": "[concat(variables('regional_cache_name'), '/owner')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Cache/Redis', variables('regional_cache_name'))]"
+            ],
+            "properties": {
+                "accessPolicyName": "Data Owner",
+                "objectId": "[reference(resourceId(parameters('overlay_resources_subscription_id'), parameters('identity_resource_group_name'), 'Microsoft.ManagedIdentity/userAssignedIdentities/', variables('rp_user_assigned_identity_name')), '2018-11-30').principalId]",
+                "objectIdAlias": "[variables('rp_user_assigned_identity_name')]"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('redis_enabled'),'true'), equals(parameters('diagnostics_enabled'),'true'))]",
+            "type": "Microsoft.Insights/diagnosticSettings",
+            "apiVersion": "2021-05-01-preview",
+            "scope": "[concat('Microsoft.Cache/Redis', '/', variables('regional_cache_name'))]",
+            "name": "redisRequestLogToLogAnalytics",
+            "dependsOn": [
+                "[resourceId('Microsoft.Cache/Redis', variables('regional_cache_name'))]"
+            ],
+            "properties": {
+                "logs": [
+                    {
+                        "category": null,
+                        "categoryGroup": "audit",
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "days": 0,
+                            "enabled": false
+                        }
+                    },
+                    {
+                        "category": null,
+                        "categoryGroup": "allLogs",
+                        "enabled": false,
+                        "retentionPolicy": {
+                            "days": 0,
+                            "enabled": false
+                        }
+                    }
+                ],
+                "metrics": [
+                    {
+                        "timeGrain": null,
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "days": 0,
+                            "enabled": false
+                        },
+                        "category": "AllMetrics"
+                    }
+                ],
+                "workspaceId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.OperationalInsights/workspaces/', parameters('log_analytics_account_name'))]",
+                "logAnalyticsDestinationType": "Dedicated"
+            }
+        }
+    ]
+}

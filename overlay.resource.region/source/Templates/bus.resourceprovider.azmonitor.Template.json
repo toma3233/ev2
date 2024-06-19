@@ -1,0 +1,256 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "bus_resourceprovider_alert_level": {
+      "type": "string",
+      "defaultValue": "level1",
+      "allowedValues": [
+        "level1",
+        "level2",
+        "level3"
+      ]
+    },
+    "bus_resourceprovider_alert_levels_sev3": {
+      "type": "object",
+      "defaultValue": "{}"
+    },
+    "bus_resourceprovider_alert_levels_sev2": {
+      "type": "object",
+      "defaultValue": "{}"
+    },
+    "metric_alerts_enabled": {
+      "type": "string",
+      "defaultValue": "true"
+    },
+    "alertNames": {
+      "type": "array",
+      "defaultValue": []
+    },
+    "healthAlertSeverity": {
+      "type": "int",
+      "defaultValue": 3,
+      "allowedValues": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "metricsAlertSeverities": {
+      "type": "array",
+      "defaultValue": []
+    },
+    "windowSize": {
+      "type": "string",
+      "defaultValue": "PT15M",
+      "allowedValues": [
+        "PT1M",
+        "PT5M",
+        "PT15M",
+        "PT30M",
+        "PT1H",
+        "PT6H",
+        "PT12H",
+        "PT24H"
+      ]
+    },
+    "evaluationFrequency": {
+      "type": "string",
+      "defaultValue": "PT1M",
+      "allowedValues": [
+        "PT1M",
+        "PT5M",
+        "PT15M",
+        "PT30M",
+        "PT1H"
+      ]
+    },
+    "resourceGroupNameGlobal": {
+      "type": "string"
+    },
+    "actionGroupName": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "action_group_id": "[resourceId(parameters('resourceGroupNameGlobal'), 'microsoft.insights/actionGroups', parameters('actionGroupName'))]",
+    "bus_namespace_health_alert_name": "[concat(parameters('name'), ' Resource Health')]",
+    "bus_namespace_health_alert_description": "[concat(variables('bus_namespace_health_alert_name'), ' Change Event')]",
+    "active_message_count_threshold_sev3": "[parameters('bus_resourceprovider_alert_levels_sev3')[parameters('bus_resourceprovider_alert_level')]]",
+    "active_message_count_threshold_sev2": "[parameters('bus_resourceprovider_alert_levels_sev2')[parameters('bus_resourceprovider_alert_level')]]",
+    "alert_descriptions": [
+      "[concat('[SEV3][', parameters('location'), '] ServiceBus ResourceProvider Active Message Count > ', variables('active_message_count_threshold_sev3'))]",
+      "[concat('[SEV2][', parameters('location'), '] ServiceBus ResourceProvider Active Message Count > ', variables('active_message_count_threshold_sev2'))]",
+      "[concat('[SEV3][', parameters('location'), '] ServiceBus ResourceProvider DLQ Message Activity')]"
+    ],
+    "active_message_count_sev3_criteria": [
+      {
+        "threshold": "[variables('active_message_count_threshold_sev3')]",
+        "name": "active_message_count_sev3",
+        "metricNamespace": "Microsoft.ServiceBus/namespaces",
+        "metricName": "ActiveMessages",
+        "dimensions": [
+          {
+            "name": "EntityName",
+            "operator": "Include",
+            "values": [
+              "ResourceProvider",
+              "resourceprovider",
+              "resourceprovidercanary",
+              "resourceproviderstable"
+            ]
+          }
+        ],
+        "operator": "GreaterThan",
+        "timeAggregation": "Average",
+        "criterionType": "StaticThresholdCriterion"
+      }
+    ],
+    "active_message_count_sev2_criteria": [
+      {
+        "threshold": "[variables('active_message_count_threshold_sev2')]",
+        "name": "active_message_count_sev2",
+        "metricNamespace": "Microsoft.ServiceBus/namespaces",
+        "metricName": "ActiveMessages",
+        "dimensions": [
+          {
+            "name": "EntityName",
+            "operator": "Include",
+            "values": [
+              "ResourceProvider",
+              "resourceprovider",
+              "resourceprovidercanary",
+              "resourceproviderstable"
+            ]
+          }
+        ],
+        "operator": "GreaterThan",
+        "timeAggregation": "Average",
+        "criterionType": "StaticThresholdCriterion"
+      }
+    ],
+    "dlq_message_count_criteria": [
+      {
+        "threshold": 0,
+        "name": "Metric1",
+        "metricNamespace": "Microsoft.ServiceBus/namespaces",
+        "metricName": "DeadletteredMessages",
+        "dimensions": [
+          {
+            "name": "EntityName",
+            "operator": "Include",
+            "values": [
+              "ResourceProvider",
+              "resourceprovider",
+              "resourceprovidercanary",
+              "resourceproviderstable"
+            ]
+          }
+        ],
+        "operator": "GreaterThan",
+        "timeAggregation": "Maximum",
+        "criterionType": "StaticThresholdCriterion"
+      }
+    ],
+    "criterias": [
+      "[variables('active_message_count_sev3_criteria')]",
+      "[variables('active_message_count_sev2_criteria')]",
+      "[variables('dlq_message_count_criteria')]"
+    ]
+  },
+  "resources": [
+    {
+      "condition": "[equals('true',parameters('metric_alerts_enabled'))]",
+      "type": "Microsoft.Insights/activityLogAlerts",
+      "apiVersion": "2020-10-01",
+      "name": "[variables('bus_namespace_health_alert_name')]",
+      "location": "Global",
+      "properties": {
+        "scopes": [
+          "[subscription().id]"
+        ],
+        "condition": {
+          "allOf": [
+            {
+              "field": "category",
+              "equals": "ResourceHealth"
+            },
+            {
+              "anyOf": [
+                {
+                  "field": "resourceGroup",
+                  "equals": "[resourceGroup().name]"
+                }
+              ]
+            },
+            {
+              "anyOf": [
+                {
+                  "field": "resourceId",
+                  "equals": "[resourceId('Microsoft.ServiceBus/namespaces', parameters('name'))]"
+                }
+              ]
+            },
+            {
+              "anyOf": [
+                {
+                  "field": "resourceType",
+                  "equals": "Microsoft.ServiceBus/namespaces"
+                }
+              ]
+            }
+          ]
+        },
+        "actions": {
+          "actionGroups": [
+            {
+              "actionGroupId": "[variables('action_group_id')]"
+            }
+          ]
+        },
+        "enabled": true,
+        "description": "[variables('bus_namespace_health_alert_description')]",
+        "severity": "[parameters('healthAlertSeverity')"
+      }
+    },
+    {
+      "condition": "[equals('true',parameters('metric_alerts_enabled'))]",
+      "name": "[parameters('alertNames')[copyIndex()]]",
+      "type": "Microsoft.Insights/metricAlerts",
+      "location": "global",
+      "apiVersion": "2018-03-01",
+      "tags": {},
+      "properties": {
+        "description": "[variables('alert_descriptions')[copyIndex()]]",
+        "severity": "[parameters('metricsAlertSeverities')[copyIndex()]]",
+        "enabled": true,
+        "scopes": [
+          "[resourceId('Microsoft.ServiceBus/namespaces', parameters('name'))]"
+        ],
+        "evaluationFrequency": "[parameters('evaluationFrequency')]",
+        "windowSize": "[parameters('windowSize')]",
+        "criteria": {
+          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
+          "allOf": "[variables('criterias')[copyIndex()]]"
+        },
+        "actions": [
+          {
+            "actionGroupId": "[variables('action_group_id')]"
+          }
+        ]
+      },
+      "copy": {
+        "name": "alertNamesCopy",
+        "count": "[length(parameters('alertNames'))]"
+      }
+    }
+  ]
+}

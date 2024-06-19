@@ -1,0 +1,23 @@
+VariableGroup:
+  Variables:
+    KUBECONFIG: "{cse_workingdir}/kubeconfig"
+    HELM: "{cse_workingdir}/release-tool/helm"
+    HELM_WRAPPER: "{cse_workingdir}/release-tool/helm-wrapper.sh"
+    REGION_GATEWAY_MSI_RESOURCE_ID: "/subscriptions/{overlay_resources_subscription_id}/resourceGroups/{resource_name_prefix}overlay-{REGION}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{resource_name_prefix}ta-region-gateway"
+    VERSION: "{EV2_BUILDVERSION}"
+    DISCOVERY_TRUSTEDACCESS_VAULTURI: "https://{resource_name_prefix}aksta{REGION}.{keyvault_suffix}/"
+    HCP_ENDPOINT_URI: "https://{domain_region_prefix}{REGION}.hcp.{domain_deployenv}"
+    FLEET_MSI_RESOURCE_ID: "/subscriptions/{overlay_resources_subscription_id}/resourceGroups/{resource_name_prefix}overlay-{REGION}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{resource_name_prefix}flt"
+    EDGE_PROXY_DNS_LABEL: "aksta-{service_cluster_name}"
+SecretFiles:
+  "kubeconfig.base64": "{underlay_keyvault_name}/{underlay_prefix}{REGION}-{serviceclusterid}-kubeconfig"
+Steps:
+- Script: ensure_package kubectl make
+  Retry: true
+- Script: |
+    base64 -d kubeconfig.base64 > "${KUBECONFIG}"
+    chmod 400 "${KUBECONFIG}"
+    kubectl cluster-info
+    chmod +x release-tool/*
+- Script: |
+    make -C deploy all

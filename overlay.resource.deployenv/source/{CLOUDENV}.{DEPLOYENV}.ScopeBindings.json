@@ -1,0 +1,66 @@
+{
+    "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/scopeBindings.json",
+    "contentVersion": "1.0.0.0",
+    "scopeBindings": [
+        {
+            "scopeTagName": "common",
+            "bindings": [
+                {
+                    "find": "__CSE_PIPELINE_VAR__",
+                    "replaceWith": ""
+                },
+                {
+                    "find": "__CSE_ADDITIONAL_VAR__",
+                    "replaceWith": ""
+                }
+            ]
+        },
+        {
+            "scopeTagName": "{CLOUDENV}.{DEPLOYENV}",
+            "bindings": [
+                {
+                    "find": "__EV2_EXTENSION_OPERATOR_APPID__",
+                    "replaceWith": "{ev2_extension_operator_appid}"
+                },
+                {
+                    "find": "__EV2_EXTENSION_OPERATOR_APPCERTIFICATE__",
+                    "replaceWith": "{ev2_extension_operator_appcert}"
+                },
+                {
+                    "find": "__ONECERTV2_ISSUER_PROVIDER_PRIVATE__",
+                    "replaceWith": "{onecertv2_issuer_provider_private}"
+                },
+                {
+                    "find": "__CERT_DOMAIN_BASE__",
+                    "replaceWith": "{domain_deployenv}"
+                }
+            ]
+        },
+        {
+            "scopeTagName": "component.devhubfd",
+            "bindings": [
+                {
+                    "find": "__DEPLOY_CERTS__",
+                    "replaceWith": "{devhub_deploy_network_resources}"
+                },
+                {
+                    "find": "__CERT_TARGET_KEYVAULT_URI__",
+                    "replaceWith": "https://{resource_name_prefix}aksdhglobal.{keyvault_suffix}"
+                }
+            ]
+        },
+        {
+            "scopeTagName": "component.oic",
+            "bindings": [
+                {
+                    "find": "__OIDC_DOCUMENT_CERT_DOMAIN__",
+                    "replaceWith": "oidc.{domain_deployenv}"
+                },
+                {
+                    "find": "__CERT_TARGET_KEYVAULT_URI__",
+                    "replaceWith": "https://{resource_name_prefix}aksoic.{keyvault_suffix}"
+                }
+            ]
+        }
+    ]
+}

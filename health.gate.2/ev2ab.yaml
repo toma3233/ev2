@@ -1,0 +1,24 @@
+Template:
+  - rolloutspec.CLOUDENV.DEPLOYENV.REGION
+VariableGroup:
+  Variables:
+    rollout_name: health.gate.2
+    parameters_name: "default.Parameters.json"
+    geneva_account: "aksdevinfra{CLOUDENV}{DEPLOYENV}"
+    geneva_account_endpoint: "https://aks.prod.microsoftmetrics.com:1886/RecoveryService"
+    health_check_duration_wait_v2: "240"
+    health_check_duration_elastic_v2: "1320"
+    health_check_resource_type: "ReleaseGateCommonHealth"
+    health_check_version: "v0"
+  Match:
+    Key: CLOUDENV
+    Values:
+      gb:
+        Match:
+          Key: DEPLOYENV
+          Values:
+            staging:
+              Variables:
+                geneva_account: "aksdevinfragbprod"
+                health_check_duration_elastic_v2: "60"
+AutoSelector: true

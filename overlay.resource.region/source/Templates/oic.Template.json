@@ -1,0 +1,168 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "metadata": {
+        "desciption": "OIDC feature",
+        "owner": "Baichao He"
+    },
+    "parameters": {
+        "resource_name_prefix_nodash": {
+            "type": "String"
+        },
+        "resource_name_prefix": {
+            "type": "string"
+        },
+        "ev2_extension_operator_objectid": {
+            "type": "string"
+        },
+        "jitgroup_objectid": {
+            "type": "string"
+        },
+        "storage_sku": {
+            "type": "string"
+        },
+        "trafficmanager_name": {
+            "type": "string"
+        },
+        "trafficmanager_relative_name": {
+            "type": "string"
+        },
+        "primary_target": {
+            "type": "string"
+        },
+        "allow_blob_public_access": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "tenant_id": "[subscription().tenantid]",
+        "location": "[resourceGroup().location]",
+        "component_code": "oic",
+        "storage_account_name": "[concat(parameters('resource_name_prefix_nodash'),'aks',variables('component_code'),variables('location'))]",
+        "deployer_svc_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'deployer-svc')]"
+    },
+    "resources": [
+        {
+            "name": "[concat(parameters('resource_name_prefix'),variables('component_code'))]",
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+            "apiVersion": "2018-11-30",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "name": "[variables('storage_account_name')]",
+            "location": "[variables('location')]",
+            "sku": {
+                "name": "[parameters('storage_sku')]",
+                "tier": "Standard"
+            },
+            "kind": "StorageV2",
+            "properties": {
+                "accessTier": "Hot",
+                "allowBlobPublicAccess": "[equals(parameters('allow_blob_public_access'),'true')]",
+                "allowSharedKeyAccess": false
+            },
+            "resources": [
+                {
+                    "type": "blobServices/containers",
+                    "apiVersion": "2018-07-01",
+                    "name": "default/00000000-0000-0000-0000-000000000001",
+                    "properties": {
+                        "publicAccess": "[if(equals(parameters('allow_blob_public_access'),'true'),'Blob','None')]"
+                    },
+                    "dependsOn": [
+                        "[variables('storage_account_name')]"
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resource_name_prefix'),'aks',variables('component_code'),variables('location'))]",
+            "location": "[variables('location')]",
+            "properties": {
+                "enableSoftDelete": true,
+                "sku": {
+                    "family": "A",
+                    "name": "standard"
+                },
+                "tenantId": "[variables('tenant_id')]",
+                "accessPolicies": [
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', variables('deployer_svc_user_assigned_identity_name')), '2018-11-30').principalId]",
+                        "permissions": {
+                            "secrets": [
+                                "get"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[parameters('ev2_extension_operator_objectid')]",
+                        "permissions": {
+                            "certificates": [
+                                "create",
+                                "get",
+                                "setissuers",
+                                "update"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[parameters('jitgroup_objectid')]",
+                        "permissions": {
+                            "secrets": [
+                                "list"
+                            ],
+                            "certificates": [
+                                "delete",
+                                "get",
+                                "list",
+                                "listissuers"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/trafficManagerProfiles",
+            "apiVersion": "2017-05-01",
+            "name": "[parameters('trafficmanager_name')]",
+            "location": "global",
+            "properties": {
+                "trafficRoutingMethod": "Priority",
+                "dnsConfig": {
+                    "relativeName": "[parameters('trafficmanager_relative_name')]",
+                    "ttl": 600
+                },
+                "monitorConfig": {
+                    "protocol": "TCP",
+                    "port": 443,
+                    "intervalInSeconds": 30,
+                    "toleratedNumberOfFailures": 3,
+                    "timeoutInSeconds": 10
+                }
+            }
+        },
+        {
+            "condition": "[not(equals(parameters('primary_target'),''))]",
+            "type": "Microsoft.Network/trafficManagerProfiles/externalEndpoints",
+            "name": "[concat(parameters('trafficmanager_name'), '/primary')]",
+            "apiVersion": "2017-05-01",
+            "properties": {
+                "endpointStatus": "Enabled",
+                "target": "[parameters('primary_target')]",
+                "priority": 10
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/trafficManagerProfiles', parameters('trafficmanager_name'))]"
+            ]
+        }
+    ]
+}

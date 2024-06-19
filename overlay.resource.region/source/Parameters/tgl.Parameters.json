@@ -1,0 +1,12 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resource_name_prefix_nodash": {
+            "value": "<resource_name_prefix_nodash>"
+        },
+        "tgl_storage_account_sku_name": {
+            "value": "<tgl_storage_account_sku_name>"
+        }
+    }
+}

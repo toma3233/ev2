@@ -1,0 +1,317 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "metadata": {
+        "desciption": "OverlayMgr",
+        "owner": ""
+    },
+    "parameters": {
+        "resource_name_prefix": {
+            "type": "string"
+        },
+        "resource_name_prefix_nodash": {
+            "type": "string"
+        },
+        "svc_objectid": {
+            "type": "string"
+        },
+        "msi_operator_resource_id": {
+            "type": "string"
+        },
+        "ev2_extension_operator_objectid": {
+            "type": "string"
+        },
+        "jitgroup_objectid": {
+            "type": "string"
+        },
+        "om_etcd_storage_account_sku_name": {
+            "type": "string"
+        },
+        "legacy_storage_account_region_subscription_id": {
+            "type": "string"
+        },
+        "legacy_etcd_resource_group_name": {
+            "type": "string"
+        },
+        "legacy_etcd_backup_storage_account_name": {
+            "type": "string"
+        },
+        "legacy_etcd_storage_account_sku_name": {
+            "type": "string"
+        },
+        "om_deploy_legacy_etcd_backup_storage_account": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "tenant_id": "[subscription().tenantid]",
+        "location": "[resourceGroup().location]",
+        "component_code": "om",
+        "deployer_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'deployer')]",
+        "deployer_cx_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'deployer-cx')]",
+        "om_keyvault_name": "[concat(parameters('resource_name_prefix'),'aks',variables('component_code'),variables('location'))]",
+        "overlaymgr_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'overlaymgr')]",
+        "rp_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'resource-provider')]",
+        "etcd_backup_storage_account_name": "[concat(parameters('resource_name_prefix_nodash'),'etcdbk',variables('location'))]",
+        "om_deploy_legacy_etcd_backup": "[and(equals(parameters('om_deploy_legacy_etcd_backup_storage_account'),'true'), not(equals(parameters('legacy_etcd_backup_storage_account_name'), '')), equals(parameters('legacy_storage_account_region_subscription_id'), subscription().subscriptionId))]"
+    },
+    "resources": [
+        {
+            "name": "[variables('overlaymgr_user_assigned_identity_name')]",
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+            "apiVersion": "2018-11-30",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2019-09-01",
+            "name": "[variables('om_keyvault_name')]",
+            "location": "[variables('location')]",
+            "properties": {
+                "enableSoftDelete": true,
+                "sku": {
+                    "family": "A",
+                    "name": "standard"
+                },
+                "tenantId": "[variables('tenant_id')]",
+                "accessPolicies": [
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[parameters('svc_objectid')]",
+                        "permissions": {
+                            "secrets": [
+                                "get"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[reference(parameters('msi_operator_resource_id'), '2018-11-30').principalId]",
+                        "permissions": {
+                            "secrets": [
+                                "get",
+                                "set",
+                                "list"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[parameters('ev2_extension_operator_objectid')]",
+                        "permissions": {
+                            "certificates": [
+                                "create",
+                                "get",
+                                "setissuers",
+                                "update"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[parameters('jitgroup_objectid')]",
+                        "permissions": {
+                            "secrets": [
+                                "list"
+                            ],
+                            "certificates": [
+                                "delete",
+                                "get",
+                                "list",
+                                "listissuers"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', variables('deployer_user_assigned_identity_name')), '2018-11-30').principalId]",
+                        "permissions": {
+                            "secrets": [
+                                "get"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', variables('deployer_cx_user_assigned_identity_name')), '2018-11-30').principalId]",
+                        "permissions": {
+                            "secrets": [
+                                "get"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', variables('overlaymgr_user_assigned_identity_name')), '2018-11-30').principalId]",
+                        "permissions": {
+                            "secrets": [
+                                "get"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', variables('rp_user_assigned_identity_name')), '2018-11-30').principalId]",
+                        "permissions": {
+                            "secrets": [
+                                "get",
+                                "set"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "name": "[variables('etcd_backup_storage_account_name')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "[parameters('om_etcd_storage_account_sku_name')]"
+            },
+            "kind": "StorageV2",
+            "properties": {
+                "accessTier": "Cool",
+                "allowBlobPublicAccess": false
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/managementPolicies",
+            "apiVersion": "2019-06-01",
+            "name": "[concat(variables('etcd_backup_storage_account_name'), '/default')]",
+            "dependsOn": [
+                "[concat('Microsoft.Storage/storageAccounts/', variables('etcd_backup_storage_account_name'))]"
+            ],
+            "properties": {
+                "policy": {
+                    "rules": [
+                        {
+                            "name": "DeleteAfterSomeDays",
+                            "enabled": true,
+                            "type": "Lifecycle",
+                            "definition": {
+                                "filters": {
+                                    "blobTypes": [
+                                        "blockBlob"
+                                    ]
+                                },
+                                "actions": {
+                                    "baseBlob": {
+                                        "delete": {
+                                            "daysAfterModificationGreaterThan": 365
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "condition": "[variables('om_deploy_legacy_etcd_backup')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "name": "[parameters('legacy_etcd_backup_storage_account_name')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "[parameters('legacy_etcd_storage_account_sku_name')]"
+            },
+            "kind": "StorageV2",
+            "properties": {
+                "accessTier": "Cool",
+                "allowBlobPublicAccess": false
+            }
+        },
+        {
+            "condition": "[variables('om_deploy_legacy_etcd_backup')]",
+            "type": "Microsoft.Storage/storageAccounts/managementPolicies",
+            "apiVersion": "2019-06-01",
+            "name": "[concat(parameters('legacy_etcd_backup_storage_account_name'), '/default')]",
+            "dependsOn": [
+                "[concat('Microsoft.Storage/storageAccounts/', parameters('legacy_etcd_backup_storage_account_name'))]"
+            ],
+            "properties": {
+                "policy": {
+                    "rules": [
+                        {
+                            "name": "DeleteAfterSomeDays",
+                            "enabled": true,
+                            "type": "Lifecycle",
+                            "definition": {
+                                "filters": {
+                                    "blobTypes": [
+                                        "blockBlob"
+                                    ]
+                                },
+                                "actions": {
+                                    "baseBlob": {
+                                        "delete": {
+                                            "daysAfterModificationGreaterThan": 365
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "name": "[concat(variables('om_keyvault_name'),'/',variables('etcd_backup_storage_account_name'),'key1')]",
+            "apiVersion": "2019-09-01",
+            "properties": {
+                "contentType": "text/plain",
+                "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('etcd_backup_storage_account_name')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', variables('om_keyvault_name'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('etcd_backup_storage_account_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "name": "[concat(variables('om_keyvault_name'),'/',variables('etcd_backup_storage_account_name'),'key2')]",
+            "apiVersion": "2019-09-01",
+            "properties": {
+                "contentType": "text/plain",
+                "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('etcd_backup_storage_account_name')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[1].value]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', variables('om_keyvault_name'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('etcd_backup_storage_account_name'))]"
+            ]
+        },
+        {
+            "condition": "[variables('om_deploy_legacy_etcd_backup')]",
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "name": "[concat(variables('om_keyvault_name'),'/',parameters('legacy_etcd_backup_storage_account_name'),'key1')]",
+            "apiVersion": "2019-09-01",
+            "properties": {
+                "contentType": "text/plain",
+                "value": "[if(not(variables('om_deploy_legacy_etcd_backup')),'',listKeys(resourceId(parameters('legacy_storage_account_region_subscription_id'), parameters('legacy_etcd_resource_group_name'), 'Microsoft.Storage/storageAccounts',parameters('legacy_etcd_backup_storage_account_name')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', variables('om_keyvault_name'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('etcd_backup_storage_account_name'))]"
+            ]
+        },
+        {
+            "condition": "[variables('om_deploy_legacy_etcd_backup')]",
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "name": "[concat(variables('om_keyvault_name'),'/',parameters('legacy_etcd_backup_storage_account_name'),'key2')]",
+            "apiVersion": "2019-09-01",
+            "properties": {
+                "contentType": "text/plain",
+                "value": "[if(not(variables('om_deploy_legacy_etcd_backup')),'',listKeys(resourceId(parameters('legacy_storage_account_region_subscription_id'), parameters('legacy_etcd_resource_group_name'), 'Microsoft.Storage/storageAccounts',parameters('legacy_etcd_backup_storage_account_name')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[1].value)]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', variables('om_keyvault_name'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('etcd_backup_storage_account_name'))]"
+            ]
+        }
+    ]
+}

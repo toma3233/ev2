@@ -1,0 +1,121 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "regional_vault_name": {
+            "type": "string"
+        },
+        "jitgroup_objectid": {
+            "type": "string"
+        },
+        "ev2_extension_operator_objectid": {
+            "type": "string"
+        },
+        "bl_pav2_objectid": {
+            "type": "string"
+        },
+        "resource_name_prefix": {
+            "type": "string"
+        },
+        "identity_resource_group_name": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "tenant_id": "[subscription().tenantid]",
+        "billing_kv_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'billingagent')]",
+        "feature_billing_kv_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'featurebillingagent')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2019-09-01",
+            "name": "[parameters('regional_vault_name')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "sku": {
+                    "family": "A",
+                    "name": "standard"
+                },
+                "tenantId": "[variables('tenant_id')]",
+                "accessPolicies": [
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[parameters('jitgroup_objectid')]",
+                        "permissions": {
+                            "secrets": [
+                                "get",
+                                "list",
+                                "set",
+                                "delete",
+                                "recover",
+                                "backup",
+                                "restore"
+                            ],
+                            "certificates": [
+                                "get",
+                                "list",
+                                "update",
+                                "create",
+                                "import",
+                                "delete",
+                                "managecontacts",
+                                "manageissuers",
+                                "getissuers",
+                                "listissuers",
+                                "setissuers",
+                                "deleteissuers"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[subscription().tenantid]",
+                        "objectId": "[parameters('ev2_extension_operator_objectid')]",
+                        "permissions": {
+                            "storage": [
+                                "set",
+                                "get",
+                                "regeneratekey",
+                                "getsas",
+                                "list",
+                                "setsas"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[subscription().tenantid]",
+                        "objectId": "[parameters('bl_pav2_objectid')]",
+                        "permissions": {
+                            "secrets": [
+                                "get",
+                                "list"
+                            ],
+                            "certificates": [
+                                "get",
+                                "list"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[reference(resourceId(parameters('identity_resource_group_name'), 'Microsoft.ManagedIdentity/userAssignedIdentities/', variables('billing_kv_user_assigned_identity_name')), '2018-11-30').principalId]",
+                        "permissions": {
+                            "secrets": [
+                                "get"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[reference(resourceId(parameters('identity_resource_group_name'), 'Microsoft.ManagedIdentity/userAssignedIdentities/', variables('feature_billing_kv_user_assigned_identity_name')), '2018-11-30').principalId]",
+                        "permissions": {
+                            "secrets": [
+                                "get"
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

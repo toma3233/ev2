@@ -1,0 +1,46 @@
+{
+    "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/serviceModel.json",
+    "contentVersion": "0.0.0.1",
+    "serviceMetadata": {
+        "serviceGroup": "{service_group_name}",
+        "environment": "{CLOUDENV}.{DEPLOYENV}.{REGION}",
+        "serviceIdentifier": "f1d1800e-d38e-41f2-b63c-72d59ecaf9c0"
+    },
+    "serviceResourceGroupDefinitions": [
+        {
+            "name": "group-definition",
+            "serviceResourceDefinitions": [
+                {
+                    "Name": "Default",
+                    "composedOf": {
+                      "extension": {
+                        "rolloutParametersPath": "Parameters\\{parameters_name}"
+                      }
+                    }
+                }
+            ]
+        }
+    ],
+    "serviceResourceGroups": [
+        {
+            "instanceOf": "group-definition",
+            "azureSubscriptionId": "{deploybox_subscription_id}",
+            "azureResourceGroupName": "{resource_name_prefix}healthbox-{rollout_name}-{system:normalized_build_version}-{REGION}",
+            "location": "{deploybox_resourcegroup_location}",
+            "scopeTags": [
+                {
+                    "name": "common"
+                },
+                {
+                    "name": "{CLOUDENV}.{DEPLOYENV}.{REGION}"
+                }
+            ],
+            "serviceResources": [
+                {
+                    "name": "DefaultServiceResource",
+                    "instanceOf": "Default"
+                }
+            ]
+        }
+    ]
+}

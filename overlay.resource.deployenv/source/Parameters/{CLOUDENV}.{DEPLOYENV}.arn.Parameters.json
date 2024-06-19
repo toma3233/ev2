@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "eventgriddomain_action_group": {
+            "value": [
+                {
+                    "name": "{resource_name_prefix}eventgriddomain-entity-action-group",
+                    "short_name": "egdenact",
+                    "email": [
+                        {
+                            "name": "aks-arn-action-group",
+                            "emailAddress": "aks-arn-action-group@microsoft.com",
+                            "useCommonAlertSchema": true
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

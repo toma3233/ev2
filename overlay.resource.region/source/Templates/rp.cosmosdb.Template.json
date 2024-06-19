@@ -1,0 +1,231 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resource_name_prefix": {
+            "type": "string"
+        },
+        "cosmosdb_account_name": {
+            "type": "string"
+        },
+        "rp_cosmosdb_zone_redundant": {
+            "type": "string",
+            "metadata": {
+                "description": "Specify if region has zone redundancy enabled"
+            }
+        },
+        "autoscale_max_throughput": {
+            "type": "int",
+            "defaultValue": 1000,
+            "maxValue": 10000,
+            "minValue": 1000,
+            "metadata": {
+                "description": "Maximum throughput for the container"
+            }
+        },
+        "msi_operator_resource_id": {
+            "type": "string"
+        },
+        "ev2_extension_operator_objectid": {
+            "type": "string"
+        },
+        "nsp_database_name": {
+            "type": "string",
+            "metadata": {
+                "description": "The name for the Nsp database"
+            }
+        },
+        "nsp_container_name": {
+            "type": "string",
+            "metadata": {
+                "description": "The name for the Nsp container"
+            }
+        },
+        "diagnostics_enabled": {
+            "type": "string"
+        },
+        "log_analytics_account_name": {
+            "type": "string"
+        },
+        "disableLocalAuth": {
+            "type": "bool",
+            "defaultValue": true
+        }
+    },
+    "variables": {
+        "location": "[resourceGroup().location]",
+        "rp_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'), 'resource-provider')]",
+        "overlaymgr_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'overlaymgr')]",
+        "rp-readwrite-cosmos-assignment-guid": "[guid(concat('rp-readwrite-', parameters('cosmosdb_account_name')))]",
+        "om-readonly-cosmos-assignment-guid": "[guid(concat('overlaymgr-readonly-', parameters('cosmosdb_account_name')))]",
+        "tenant_id": "[subscription().tenantid]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts",
+            "name": "[parameters('cosmosdb_account_name')]",
+            "apiVersion": "2021-10-15",
+            "kind": "GlobalDocumentDB",
+            "location": "[variables('location')]",
+            "properties": {
+                "publicNetworkAccess": "Enabled",
+                "consistencyPolicy": {
+                    "defaultConsistencyLevel": "Strong",
+                    "maxIntervalInSeconds": 5,
+                    "maxStalenessPrefix": 100
+                },
+                "locations": [
+                    {
+                        "locationName": "[variables('location')]",
+                        "failoverPriority": 0,
+                        "isZoneRedundant": "[equals('true',parameters('rp_cosmosdb_zone_redundant'))]"                    }
+                ],
+                "backupPolicy": {
+                    "type": "Periodic",
+                    "periodicModeProperties": {
+                        "backupIntervalInMinutes": 240,
+                        "backupRetentionIntervalInHours": 720
+                    }
+                },
+                "databaseAccountOfferType": "Standard",
+                "enableAutomaticFailover": false,
+                "ipRules": [
+                    {
+                        "ipAddressOrRange": "0.0.0.0"
+                    }
+                ],
+                "disableLocalAuth": "[parameters('disableLocalAuth')]"
+            }
+        },
+        {
+            "condition": "[equals(parameters('diagnostics_enabled'),'true')]",
+            "type": "Microsoft.Insights/diagnosticSettings",
+            "apiVersion": "2017-05-01-preview",
+            "scope": "[concat('Microsoft.DocumentDB/databaseAccounts', '/', parameters('cosmosdb_account_name'))]",
+            "name": "dataplaneRequestLogToLogAnalytics",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosdb_account_name'))]"
+            ],
+            "properties": {
+                "logs": [
+                    {
+                        "category": "DataPlaneRequests",
+                        "categoryGroup": null,
+                        "enabled": true,
+                        "retentionPolicy": {
+                            "days": 0,
+                            "enabled": false
+                        }
+                    }
+                ],
+                "workspaceId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.OperationalInsights/workspaces/', parameters('log_analytics_account_name'))]",
+                "logAnalyticsDestinationType": "Dedicated"
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+            "apiVersion": "2021-10-15",
+            "name": "[concat(parameters('cosmosdb_account_name'), '/', parameters('nsp_database_name'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosdb_account_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "[parameters('nsp_database_name')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+            "apiVersion": "2021-10-15",
+            "name": "[concat(parameters('cosmosdb_account_name'), '/', parameters('nsp_database_name'), '/', parameters('nsp_container_name'))]",
+            "properties": {
+                "resource": {
+                    "id": "[parameters('nsp_container_name')]",
+                    "partitionKey": {
+                        "paths": [
+                            "/tenantId"
+                        ]
+                    },
+                    "indexingPolicy": {
+                        "indexingMode": "consistent",
+                        "includedPaths": [
+                            {
+                                "path": "/entityId/?"
+                            },
+                            {
+                                "path": "/tenantId/?"
+                            },
+                            {
+                                "path": "/subscriptionId/?"
+                            },
+                            {
+                                "path": "/resourceGroup/?"
+                            },
+                            {
+                                "path": "/clusterName/?"
+                            },
+                            {
+                                "path": "/perimeterGuid/?"
+                            },
+                            {
+                                "path": "/perimeterProfileName/?"
+                            }
+                        ],
+                        "excludedPaths": [
+                            {
+                                "path": "/*"
+                            }
+                        ]
+                    },
+                    "defaultTtl": -1,
+                    "uniqueKeyPolicy": {
+                        "uniqueKeys": [
+                            {
+                                "paths": [
+                                    "/entityId"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "options": {
+                    "autoscaleSettings": {
+                        "maxThroughput": "[parameters('autoscale_max_throughput')]"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('cosmosdb_account_name'), parameters('nsp_database_name'))]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosdb_account_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments",
+            "apiVersion": "2021-10-15",
+            "name": "[concat(parameters('cosmosdb_account_name'), '/', variables('rp-readwrite-cosmos-assignment-guid'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosdb_account_name'))]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions', parameters('cosmosdb_account_name'), '00000000-0000-0000-0000-000000000002')]",
+                "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('rp_user_assigned_identity_name')), '2018-11-30').principalId]",
+                "scope": "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosdb_account_name'))]"
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments",
+            "apiVersion": "2021-10-15",
+            "name": "[concat(parameters('cosmosdb_account_name'), '/', variables('om-readonly-cosmos-assignment-guid'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosdb_account_name'))]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments', parameters('cosmosdb_account_name'), variables('rp-readwrite-cosmos-assignment-guid'))]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions', parameters('cosmosdb_account_name'), '00000000-0000-0000-0000-000000000001')]",
+                "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('overlaymgr_user_assigned_identity_name')), '2018-11-30').principalId]",
+                "scope": "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosdb_account_name'))]"
+            }
+        }
+    ]
+}

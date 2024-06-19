@@ -1,0 +1,192 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resource_name_prefix": {
+            "type": "string"
+        },
+        "svc_objectid": {
+            "type": "string"
+        },
+        "msi_operator_resource_id": {
+            "type": "string"
+        },
+        "ev2_extension_operator_objectid": {
+            "type": "string"
+        },
+        "jitgroup_objectid": {
+            "type": "string"
+        },
+        "rp_trafficmanager_name": {
+            "type": "string"
+        },
+        "rp_trafficmanager_relative_name": {
+            "type": "string"
+        },
+        "service_cluster_name": {
+            "type": "string"
+        },
+        "backup_service_cluster_name": {
+            "type": "string"
+        },
+        "endpoint_suffix": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "tenant_id": "[subscription().tenantid]",
+        "location": "[resourceGroup().location]",
+        "component_code": "rp",
+        "deployer_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'deployer')]",
+        "deployer_svc_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'deployer-svc')]",
+        "rp_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'), 'resource-provider')]",
+        "primary_rp_target": "[concat('aksrp-', parameters('service_cluster_name'), parameters('endpoint_suffix'))]",
+        "backup_rp_target": "[concat('aksrp-', parameters('backup_service_cluster_name'), parameters('endpoint_suffix'))]"
+    },
+    "resources": [
+        {
+            "name": "[variables('rp_user_assigned_identity_name')]",
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+            "apiVersion": "2018-11-30",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resource_name_prefix'),'aks',variables('component_code'),variables('location'))]",
+            "location": "[variables('location')]",
+            "properties": {
+                "enableSoftDelete": true,
+                "sku": {
+                    "family": "A",
+                    "name": "standard"
+                },
+                "tenantId": "[variables('tenant_id')]",
+                "accessPolicies": [
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[parameters('svc_objectid')]",
+                        "permissions": {
+                            "secrets": [
+                                "get"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[reference(variables('rp_user_assigned_identity_name')).principalId]",
+                        "permissions": {
+                            "secrets": [
+                                "get"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', variables('deployer_user_assigned_identity_name')), '2018-11-30').principalId]",
+                        "permissions": {
+                            "secrets": [
+                                "get"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', variables('deployer_svc_user_assigned_identity_name')), '2018-11-30').principalId]",
+                        "permissions": {
+                            "secrets": [
+                                "get"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[reference(parameters('msi_operator_resource_id'), '2018-11-30').principalId]",
+                        "permissions": {
+                            "secrets": [
+                                "get",
+                                "set"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[parameters('ev2_extension_operator_objectid')]",
+                        "permissions": {
+                            "certificates": [
+                                "create",
+                                "get",
+                                "setissuers",
+                                "update"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[parameters('jitgroup_objectid')]",
+                        "permissions": {
+                            "secrets": [
+                                "list"
+                            ],
+                            "certificates": [
+                                "delete",
+                                "get",
+                                "list",
+                                "listissuers"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/trafficManagerProfiles",
+            "apiVersion": "2017-05-01",
+            "name": "[parameters('rp_trafficmanager_name')]",
+            "location": "global",
+            "properties": {
+                "trafficRoutingMethod": "Priority",
+                "dnsConfig": {
+                    "relativeName": "[parameters('rp_trafficmanager_relative_name')]",
+                    "ttl": 300
+                },
+                "monitorConfig": {
+                    "protocol": "HTTP",
+                    "port": 8080,
+                    "path": "/healthz",
+                    "intervalInSeconds": 30,
+                    "toleratedNumberOfFailures": 3,
+                    "timeoutInSeconds": 10
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/trafficManagerProfiles/externalEndpoints",
+            "name": "[concat(parameters('rp_trafficmanager_name'), '/primary')]",
+            "apiVersion": "2017-05-01",
+            "properties": {
+                "endpointStatus": "Enabled",
+                "target": "[variables('primary_rp_target')]",
+                "priority": 10
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/trafficManagerProfiles', parameters('rp_trafficmanager_name'))]"
+            ]
+        },
+        {
+            "condition": "[not(equals(parameters('backup_service_cluster_name'), ''))]",
+            "type": "Microsoft.Network/trafficManagerProfiles/externalEndpoints",
+            "name": "[concat(parameters('rp_trafficmanager_name'), '/backup')]",
+            "apiVersion": "2017-05-01",
+            "properties": {
+                "endpointStatus": "Enabled",
+                "target": "[variables('backup_rp_target')]",
+                "priority": 20
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/trafficManagerProfiles', parameters('rp_trafficmanager_name'))]"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,27 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "costanalysis_msi_name": {
+            "value": "{resource_name_prefix}cost-analysis-scraper"
+        },
+        "eventhub_namespace": {
+            "value": "{costanalysis_namespace}"
+        },
+        "data_eventhub_name": {
+            "value": "cost-analysis-primary"
+        },
+        "data_eventhub_name_unpartitioned": {
+            "value": "cost-analysis"
+        },
+        "response_eventhub_name": {
+            "value": "pav2-response-primary"
+        },
+        "response_eventhub_name_unpartitioned": {
+            "value": "pav2-response"
+        },
+        "costanalysis_eventhub_zone_redundant": {
+            "value": "{costanalysis_eventhub_zone_redundant}"
+        }
+    }
+}

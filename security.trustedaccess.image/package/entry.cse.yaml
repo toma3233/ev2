@@ -1,0 +1,8 @@
+Steps:
+  - Script: ensure_package docker make
+    Retry: true
+  - Script: ensure_azlogin
+    Retry: true
+  - Script: |
+      az acr login --name ${REGISTRY_NAME} --subscription ${GLOBAL_SUBSCRIPTION_ID}
+      make -f publish.mk IMAGES_DIR=. VERSION="${EV2_BUILDVERSION}"

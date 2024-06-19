@@ -1,0 +1,115 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "metric_alerts_enabled": {
+      "type": "string"
+    },
+    "resourceGroupNameGlobal": {
+      "type": "string"
+    },
+    "actionGroupName": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "condition": "[equals('true',parameters('metric_alerts_enabled'))]",
+      "name": "FleetOperations DLQ Message Count",
+      "type": "Microsoft.Insights/metricAlerts",
+      "location": "global",
+      "apiVersion": "2018-03-01",
+      "properties": {
+        "description": "[concat('[SEV3][', parameters('location'), '] ServiceBus Fleet DLQ Message Activity')]",
+        "severity": 3,
+        "enabled": true,
+        "scopes": [
+          "[resourceId('Microsoft.ServiceBus/namespaces', parameters('name'))]"
+        ],
+        "evaluationFrequency": "PT1M",
+        "windowSize": "PT15M",
+        "criteria": {
+          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
+          "allOf": [
+            {
+              "threshold": 0,
+              "name": "Metric1",
+              "metricNamespace": "Microsoft.ServiceBus/namespaces",
+              "metricName": "DeadletteredMessages",
+              "dimensions": [
+                {
+                  "name": "EntityName",
+                  "operator": "Include",
+                  "values": [
+                    "FleetOperations",
+                    "fleetevents"
+                  ]
+                }
+              ],
+              "operator": "GreaterThan",
+              "timeAggregation": "Maximum",
+              "criterionType": "StaticThresholdCriterion"
+            }
+          ]
+        },
+        "actions": [
+          {
+            "actionGroupId": "[resourceId(parameters('resourceGroupNameGlobal'), 'microsoft.insights/actionGroups', parameters('actionGroupName'))]"
+          }
+        ]
+      }
+    },
+    {
+      "condition": "[equals('true',parameters('metric_alerts_enabled'))]",
+      "name": "FleetOperations Active Message Count SEV3",
+      "type": "Microsoft.Insights/metricAlerts",
+      "location": "global",
+      "apiVersion": "2018-03-01",
+      "properties": {
+        "description": "[concat('[SEV3][', parameters('location'), '] ServiceBus Fleet Active Message Count > 200')]",
+        "severity": 3,
+        "enabled": true,
+        "scopes": [
+          "[resourceId('Microsoft.ServiceBus/namespaces', parameters('name'))]"
+        ],
+        "evaluationFrequency": "PT1M",
+        "windowSize": "PT15M",
+        "criteria": {
+          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
+          "allOf": [
+            {
+              "threshold": 200,
+              "name": "active_message_count_sev3",
+              "metricNamespace": "Microsoft.ServiceBus/namespaces",
+              "metricName": "ActiveMessages",
+              "dimensions": [
+                {
+                  "name": "EntityName",
+                  "operator": "Include",
+                  "values": [
+                    "FleetOperations",
+                    "fleetevents"
+                  ]
+                }
+              ],
+              "operator": "GreaterThan",
+              "timeAggregation": "Average",
+              "criterionType": "StaticThresholdCriterion"
+            }
+          ]
+        },
+        "actions": [
+          {
+            "actionGroupId": "[resourceId(parameters('resourceGroupNameGlobal'), 'microsoft.insights/actionGroups', parameters('actionGroupName'))]"
+          }
+        ]
+      }
+    }
+  ]
+}

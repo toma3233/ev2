@@ -1,0 +1,43 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resource_name_prefix": {
+            "type": "string"
+        },
+        "overlay_resources_subscription_id": {
+            "type": "string"
+        },
+        "identity_resource_group_name": {
+            "type": "string"
+        },
+        "hcp_keyvault_name": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "tenant_id": "[subscription().tenantid]",
+        "location": "[resourceGroup().location]",
+        "hcp_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'hcp')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.KeyVault/vaults/accessPolicies",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('hcp_keyvault_name'), '/add')]",
+            "properties": {
+                "accessPolicies": [
+                    {
+                    "tenantId": "[variables('tenant_id')]",
+                    "objectId": "[reference(resourceId(parameters('overlay_resources_subscription_id'), parameters('identity_resource_group_name'), 'Microsoft.ManagedIdentity/userAssignedIdentities/', variables('hcp_user_assigned_identity_name')), '2018-11-30').principalId]",
+                    "permissions": {
+                        "secrets": [
+                            "get"
+                        ]
+                    }
+                    }
+                ]
+            }
+        }
+    ]
+}

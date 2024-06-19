@@ -1,0 +1,46 @@
+{
+    "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/serviceModel.json",
+    "contentVersion": "0.0.0.1",
+    "serviceMetadata": {
+        "serviceGroup": "{service_group_name}",
+        "environment": "Prod",
+        "serviceIdentifier": "f1d1800e-d38e-41f2-b63c-72d59ecaf9c0"
+    },
+    "serviceResourceGroupDefinitions": [
+        {
+            "name": "group-definition",
+            "serviceResourceDefinitions": [
+                {
+                    "Name": "Default",
+                    "composedOf": {
+                        "extension": {
+                            "rolloutParametersPath": "{CLOUDENV}.{DEPLOYENV}.{REGION}.RolloutParameters.json",
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "serviceResourceGroups": [
+        {
+            "instanceOf": "group-definition",
+            "azureSubscriptionId": "{MONITOR_SUBSCRIPTION}",
+            "azureResourceGroupName": "DevInfraArtifactImageRelease-{DEPLOYENV}-{REGION}",
+            "location": "{REGION}",
+            "scopeTags": [
+                {
+                    "name": "common"
+                },
+                {
+                    "name": "arbitraryMDMHealthCheckApp"
+                }
+            ],
+            "serviceResources": [
+                {
+                    "name": "DefaultServiceResource",
+                    "instanceOf": "Default"
+                }
+            ]
+        }
+    ]
+}

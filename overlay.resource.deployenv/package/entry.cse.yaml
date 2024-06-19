@@ -1,0 +1,33 @@
+VariableGroup:
+  Variables:
+    OIC_AZURE_CDN_FRONTDOOR_OBJECTID: "" # we use empty object id to disable OIDC storage account CDN setup
+  Match:
+    Key: CLOUDENV
+    Values:
+      gb:
+        Variables:
+          OIC_AZURE_CDN_FRONTDOOR_OBJECTID: "94d82049-8ae1-4429-a36c-8f0eb0600c86" # Microsoft.AzureFrontdoor-Cdn in AME
+        Match:
+          Key: DEPLOYENV
+          Values:
+            test:
+              Variables:
+                OIC_AZURE_CDN_FRONTDOOR_OBJECTID: "4dbab725-22a4-44d5-ad44-c267ca38a954" # Microsoft.AzureFrontdoor-Cdn in MSFT
+Steps:
+  - Script: ensure_package jq
+    Retry: true
+  - Script: ensure_azlogin "${OVERLAY_RESOURCES_SUBSCRIPTION_ID}"
+    Retry: true
+  - Script: |
+      function call() {
+        echo "--------------------------------"
+        echo "Run '$@' begin"
+        $@
+        echo "Run '$@' end"
+        echo "--------------------------------"
+      }
+
+      echo "Run overlay.resource.deployenv script for ${CLOUDENV}.${DEPLOYENV} begin"
+      call bash common.cleanup.sh
+      call bash oic.cdn.sh
+      echo "Run overlay.resource.deployenv script for ${CLOUDENV}.${DEPLOYENV} end"

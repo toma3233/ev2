@@ -1,0 +1,59 @@
+{
+    "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/ServiceModel.json",
+    "contentVersion": "0.0.0.1",
+    "serviceMetadata": {
+        "serviceGroup": "{service_group_name}",
+        "environment": "{CLOUDENV}.{DEPLOYENV}.{REGION}"
+    },
+    "serviceResourceGroupDefinitions": [
+        {
+            "name": "group-definition",
+            "serviceResourceDefinitions": [
+                {
+                    "name": "arm.bl.msi",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\bl.msi.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "script",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\CustomScript-linux.Template.json"
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "serviceResourceGroups": [
+        {
+            "azureResourceGroupName": "{resource_name_prefix}aro-billing-{REGION}",
+            "instanceOf": "group-definition",
+            "azureSubscriptionId": "{overlay_resources_subscription_id}",
+            "location": "{region_location}",
+            "serviceResources": [
+                {
+                    "name": "bl.msi",
+                    "instanceOf": "arm.bl.msi",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.bl.msi.Parameters.json"
+                }
+            ]
+        },
+        {
+            "azureResourceGroupName": "{resource_name_prefix}deploybox-{rollout_name}-{system:normalized_build_version}",
+            "instanceOf": "group-definition",
+            "azureSubscriptionId": "{deploybox_subscription_id}",            
+            "location": "{deploybox_location}",
+            "serviceResources": [
+                {
+                    "name": "script",
+                    "instanceOf": "script",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.CustomScript-linux.Parameters.json"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "value": "{bus_namespace_name}"
+    },
+    "location": {
+      "value": "{REGION}"
+    },
+    "sku": {
+      "value": "{bus_sku}"
+    },
+    "zoneRedundant": {
+      "value": "{servicebus_zone_redundant_enabled}"
+    },
+    "node_provisioner_sb_namespace": {
+      "value": "{node_provisioner_sb_namespace}"
+    }
+  }
+}

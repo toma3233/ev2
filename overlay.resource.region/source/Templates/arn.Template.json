@@ -1,0 +1,54 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "arn_eventgriddomain_name": {
+            "type": "string"
+        },
+        "arn_eventgriddomain_maintenance_topic": {
+          "type": "string"
+      },
+        "arn_eventgriddomain_enabled": {
+            "type": "string"
+        }
+    },
+    "resources": [
+        {
+            "condition": "[equals(parameters('arn_eventgriddomain_enabled'),'true')]",
+            "type": "Microsoft.EventGrid/domains",
+            "apiVersion": "2023-06-01-preview",
+            "name": "[parameters('arn_eventgriddomain_name')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+              "name": "Basic"
+            },
+            "identity": {
+              "type": "None"
+            },
+            "properties": {
+              "dataResidencyBoundary": "WithinGeopair",
+              "disableLocalAuth": true,
+              "inboundIpRules": [],
+              "inputSchema": "EventGridSchema"
+            }
+        },
+        {
+          "condition": "[equals(parameters('arn_eventgriddomain_enabled'),'true')]",
+          "type": "Microsoft.EventGrid/domains/topics",
+          "apiVersion": "2023-12-15-preview",
+          "name": "[concat(parameters('arn_eventgriddomain_name'), '/', parameters('arn_eventgriddomain_maintenance_topic'))]",
+          "dependsOn": [
+            "[resourceId('Microsoft.EventGrid/domains', parameters('arn_eventgriddomain_name'))]"
+          ]
+        },
+        {
+          "condition": "[equals(parameters('arn_eventgriddomain_enabled'),'true')]",
+          "type": "Microsoft.EventGrid/domains/topics",
+          "apiVersion": "2023-12-15-preview",
+          "name": "[concat(parameters('arn_eventgriddomain_name'), '/fleet-arm')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.EventGrid/domains', parameters('arn_eventgriddomain_name'))]"
+          ]
+        }
+    ]
+}

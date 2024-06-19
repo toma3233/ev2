@@ -1,0 +1,26 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "metadata": {
+        "desciption": "Regional Looper",
+        "owner": ""
+    },
+    "parameters": {
+        "resource_name_prefix": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "location": "[resourceGroup().location]",
+        "regionallooper_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'regionallooper')]"
+    },
+    "resources": [
+        {
+            "name": "[variables('regionallooper_user_assigned_identity_name')]",
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+            "apiVersion": "2018-11-30",
+            "location": "[variables('location')]",
+            "properties": {}
+        }
+    ]
+}

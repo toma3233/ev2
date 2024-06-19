@@ -1,0 +1,234 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "maintenanceconfigagent_msi_name": {
+            "type": "string"
+        },
+        "eventhub_namespace": {
+            "type": "string"
+        },
+        "eventhub_name": {
+            "type": "string"
+        },
+        "eventhub_authorizationrules_name": {
+            "type": "string"
+        },
+        "mcs_eventhub_zone_redundant": {
+            "type": "string"
+        },
+        "storageaccount_name": {
+            "type": "string"
+        },
+        "storageaccount_container_name": {
+            "type": "string"
+        },
+        "regional_vault_name": {
+            "type": "string"
+        },
+        "jitgroup_objectid": {
+            "type": "string"
+        },
+        "ev2_extension_operator_objectid": {
+            "type": "string"
+        },
+        "identity_resource_group_name": {
+            "type": "string"
+        },
+        "storage_account_sku": {
+            "type": "string"
+        }
+    },
+    "resources": [
+        {
+            "name": "[parameters('maintenanceconfigagent_msi_name')]",
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+            "apiVersion": "2018-11-30",
+            "location": "[resourceGroup().location]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces",
+            "apiVersion": "2021-11-01",
+            "name": "[parameters('eventhub_namespace')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Standard",
+                "tier": "Standard",
+                "capacity": 1
+            },
+            "properties": {
+                "isAutoInflateEnabled": false,
+                "maximumThroughputUnits": 0,
+                "zoneRedundant": "[equals('true',parameters('mcs_eventhub_zone_redundant'))]"
+            }
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs",
+            "apiVersion": "2021-11-01",
+            "name": "[concat(parameters('eventhub_namespace'), '/' ,parameters('eventhub_name'))]",
+            "properties": {
+                "messageRetentionInDays": 7,
+                "partitionCount": 1
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('eventhub_namespace'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs/authorizationRules",
+            "apiVersion": "2021-11-01",
+            "name": "[concat(parameters('eventhub_namespace'), '/' ,parameters('eventhub_name'), '/', parameters('eventhub_authorizationrules_name'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('eventhub_namespace'), parameters('eventhub_name'))]"
+            ],
+            "properties": {
+                "rights": [
+                    "Listen"
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "name": "[parameters('storageaccount_name')]",
+            "location": "[resourceGroup().location]",
+            "kind": "StorageV2",
+            "sku": {
+                "name": "[parameters('storage_account_sku')]",
+                "tier": "Standard"
+            },
+            "properties": {
+                "accessTier": "Hot",
+                "allowBlobPublicAccess": false
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2018-07-01",
+            "name": "[concat(parameters('storageaccount_name'), '/', 'default', '/', parameters('storageaccount_container_name'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2019-09-01",
+            "name": "[parameters('regional_vault_name')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "sku": {
+                    "family": "A",
+                    "name": "standard"
+                },
+                "tenantId": "[subscription().tenantid]",
+                "accessPolicies": [
+                    {
+                        "tenantId": "[subscription().tenantid]",
+                        "objectId": "[parameters('jitgroup_objectid')]",
+                        "permissions": {
+                            "secrets": [
+                                "get",
+                                "list",
+                                "set",
+                                "delete",
+                                "recover",
+                                "backup",
+                                "restore"
+                            ],
+                            "certificates": [
+                                "get",
+                                "list",
+                                "update",
+                                "create",
+                                "import",
+                                "delete",
+                                "managecontacts",
+                                "manageissuers",
+                                "getissuers",
+                                "listissuers",
+                                "setissuers",
+                                "deleteissuers"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[subscription().tenantid]",
+                        "objectId": "[parameters('ev2_extension_operator_objectid')]",
+                        "permissions": {
+                            "storage": [
+                                "set",
+                                "get",
+                                "regeneratekey",
+                                "getsas",
+                                "list",
+                                "setsas"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[subscription().tenantid]",
+                        "objectId": "[reference(resourceId(parameters('identity_resource_group_name'), 'Microsoft.ManagedIdentity/userAssignedIdentities/', parameters('maintenanceconfigagent_msi_name')), '2018-11-30').principalId]",
+                        "permissions": {
+                            "secrets": [
+                                "get"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "name": "[concat(parameters('regional_vault_name'), '/', parameters('storageaccount_name'), 'key1')]",
+            "apiVersion": "2019-09-01",
+            "properties": {
+                "contentType": "text/plain",
+                "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount_name')), '2018-07-01').keys[0].value]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('regional_vault_name'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "name": "[concat(parameters('regional_vault_name'), '/', parameters('storageaccount_name'), 'key2')]",
+            "apiVersion": "2019-09-01",
+            "properties": {
+                "contentType": "text/plain",
+                "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount_name')), '2018-07-01').keys[1].value]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('regional_vault_name'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageaccount_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "name": "[concat(parameters('regional_vault_name'), '/', parameters('eventhub_name'), 'key1')]",
+            "apiVersion": "2019-09-01",
+            "properties": {
+                "contentType": "text/plain",
+                "value": "[listkeys(resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', parameters('eventhub_namespace'), parameters('eventhub_name'), parameters('eventhub_authorizationrules_name')), '2021-11-01').primaryKey]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('regional_vault_name'))]",
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', parameters('eventhub_namespace'), parameters('eventhub_name'), parameters('eventhub_authorizationrules_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "name": "[concat(parameters('regional_vault_name'), '/', parameters('eventhub_name'), 'key2')]",
+            "apiVersion": "2019-09-01",
+            "properties": {
+                "contentType": "text/plain",
+                "value": "[listkeys(resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', parameters('eventhub_namespace'), parameters('eventhub_name'), parameters('eventhub_authorizationrules_name')), '2021-11-01').secondaryKey]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('regional_vault_name'))]",
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', parameters('eventhub_namespace'), parameters('eventhub_name'), parameters('eventhub_authorizationrules_name'))]"
+            ]
+        }
+    ]
+}

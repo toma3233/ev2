@@ -1,0 +1,44 @@
+Template:
+  - customscript-linux.CLOUDENV.DEPLOYENV
+Include:
+  - Parameters/cert_issuers.Parameters.json
+VariableGroup:
+  Variables:
+    acr_addon_testcharts_zone_redundancy: "true"
+    devhub_deploy_network_resources: "false"
+    frontdoor_object_id: ""
+    oic_allow_blob_public_access: 'true'
+    oic_storage_account_sku: "Standard_LRS"
+    rollout_name: overlay.resource.deployenv
+  Match:
+    Key: CLOUDENV
+    Values:
+      gb:
+        Variables:
+          devhub_deploy_network_resources: "true"
+          frontdoor_object_id: "94d82049-8ae1-4429-a36c-8f0eb0600c86" # Microsoft.AzureFrontdoor-Cdn in AME
+          oic_storage_account_sku: "Standard_ZRS"
+        Match:
+          Key: DEPLOYENV
+          Values:
+            test:
+              Variables:
+                frontdoor_object_id: "4dbab725-22a4-44d5-ad44-c267ca38a954" # Microsoft.AzureFrontdoor-Cdn in MSFT
+                oic_allow_blob_public_access: 'false'
+                oic_storage_account_sku: "Standard_ZRS"
+            int:
+              Variables:
+                oic_storage_account_sku: "Standard_LRS"
+      ff:
+        Variables:
+          oic_storage_account_sku: "Standard_ZRS"
+      mc:
+        Variables:
+          acr_addon_testcharts_zone_redundancy: "false"
+      ex:
+        Variables:
+          acr_addon_testcharts_zone_redundancy: "false"
+      rx:
+        Variables:
+          acr_addon_testcharts_zone_redundancy: "false"
+AutoSelector: true

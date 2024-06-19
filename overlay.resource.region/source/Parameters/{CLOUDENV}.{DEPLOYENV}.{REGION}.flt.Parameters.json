@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resource_name_prefix": {
+            "value": "{resource_name_prefix}"
+        },
+        "flt_db_account_name": {
+            "value": "{resource_name_prefix_nodash}flt{REGION}"
+        },
+        "flt_cosmosdb_zone_redundant": {
+            "value": "{flt_cosmosdb_zone_redundant}"
+        },
+        "flt_deploy_cosmosdb": {
+            "value": "{flt_deploy_cosmosdb}"
+        },
+        "ev2_extension_operator_objectid": {
+            "value": "{ev2_extension_operator_objectid}"
+        },
+        "jitgroup_objectid": {
+            "value": "{jitgroup_objectid}"
+        }
+    }
+}

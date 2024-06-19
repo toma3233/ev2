@@ -1,0 +1,15 @@
+Template:
+  - customscript-linux.CLOUDENV.DEPLOYENV
+  - rolloutspec.CLOUDENV.DEPLOYENV
+VariableGroup:
+  Variables:
+    rollout_name: az-cli-aksbin.sync
+  Match:
+    Key: CLOUDENV
+    Values:
+      gb:
+        Match:
+          Key: DEPLOYENV
+          Values:
+            test:
+            prod:

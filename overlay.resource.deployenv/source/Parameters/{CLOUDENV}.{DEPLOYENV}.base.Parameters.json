@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "acr_default_registry_name": {
+            "value": "{resource_name_prefix_nodash}aksol"
+        },
+        "acr_ccp_registry_name": {
+            "value": "{resource_name_prefix_nodash}ccpdeployment"
+        },
+        "acr_addon_charts_registry_name": {
+            "value": "{resource_name_prefix_nodash}aksaddoncharts"
+        },
+        "acr_addon_testcharts_registry_name": {
+            "value": "{resource_name_prefix_nodash}aksaddontestcharts"
+        },
+        "acr_addon_adapter_charts_registry_name": {
+            "value": "{resource_name_prefix_nodash}aksaddonadaptercharts"
+        },
+        "domain_dnszone_name": {
+            "value": "{domain_deployenv}"
+        },
+        "aksapp_dnszone_name": {
+            "value": "{resource_name_prefix}aksapp.{v2_domain_cloud_zone_name}"
+        },
+        "acr_addon_testcharts_zone_redundancy": {
+            "value": "{acr_addon_testcharts_zone_redundancy}"
+        }
+    }
+}

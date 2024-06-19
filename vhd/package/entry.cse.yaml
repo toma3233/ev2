@@ -1,0 +1,312 @@
+VariableGroup:
+  Variables:
+    EV2_BUILDVERSION: "{CSE_RUN_BUILDVERSION}"
+    SOV_CLOUD_HUB_STORAGE_ACCOUNT: sigvhdsaprod
+    SOV_CLOUD_HUB_CONTAINER: sigvhd
+    STORAGE_ACCOUNT_TYPE: "Premium_LRS"
+    LOW_SIDE_SUBSCRIPTION_ID: "d73e1ae3-e26f-408f-98ad-c17d3479aa0c"
+    LOW_SIDE_TENANT_ID: "33e01921-4d64-4f8c-a055-5bdaffd5e33d"
+    LOW_SIDE_AGC_SA_CONTAINER_NAME: "sigvhd"
+    LOW_SIDE_AGC_SA_NAME: "sigvhdsaagc"
+    MSI_OPERATOR_RESOURCE_ID: "{msi_operator_resource_id}"
+    GROUP_REPLICA_COUNTS: ""
+    VERSION_AZURECLI: "2.44.0-1"
+    RESOURCE_SUFFIX: ""
+  Match:
+    Key: CLOUDENV   #Note the key for matching can only be a few predefined ones
+    Values:
+      gb: # NOTE: NEEDS TO BE UPDATED MANUALLY AS PART OF NEW REGION BUILDOUT
+        Match:
+          Key: DEPLOYENV
+          Values:
+            test:
+              Variables:
+                SIG_SUBSCRIPTION_ID: "8ecadfc9-d1a3-4ea4-b844-0d9f87e4d7c8" #ACS Test
+                SIG_REGION: "eastus"
+              Match:
+                Key: REGION
+                Values:
+                  eastus:
+                    Variables:
+                      GROUP_REPLICA_COUNTS: >-
+                        eastus=2
+                  westus2:
+                    Variables:
+                      GROUP_REPLICA_COUNTS: >-
+                        westus2=2,
+                        eastus2euap=2,
+                        centraluseuap=2,
+                        australiaeast=2,
+                        canadacentral=2,
+                        westcentralus=2,
+                        australiacentral=2,
+                        australiasoutheast=2,
+                        canadaeast=2,
+                        eastasia=2,
+                        southeastasia=2,
+                        uksouth=2,
+                        ukwest=2,
+                        japaneast=2,
+                        japanwest=2,
+                        northeurope=2,
+                        westeurope=2,
+                        brazilsouth=2,
+                        centralindia=2,
+                        centralus=2,
+                        eastus2=2,
+                        koreacentral=2,
+                        koreasouth=2,
+                        northcentralus=2,
+                        southcentralus=2,
+                        westus=2,
+                        uaenorth=2
+                  westus: #NOTE: this is for edge zone sceario (separate galleries)
+                    Variables:
+                      GROUP_REPLICA_COUNTS: >-
+                        westus=losangeles=2
+                        westus=microsoftlosangeles1=2
+                        southcentralus=attdallas1=2
+            prod:
+              Variables:
+                SIG_SUBSCRIPTION_ID: "109a5e88-712a-48ae-9078-9ca8b3c81345"
+                SIG_REGION: "eastus"
+              Match:
+                Key: REGION
+                Values:
+                  eastus:
+                    Variables:
+                      GROUP_REPLICA_COUNTS: >-
+                        eastus=50
+                  westus2:
+                    Variables:
+                      GROUP_REPLICA_COUNTS: >-
+                        westus2=50,
+                        eastus2euap=20,
+                        centraluseuap=20,
+                        australiaeast=40,
+                        canadacentral=30,
+                        westcentralus=20,
+                        australiacentral=20,
+                        australiacentral2=15,
+                        australiasoutheast=20,
+                        canadaeast=15,
+                        eastasia=30,
+                        southeastasia=30,
+                        uksouth=40,
+                        ukwest=18,
+                        israelcentral=20,
+                        italynorth=10,
+                        japaneast=40,
+                        japanwest=20,
+                        northeurope=50,
+                        spaincentral=10,
+                        taiwannorth=5,
+                        taiwannorthwest=5,
+                        uaecentral=20,
+                        westeurope=50,
+                        brazilsouth=20,
+                        brazilsoutheast=20,
+                        centralindia=20,
+                        centralus=40,
+                        eastus2=50,
+                        francecentral=20,
+                        francesouth=5,
+                        germanynorth=5,
+                        germanywestcentral=20,
+                        jioindiacentral=20,
+                        jioindiawest=15,
+                        koreacentral=20,
+                        koreasouth=20,
+                        malaysiasouth=5,
+                        mexicocentral=5,
+                        northcentralus=50,
+                        norwayeast=10,
+                        norwaywest=5,
+                        polandcentral=10,
+                        qatarcentral=10,
+                        southafricanorth=20,
+                        southafricawest=5,
+                        southcentralus=30,
+                        southindia=20,
+                        switzerlandnorth=10,
+                        switzerlandwest=5,
+                        uaenorth=10,
+                        westus=50,
+                        westus3=25,
+                        swedencentral=10,
+                        swedensouth=10
+                  westus: #NOTE: this is for edge zone sceario (separate galleries)
+                    Variables:
+                      GROUP_REPLICA_COUNTS: >-
+                        westus=losangeles=2
+                        westus=microsoftlosangeles1=2
+                        southcentralus=attdallas1=2
+      ex:
+        Match:
+          Key: DEPLOYENV
+          Values:
+            prod:
+              Variables:
+                SIG_SUBSCRIPTION_ID: "84acb439-6865-4859-8d0d-5776a1446cf9"
+                SIG_REGION: "usnatwest"
+                STORAGE_ACCOUNT_TYPE: "Standard_LRS"
+                GROUP_REPLICA_COUNTS: >-
+                  usnatwest=2,
+                  usnateast=2
+      rx:
+        Match:
+          Key: DEPLOYENV
+          Values:
+            staging:
+              Variables:
+                SIG_SUBSCRIPTION_ID: "03f7e499-607c-4a2e-b6c1-b935e84a68f3"
+                SIG_REGION: "ussecwest"
+                STORAGE_ACCOUNT_TYPE: "Standard_LRS"
+                GROUP_REPLICA_COUNTS: >-
+                  ussecwest=2,
+                  usseceast=2,
+                  ussecwestcentral=2
+            prod:
+              Variables:
+                SIG_SUBSCRIPTION_ID: "03f7e499-607c-4a2e-b6c1-b935e84a68f3"
+                SIG_REGION: "ussecwest"
+                STORAGE_ACCOUNT_TYPE: "Standard_LRS"
+                GROUP_REPLICA_COUNTS: >-
+                  ussecwest=2,
+                  usseceast=2,
+                  ussecwestcentral=2
+      ff:
+        Match:
+          Key: DEPLOYENV
+          Values:
+            int:
+              Variables:
+                SIG_SUBSCRIPTION_ID: 70465ab6-3d9d-4eeb-9658-a5f969a07276
+                SIG_REGION: "usgovvirginia"
+                SOV_CLOUD_HUB_STORAGE_ACCOUNT: "sigvhdsaint"
+                RESOURCE_SUFFIX: "int"
+                STORAGE_ACCOUNT_TYPE: "Standard_LRS"
+                GROUP_REPLICA_COUNTS: >-
+                  usgovvirginia=2
+            prod:
+              Variables:
+                SIG_SUBSCRIPTION_ID: 9742022a-a1cc-4ae0-9ba7-b81e9c3f21ca #AKS Overlay VHD - FF Prod
+                SIG_REGION: "usgovvirginia"
+                GROUP_REPLICA_COUNTS: >-
+                  usgovarizona=20,
+                  usgovtexas=20,
+                  usgovvirginia=20
+      mc:
+        Match:
+          Key: DEPLOYENV
+          Values:
+            int:
+              Variables:
+                SIG_SUBSCRIPTION_ID: "7ff8885e-a99f-47ed-8684-c543dff80e9c" #MC Int
+                SIG_REGION: "chinaeast2"
+                STORAGE_ACCOUNT_TYPE: "Standard_LRS"
+                SOV_CLOUD_HUB_STORAGE_ACCOUNT: "sigvhdsaint"
+                RESOURCE_SUFFIX: "int"
+                GROUP_REPLICA_COUNTS: >-
+                  chinaeast2=2,
+                  chinanorth2=2
+            prod:
+              Variables:
+                SIG_SUBSCRIPTION_ID: "e03af0b6-3d12-4f9a-955d-cd91175ef5eb" #AKS Overlay VHD - MC Prod
+                SIG_REGION: "chinaeast2"
+                GROUP_REPLICA_COUNTS: >-
+                  chinanorth2=20,
+                  chinaeast2=20,
+                  chinanorth3=20,
+                  chinaeast3=20
+Steps:
+- Script: ensure_azlogin "${SIG_SUBSCRIPTION_ID}"
+  Retry: true
+- Script: ensure_package jq
+  Retry: true
+- Script: |
+    #!/bin/bash
+    set -e # Ensure sub process failures are propagated
+    echo "cse_additional_var set as: ${CSE_ADDITIONAL_VAR}"
+    echo "GROUP_REPLICA_COUNTS set as: ${GROUP_REPLICA_COUNTS}"
+    if [ "${CSE_ADDITIONAL_VAR}" == "release" ]; then
+      echo "releasing..."
+      chmod +x release.sh && ./release.sh
+    elif [ "${CSE_ADDITIONAL_VAR}" == "deleteArm" ]; then
+      echo "delete arm images"
+      chmod +x remove_arm_images.sh && ./remove_arm_images.sh
+    elif [ "${CSE_ADDITIONAL_VAR}" == "deleteAzLinuxArm" ]; then
+      echo "delete azure linux arm images"
+      chmod +x delete_arm.sh && ./delete_arm.sh
+    elif [ "${CSE_ADDITIONAL_VAR}" == "community" ]; then
+      echo "releasing to community gallery..."
+      chmod +x release_community.sh && ./release_community.sh
+    elif [ "${CSE_ADDITIONAL_VAR}" == "edgezone" ]; then
+      echo "releasing to edge zone..."
+      chmod +x release_edgezone.sh && ./release_edgezone.sh
+    elif [ "${CSE_ADDITIONAL_VAR}" == "blobcopy" ]; then
+      echo "copying vhd files to sovereign storage..."
+      chmod +x copy_blob_to_sov_cloud.sh && ./copy_blob_to_sov_cloud.sh
+    elif [ "${CSE_ADDITIONAL_VAR}" == "blobcopywait" ]; then
+      echo "waiting for vhd files in sovereign storage..."
+      chmod +x copy_blob_to_sov_cloud.sh && ./copy_blob_to_sov_cloud.sh "wait"
+    elif [ "${CSE_ADDITIONAL_VAR}" == "lowside" ]; then
+      echo "uploading..."
+      chmod +x upload_to_lowside.sh && ./upload_to_lowside.sh
+    elif [ "${CSE_ADDITIONAL_VAR}" == "HEALTHCHECK" ]; then
+      echo "healthcheck..."
+      chmod +x healthcheck.sh && ./healthcheck.sh
+    elif [ "${CSE_ADDITIONAL_VAR}" == "COMMUNITY_HEALTHCHECK" ]; then
+      echo "community healthcheck..."
+      chmod +x healthcheck.sh && RESOURCE_SUFFIX="community" ./healthcheck.sh
+    elif [ "${CSE_ADDITIONAL_VAR}" == "EDGEZONE_HEALTHCHECK" ]; then
+      echo "Edge Zone healthcheck..."
+      chmod +x healthcheck.sh && RESOURCE_SUFFIX="EdgeZone" ./healthcheck.sh
+    elif [ "${CSE_ADDITIONAL_VAR}" == "deleteMI" ]; then
+      echo "delete managed image..."
+      chmod +x delete_managed_image.sh && ./delete_managed_image.sh
+    elif [ "${CSE_ADDITIONAL_VAR}" == "deleteSovBlob" ]; then
+      echo "delete copied vhd blob in sovereign cloud..."
+      chmod +x delete_sov_blob.sh && ./delete_sov_blob.sh
+    elif [ "${CSE_ADDITIONAL_VAR}" == "downscale" ]; then
+      echo "downscale image replicas for older images in public clouds.."
+      chmod +x reduce.sh && ./reduce.sh
+    elif [ "${CSE_ADDITIONAL_VAR}" == "optimizeBlobsToSIG" ]; then
+      echo "prefetch optimize vhds with azure image builder and publish to prod SIG directly..."
+      chmod +x run_image_builder_prod.sh && ./run_image_builder_prod.sh
+    elif [ "${CSE_ADDITIONAL_VAR}" == "removeCommunity" ]; then
+      echo "remove community image galleries for fresh set"
+      chmod +x remove_community.sh && ./remove_community.sh
+    elif [ "${CSE_ADDITIONAL_VAR}" == "removeEdgeZone" ]; then
+      echo "remove edge zone for older images in public clouds.."
+      chmod +x remove_edgezone.sh && ./remove_edgezone.sh
+    elif [ "${CSE_ADDITIONAL_VAR}" == "blobcopyForImageBuilder" ]; then
+      echo "copying vhd files for image builder run..."
+      chmod +x blob_copy_for_image_builder_test.sh && ./blob_copy_for_image_builder_test.sh
+    elif [ "${CSE_ADDITIONAL_VAR}" == "blobcopywaitForImageBuilder" ]; then
+      echo "waiting for vhd files to run image builder..."
+      chmod +x blob_copy_for_image_builder_test.sh && ./blob_copy_for_image_builder_test.sh "wait"
+    elif [ "${CSE_ADDITIONAL_VAR}" == "optimizeBlobs" ]; then
+      echo "creating prefetch-optimized blobs with image builder..."
+      chmod +x optimize_with_prefetch.sh && ./optimize_with_prefetch.sh "optimizeBlobs"
+    elif [ "${CSE_ADDITIONAL_VAR}" == "beginOptimizedBlobOverwrite" ]; then
+      echo "overwriting original blobs with prefetch-optimized-blobs..."
+      chmod +x optimize_with_prefetch.sh && ./optimize_with_prefetch.sh "beginOptimizedBlobOverwrite"
+    elif [ "${CSE_ADDITIONAL_VAR}" == "waitOptimizedBlobOverwrite" ]; then
+      echo "waiting for optimized overwrite to complete..."
+      chmod +x optimize_with_prefetch.sh && ./optimize_with_prefetch.sh "waitOptimizedBlobOverwrite"
+    elif [ "${CSE_ADDITIONAL_VAR}" == "deleteImageBuilderRg" ]; then
+      echo "garbage collecting image builder resource groups..."
+      chmod +x garbage_collect_image_builder.sh && ./garbage_collect_image_builder.sh "tags" "run"
+    elif [ "${CSE_ADDITIONAL_VAR}" == "noop" ]; then
+      echo "CSE_ADDITIONAL_VAR is set to 'noop', proceeding without running an operation..."
+    elif [ "${CSE_ADDITIONAL_VAR}" == "deletewin2004images-dryrun" ]; then
+      echo "DRY-RUN: listing all Windows2004 images in the cloud ${CLOUDENV}"
+      export DRY_RUN=True
+      chmod +x deletews2004images.sh && ./deletews2004images.sh
+    elif [ "${CSE_ADDITIONAL_VAR}" == "deletewin2004images" ]; then
+      echo "deleting all Windows2004 images in the cloud ${CLOUDENV}"
+      export DRY_RUN=False
+      chmod +x deletews2004images.sh && ./deletews2004images.sh
+    fi
+    echo "done..."

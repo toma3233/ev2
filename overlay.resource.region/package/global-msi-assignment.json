@@ -1,0 +1,8 @@
+{
+  "identities": [
+    {
+      "name": "sms",
+      "underlay": "svc"
+    }
+  ]
+}

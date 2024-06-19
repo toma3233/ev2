@@ -1,0 +1,38 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resource_name_prefix": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "location": "[resourceGroup().location]",
+        "jitcontroller_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'jitcontroller')]",
+        "jitcontroller_svc_user_assigned_identity_name" : "[concat(parameters('resource_name_prefix'),'jitcontroller-svc')]",
+        "jithandler_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'jithandler')]"
+    },
+    "resources": [
+        {
+            "name": "[variables('jitcontroller_user_assigned_identity_name')]",
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+            "apiVersion": "2018-11-30",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "name": "[variables('jitcontroller_svc_user_assigned_identity_name')]",
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+            "apiVersion": "2018-11-30",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "name": "[variables('jithandler_user_assigned_identity_name')]",
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+            "apiVersion": "2018-11-30",
+            "location": "[variables('location')]",
+            "properties": {}
+        }
+    ]
+}

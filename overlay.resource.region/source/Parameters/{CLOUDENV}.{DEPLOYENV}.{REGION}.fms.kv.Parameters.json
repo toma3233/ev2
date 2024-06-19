@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resource_name_prefix": {
+            "value": "{resource_name_prefix}"
+        },
+        "vault_name": {
+            "value": "{resource_name_prefix}aks-msi-{region_short_name}"
+        },
+        "sku_name": {
+            "value": "{fms_sku_name}"
+        },
+        "overlay_resources_subscription_id": {
+            "value": "{overlay_resources_subscription_id}"
+        },
+        "identity_resource_group_name": {
+            "value": "{resource_name_prefix}overlay-{REGION}"
+        },
+        "svc_objectid": {
+            "value": "{svc_objectid}"
+        }
+    }
+}

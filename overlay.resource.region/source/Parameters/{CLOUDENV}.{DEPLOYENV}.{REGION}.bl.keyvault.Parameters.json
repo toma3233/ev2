@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "regional_vault_name": {
+            "value": "{resource_name_prefix}aksblp{region_short_name}"
+        },
+        "jitgroup_objectid": {
+            "value": "{jitgroup_objectid}"
+        },
+        "ev2_extension_operator_objectid": {
+            "value": "{ev2_extension_operator_objectid}"
+        },
+        "bl_pav2_objectid": {
+            "value": "{bl_pav2_objectid}"
+        },
+        "resource_name_prefix": {
+            "value": "{resource_name_prefix}"
+        },
+        "identity_resource_group_name": {
+            "value": "{resource_name_prefix}overlay-{REGION}"
+        }
+    }
+}

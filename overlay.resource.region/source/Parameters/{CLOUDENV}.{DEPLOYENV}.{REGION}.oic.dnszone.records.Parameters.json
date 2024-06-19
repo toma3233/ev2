@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "oic_region": {
+            "value": "{domain_region_prefix}{REGION}"
+        },
+        "oic_domain_dnszone_name": {
+            "value": "oidc.{domain_deployenv}"
+        },
+        "oic_cdn_endpoint_resource_group": {
+            "value": "{resource_name_prefix}overlay-{REGION}"
+        },
+        "oic_cdn_profile_name": {
+            "value": "{resource_name_prefix_nodash}aksoic{REGION}"
+        },
+        "oic_cdn_endpoint_name": {
+            "value": "{resource_name_prefix_nodash}aksoic{REGION}"
+        }
+    }
+}

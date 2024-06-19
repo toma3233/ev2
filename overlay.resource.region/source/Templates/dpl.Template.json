@@ -1,0 +1,148 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resource_name_prefix": {
+            "type": "string"
+        },
+        "resource_name_prefix_nodash": {
+            "type": "String"
+        },
+        "msi_operator_resource_id": {
+            "type": "string"
+        },
+        "dpl_keep_kv": {
+            "type": "string"
+        },
+        "storage_account_sku": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "tenant_id": "[subscription().tenantid]",
+        "location": "[resourceGroup().location]",
+        "component_code": "dpl",
+        "storageaccount_name": "[concat(parameters('resource_name_prefix_nodash'),'aks',variables('component_code'),variables('location'))]",
+        "deployer_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'deployer')]",
+        "deployer_cx_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'deployer-cx')]",
+        "deployer_svc_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'deployer-svc')]",
+        "deployer_keyvault_name": "[concat(parameters('resource_name_prefix'),'aks',variables('component_code'),variables('location'))]"
+    },
+    "resources": [
+        {
+            "name": "[variables('deployer_user_assigned_identity_name')]",
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+            "apiVersion": "2018-11-30",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "name": "[variables('deployer_cx_user_assigned_identity_name')]",
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+            "apiVersion": "2018-11-30",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "name": "[variables('deployer_svc_user_assigned_identity_name')]",
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+            "apiVersion": "2018-11-30",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "name": "[variables('storageaccount_name')]",
+            "location": "[variables('location')]",
+            "sku": {
+                "name": "[parameters('storage_account_sku')]",
+                "tier": "Standard"
+            },
+            "kind": "StorageV2",
+            "properties": {
+                "accessTier": "Hot",
+                "allowBlobPublicAccess": false,
+                "allowSharedKeyAccess": false
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2018-07-01",
+            "name": "[concat(variables('storageaccount_name'), '/default/clustertype')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageaccount_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2018-07-01",
+            "name": "[concat(variables('storageaccount_name'), '/default/cluster')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageaccount_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2018-07-01",
+            "name": "[concat(variables('storageaccount_name'), '/default/aksapp')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageaccount_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2018-07-01",
+            "name": "[concat(variables('storageaccount_name'), '/default/cxbuild')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageaccount_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2018-07-01",
+            "name": "[concat(variables('storageaccount_name'), '/default/deployer')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageaccount_name'))]"
+            ]
+        },
+        {
+            "condition": "[equals(parameters('dpl_keep_kv'), 'true')]",
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2019-09-01",
+            "name": "[variables('deployer_keyvault_name')]",
+            "location": "[variables('location')]",
+            "properties": {
+                "enableSoftDelete": true,
+                "sku": {
+                    "family": "A",
+                    "name": "standard"
+                },
+                "tenantId": "[variables('tenant_id')]",
+                "accessPolicies": [
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[reference(parameters('msi_operator_resource_id'), '2018-11-30').principalId]",
+                        "permissions": {
+                            "secrets": [
+                                "delete",
+                                "get",
+                                "set",
+                                "list"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', variables('deployer_user_assigned_identity_name')), '2018-11-30').principalId]",
+                        "permissions": {
+                            "secrets": [
+                                "get"
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

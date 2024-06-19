@@ -1,0 +1,32 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resource_name_prefix_nodash": {
+            "type": "string"
+        },
+        "tgl_storage_account_sku_name": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "location": "[resourceGroup().location]",
+        "component_code": "tgl"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "name": "[concat(parameters('resource_name_prefix_nodash'),'akstgl',variables('location'))]",
+            "location": "[variables('location')]",
+            "sku": {
+                "name": "[parameters('tgl_storage_account_sku_name')]"
+            },
+            "kind": "StorageV2",
+            "properties": {
+                "allowBlobPublicAccess": false,
+                "allowSharedKeyAccess": true
+            }
+        }
+    ]
+}

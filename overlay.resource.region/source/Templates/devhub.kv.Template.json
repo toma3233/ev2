@@ -1,0 +1,81 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploy_access_policies": {
+      "type": "string",
+      "allowedValues": [
+        "true",
+        "false"
+      ]
+    },
+    "vault_name": {
+      "type": "string"
+    },
+    "resource_name_prefix": {
+      "type": "string"
+    },
+    "regional_resource_group": {
+      "type": "string"
+    },
+    "msi_operator_resource_id": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "tenant_id": "[subscription().tenantid]",
+    "devhub_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'devhub')]",
+    "deployer_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'deployer')]",
+    "deployer_svc_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'deployer-svc')]"
+  },
+  "resources": [
+    {
+      "condition": "[equals(parameters('deploy_access_policies'), 'true')]",
+      "type": "Microsoft.KeyVault/vaults/accessPolicies",
+      "apiVersion": "2021-11-01-preview",
+      "name": "[concat(parameters('vault_name'), '/add')]",
+      "properties": {
+        "accessPolicies": [
+          {
+            "tenantId": "[variables('tenant_id')]",
+            "objectId": "[if(equals(parameters('deploy_access_policies'), 'true'), reference(resourceId(parameters('regional_resource_group'), 'Microsoft.ManagedIdentity/userAssignedIdentities/', variables('devhub_user_assigned_identity_name')), '2018-11-30').principalId, json('null'))]",
+            "permissions": {
+              "secrets": [
+                "get"
+              ]
+            }
+          },
+          {
+            "tenantId": "[variables('tenant_id')]",
+            "objectId": "[if(equals(parameters('deploy_access_policies'),'true'), reference(parameters('msi_operator_resource_id'), '2018-11-30').principalId, json('null'))]",
+            "permissions": {
+              "secrets": [
+                "get",
+                "set",
+                "list"
+              ]
+            }
+          },
+          {
+            "tenantId": "[variables('tenant_id')]",
+            "objectId": "[if(equals(parameters('deploy_access_policies'),'true'), reference(resourceId(parameters('regional_resource_group'), 'Microsoft.ManagedIdentity/userAssignedIdentities/', variables('deployer_user_assigned_identity_name')), '2018-11-30').principalId, json('null'))]",
+            "permissions": {
+              "secrets": [
+                "get"
+              ]
+            }
+          },
+          {
+            "tenantId": "[variables('tenant_id')]",
+            "objectId": "[if(equals(parameters('deploy_access_policies'),'true'), reference(resourceId(parameters('regional_resource_group'), 'Microsoft.ManagedIdentity/userAssignedIdentities/', variables('deployer_svc_user_assigned_identity_name')), '2018-11-30').principalId, json('null'))]",
+            "permissions": {
+              "secrets": [
+                "get"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

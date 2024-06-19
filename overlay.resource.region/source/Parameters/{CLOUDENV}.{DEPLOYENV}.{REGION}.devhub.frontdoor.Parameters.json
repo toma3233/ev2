@@ -1,0 +1,42 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploy_frontdoor": {
+      "value": "{devhub_deploy_networking_config}"
+    },
+    "profile_name": {
+      "value": "{devhub_frontdoor_profile_endpoint_name}"
+    },
+    "endpoint_name": {
+      "value": "{devhub_frontdoor_profile_endpoint_name}"
+    },
+    "origin_host_name": {
+      "value": "{devhub_frontdoor_regional_cname}.devhub.{domain_deployenv}"
+    },
+    "origin_group_name": {
+      "value": "{resource_name_prefix}devhub-{REGION}-og"
+    },
+    "origin_name": {
+      "value": "{resource_name_prefix}devhub-{REGION}-origin"
+    },
+    "route_name": {
+      "value": "{resource_name_prefix}devhub-{REGION}-route"
+    },
+    "path_match": {
+      "value": "{devhub_frontdoor_path_match}"
+    },
+    "dns_zone_name": {
+      "value": "devhub.{domain_deployenv}"
+    },
+    "cname_record": {
+      "value": "fd"
+    },
+    "custom_domain_resource_name": {
+      "value": "{devhub_frontdoor_custom_domain}"
+    },
+    "cert_vault_name": {
+      "value": "{devhub_global_kv_name}"
+    }
+  }
+}

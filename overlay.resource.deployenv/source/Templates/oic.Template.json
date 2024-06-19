@@ -1,0 +1,92 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resource_name_prefix_nodash": {
+            "type": "String"
+        },
+        "resource_name_prefix": {
+            "type": "string"
+        },
+        "ev2_extension_operator_objectid": {
+            "type": "string"
+        },
+        "jitgroup_objectid": {
+            "type": "string"
+        },
+        "oic_storage_account_sku": {
+            "type": "string",
+            "defaultValue": "Standard_LRS"
+        },
+        "allow_blob_public_access": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "tenant_id": "[subscription().tenantid]",
+        "location": "[resourceGroup().location]",
+        "component_code": "oic",
+        "storageaccount_name": "[concat(parameters('resource_name_prefix_nodash'),'aks',variables('component_code'))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "name": "[variables('storageaccount_name')]",
+            "location": "[variables('location')]",
+            "sku": {
+                "name": "[parameters('oic_storage_account_sku')]",
+                "tier": "Standard"
+            },
+            "kind": "StorageV2",
+            "properties": {
+                "accessTier": "Hot",
+                "allowBlobPublicAccess": "[equals(parameters('allow_blob_public_access'),'true')]",
+                "allowSharedKeyAccess": false
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resource_name_prefix'),'aks',variables('component_code'))]",
+            "location": "[variables('location')]",
+            "properties": {
+                "enableSoftDelete": true,
+                "sku": {
+                    "family": "A",
+                    "name": "standard"
+                },
+                "tenantId": "[variables('tenant_id')]",
+                "accessPolicies": [
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[parameters('ev2_extension_operator_objectid')]",
+                        "permissions": {
+                            "certificates": [
+                                "create",
+                                "get",
+                                "setissuers",
+                                "update"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[parameters('jitgroup_objectid')]",
+                        "permissions": {
+                            "secrets": [
+                                "list"
+                            ],
+                            "certificates": [
+                                "delete",
+                                "get",
+                                "list",
+                                "listissuers"
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

@@ -1,0 +1,22 @@
+VariableGroup:
+  Match:
+    Key: CLOUDENV
+    Values:
+      gb:
+        Match:
+          Key: DEPLOYENV
+          Values:
+            test:
+              Variables:
+                storage_accounts: "{resource_name_prefix_nodash}aksteleport"
+            prod:
+              Variables:
+                storage_accounts: "{resource_name_prefix_nodash}aksteleportusnat {resource_name_prefix_nodash}aksteleportussec"
+Steps:
+- Script:
+    ensure_package jq azure-cli
+  Retry: true
+- Script:
+    ensure_azlogin ${GLOBAL_SUBSCRIPTION_ID}
+- Script: |
+    bash run.sh

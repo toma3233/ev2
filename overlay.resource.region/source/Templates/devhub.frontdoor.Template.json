@@ -1,0 +1,174 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploy_frontdoor": {
+      "type": "string",
+      "allowedValues": [
+        "true",
+        "false"
+      ]
+    },
+    "profile_name": {
+      "type": "string"
+    },
+    "endpoint_name": {
+      "type": "string"
+    },
+    "origin_host_name": {
+      "type": "string"
+    },
+    "origin_group_name": {
+      "type": "string"
+    },
+    "origin_name": {
+      "type": "string"
+    },
+    "route_name": {
+      "type": "string"
+    },
+    "path_match": {
+      "type": "string"
+    },
+    "dns_zone_name": {
+      "type": "string"
+    },
+    "cname_record": {
+      "type": "string"
+    },
+    "custom_domain_resource_name": {
+      "type": "string"
+    },
+    "cert_vault_name": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "secretName": "fdcerts",
+    "kvCertName": "ssl"
+  },
+  "resources": [
+    {
+      "condition": "[equals(parameters('deploy_frontdoor'), 'true')]",
+      "type": "Microsoft.Cdn/profiles/secrets",
+      "apiVersion": "2020-09-01",
+      "name": "[concat(parameters('profile_name'), '/', variables('secretName'))]",
+      "properties": {
+        "parameters": {
+          "type": "CustomerCertificate",
+          "useLatestVersion": "true",
+          "secretSource": {
+            "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().Id, '/providers/Microsoft.KeyVault/vaults/', parameters('cert_vault_name'), '/certificates/', variables('kvCertName'))]"
+          }
+        }
+      }
+    },
+    {
+      "condition": "[equals(parameters('deploy_frontdoor'), 'true')]",
+      "type": "Microsoft.Cdn/profiles/customDomains",
+      "apiVersion": "2021-06-01",
+      "name": "[concat(parameters('profile_name'), '/', parameters('custom_domain_resource_name'))]",
+      "properties": {
+        "hostName": "[if(equals(parameters('deploy_frontdoor'), 'true'), substring(reference(resourceId('Microsoft.Network/dnszones/CNAME', parameters('dns_zone_name'), parameters('cname_record')), '2016-04-01').fqdn, 0, sub(length(reference(resourceId('Microsoft.Network/dnszones/CNAME', parameters('dns_zone_name'), parameters('cname_record')), '2016-04-01').fqdn), 1)), json('null'))]",
+        "tlsSettings": {
+          "certificateType": "CustomerCertificate",
+          "minimumTlsVersion": "TLS12",
+          "secret": {
+            "id": "[resourceId('Microsoft.Cdn/profiles/secrets', parameters('profile_name'), variables('secretName'))]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/secrets', parameters('profile_name'), variables('secretName'))]"
+      ]
+    },
+    {
+      "condition": "[equals(parameters('deploy_frontdoor'),'true')]",
+      "type": "Microsoft.Network/dnsZones/TXT",
+      "apiVersion": "2018-05-01",
+      "name": "[concat(parameters('dns_zone_name'), '/', '_dnsauth.', parameters('cname_record'))]",
+      "properties": {
+        "TTL": 3600,
+        "TXTRecords": [
+          {
+            "value": [
+            "[if(and(equals(parameters('deploy_frontdoor'),'true'),not(equals(reference(resourceId('Microsoft.Cdn/profiles/customDomains', parameters('profile_name'), parameters('custom_domain_resource_name')), '2021-06-01').validationProperties.validationToken, null()))),reference(resourceId('Microsoft.Cdn/profiles/customDomains', parameters('profile_name'), parameters('custom_domain_resource_name')), '2021-06-01').validationProperties.validationToken,'null')]"
+            ]
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/customDomains', parameters('profile_name'), parameters('custom_domain_resource_name'))]"
+      ]
+    },
+    {
+      "condition": "[equals(parameters('deploy_frontdoor'), 'true')]",
+      "type": "Microsoft.Cdn/profiles/originGroups",
+      "apiVersion": "2021-06-01",
+      "name": "[concat(parameters('profile_name'), '/', parameters('origin_group_name'))]",
+      "properties": {
+        "loadBalancingSettings": {
+          "sampleSize": 4,
+          "successfulSamplesRequired": 3
+        },
+        "healthProbeSettings": {
+          "probePath": "/healthz",
+          "probeRequestType": "HEAD",
+          "probeProtocol": "Https",
+          "probeIntervalInSeconds": 100
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/customDomains', parameters('profile_name'), parameters('custom_domain_resource_name'))]"
+      ]
+    },
+    {
+      "condition": "[equals(parameters('deploy_frontdoor'), 'true')]",
+      "type": "Microsoft.Cdn/profiles/originGroups/origins",
+      "apiVersion": "2021-06-01",
+      "name": "[concat(parameters('profile_name'), '/', parameters('origin_group_name'), '/', parameters('origin_name'))]",
+      "properties": {
+        "hostName": "[parameters('origin_host_name')]",
+        "httpPort": 80,
+        "httpsPort": 443,
+        "originHostHeader": "[parameters('origin_host_name')]",
+        "priority": 1,
+        "weight": 1000
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/originGroups', parameters('profile_name'), parameters('origin_group_name'))]"
+      ]
+    },
+    {
+      "condition": "[equals(parameters('deploy_frontdoor'), 'true')]",
+      "type": "Microsoft.Cdn/profiles/afdEndpoints/routes",
+      "apiVersion": "2021-06-01",
+      "name": "[concat(parameters('profile_name'), '/', parameters('endpoint_name'), '/', parameters('route_name'))]",
+      "properties": {
+        "customDomains": [
+          {
+            "id": "[resourceId('Microsoft.Cdn/profiles/customDomains', parameters('profile_name'), parameters('custom_domain_resource_name'))]"
+          }
+        ],
+        "originGroup": {
+          "id": "[resourceId('Microsoft.Cdn/profiles/originGroups', parameters('profile_name'), parameters('origin_group_name'))]"
+        },
+        "supportedProtocols": [
+          "Http",
+          "Https"
+        ],
+        "patternsToMatch": [
+          "[parameters('path_match')]"
+        ],
+        "forwardingProtocol": "HttpsOnly",
+        "linkToDefaultDomain": "Enabled",
+        "httpsRedirect": "Enabled"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Cdn/profiles/customDomains', parameters('profile_name'), parameters('custom_domain_resource_name'))]",
+        "[resourceId('Microsoft.Cdn/profiles/originGroups/origins', parameters('profile_name'), parameters('origin_group_name'), parameters('origin_name'))]",
+        "[resourceId('Microsoft.Cdn/profiles/originGroups', parameters('profile_name'), parameters('origin_group_name'))]"
+      ]
+    }
+  ]
+}

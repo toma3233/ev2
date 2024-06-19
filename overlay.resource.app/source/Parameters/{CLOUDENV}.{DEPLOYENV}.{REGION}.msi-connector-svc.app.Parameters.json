@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appName": {
+            "value": "{resource_name_prefix}aks-msi-connector-svc-{REGION}"
+        },
+        "publisher": {
+            "value": "{msi_connector_svc_publisher}"
+        },
+        "deploy": {
+            "value": "{msi_connector_svc_appDeploy}"
+        },
+        "ownerIds": {
+            "value": "{msi_connector_svc_sp_owners}"
+        }
+    }
+}

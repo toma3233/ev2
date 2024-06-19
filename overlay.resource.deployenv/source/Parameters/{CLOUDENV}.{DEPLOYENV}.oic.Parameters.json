@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "ev2_extension_operator_objectid": {
+            "value": "{ev2_extension_operator_objectid}"
+        },
+        "jitgroup_objectid": {
+            "value": "{jitgroup_objectid}"
+        },
+        "oic_storage_account_sku": {
+            "value": "{oic_storage_account_sku}"
+        },
+        "resource_name_prefix_nodash": {
+            "value": "{resource_name_prefix_nodash}"
+        },
+        "resource_name_prefix": {
+            "value": "{resource_name_prefix}"
+        },
+        "allow_blob_public_access":{
+            "value": "{oic_allow_blob_public_access}"
+        }
+    }
+}

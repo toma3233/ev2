@@ -1,0 +1,249 @@
+VariableGroup:
+  Variables:
+    EV2_BUILDVERSION: "{CSE_RUN_BUILDVERSION}"
+    STORAGE_ACCOUNT_TYPE: "Premium_LRS"
+    GROUP_REPLICA_COUNTS: ""
+    VERSION_AZURECLI: "2.40.0-1"
+    RESOURCE_SUFFIX: ""
+  Match:
+    Key: CLOUDENV   #Note the key for matching can only be a few predefined ones
+    Values:
+      gb:
+        Match:
+          Key: DEPLOYENV
+          Values:
+            test:
+              Variables:
+                RG_SUBSCRIPTION_ID: "8ecadfc9-d1a3-4ea4-b844-0d9f87e4d7c8" #ACS Test
+                RG_REGION: "eastus"
+              Match:
+                Key: REGION
+                Values:
+                  eastus: #NOTE: use the first region of the group as a group indicator, expect the exact region to be passed in by release
+                    Variables:
+                      GROUP_REPLICA_COUNTS: >-
+                        eastus=2
+                  westus2:
+                    Variables:
+                      GROUP_REPLICA_COUNTS: >-
+                        westus2=2
+                  eastus2euap:
+                    Variables:
+                      GROUP_REPLICA_COUNTS: >-
+                        eastus2euap=2,
+                        centraluseuap=2
+                  australiaeast:
+                    Variables:
+                      GROUP_REPLICA_COUNTS: >-
+                        australiaeast=2,
+                        canadacentral=2,
+                        westcentralus=2
+                  australiacentral:
+                    Variables:
+                      GROUP_REPLICA_COUNTS: >-
+                        australiacentral=2,
+                        australiasoutheast=2,
+                        canadaeast=2,
+                        eastasia=2,
+                        southeastasia=2,
+                        uksouth=2,
+                        ukwest=2
+                  japaneast:
+                    Variables:
+                      GROUP_REPLICA_COUNTS: >-
+                        israelcentral=2,
+                        italynorth=2,
+                        japaneast=2,
+                        japanwest=2,
+                        northeurope=2,
+                        westeurope=2
+                  brazilsouth:
+                    Variables:
+                      GROUP_REPLICA_COUNTS: >-
+                        brazilsouth=2,
+                        centralindia=2,
+                        centralus=2,
+                        eastus=2,
+                        eastus2=2,
+                        koreacentral=2,
+                        koreasouth=2,
+                        northcentralus=2,
+                        southcentralus=2,
+                        westus=2,
+                        westus2=2,
+                        uaenorth=2
+            prod:
+              Variables:
+                RG_SUBSCRIPTION_ID: "109a5e88-712a-48ae-9078-9ca8b3c81345"
+                RG_REGION: "eastus"
+              Match:
+                Key: REGION
+                Values:
+                  eastus:
+                    Variables:
+                      GROUP_REPLICA_COUNTS: >-
+                        eastus=5
+                  westus2:
+                    Variables:
+                      GROUP_REPLICA_COUNTS: >-
+                        westus2=5
+                  eastus2euap:
+                    Variables:
+                      GROUP_REPLICA_COUNTS: >-
+                        eastus2euap=20,
+                        centraluseuap=20
+                  australiaeast:
+                    Variables:
+                      GROUP_REPLICA_COUNTS: >-
+                        australiaeast=40,
+                        canadacentral=30,
+                        westcentralus=20
+                  australiacentral:
+                    Variables:
+                      GROUP_REPLICA_COUNTS: >-
+                        australiacentral=20,
+                        australiacentral2=15,
+                        australiasoutheast=20,
+                        canadaeast=15,
+                        eastasia=30,
+                        southeastasia=30,
+                        uksouth=40,
+                        ukwest=18
+                  japaneast:
+                    Variables:
+                      GROUP_REPLICA_COUNTS: >-
+                        japaneast=40,
+                        japanwest=20,
+                        northeurope=50,
+                        uaecentral=20,
+                        westeurope=50
+                  brazilsouth:
+                    Variables: #5 for satellite regions
+                      GROUP_REPLICA_COUNTS: >-
+                        brazilsouth=20,
+                        brazilsoutheast=20,
+                        centralindia=20,
+                        centralus=40,
+                        eastus=50,
+                        eastus2=50,
+                        francecentral=20,
+                        francesouth=5,
+                        germanynorth=5,
+                        germanywestcentral=20,
+                        jioindiacentral=20,
+                        jioindiawest=15,
+                        koreacentral=20,
+                        koreasouth=20,
+                        malaysiasouth=5,
+                        northcentralus=50,
+                        norwayeast=10,
+                        norwaywest=5,
+                        qatarcentral=10,
+                        southafricanorth=20,
+                        southafricawest=5,
+                        southcentralus=30,
+                        southindia=20,
+                        switzerlandnorth=10,
+                        switzerlandwest=5,
+                        uaenorth=10,
+                        westus=50,
+                        westus2=50,
+                        westus3=25,
+                        swedencentral=10,
+                        swedensouth=10
+      ex:
+        Match:
+          Key: DEPLOYENV
+          Values:
+            prod:
+              Variables:
+                RG_SUBSCRIPTION_ID: "84acb439-6865-4859-8d0d-5776a1446cf9"
+                RG_REGION: "usnatwest"
+                HIGH_SIDE_TELEPORT_STORAGE_URI: https://aksteleportusnat.blob.core.eaglex.ic.gov/aksteleportusnat/sigvhd/
+                HIGH_SIDE_TELEPORT_SECRET_URI: https://aksteleportex.vault.cloudapi.eaglex.ic.gov/secrets/aksteleportusnat-aksusnatsighigh
+                STORAGE_ACCOUNT_TYPE: "Standard_LRS"
+                GROUP_REPLICA_COUNTS: >-
+                  usnatwest=2,
+                  usnateast=2
+      rx:
+        Match:
+          Key: DEPLOYENV
+          Values:
+            prod:
+              Variables:
+                RG_SUBSCRIPTION_ID: "03f7e499-607c-4a2e-b6c1-b935e84a68f3"
+                RG_REGION: "ussecwest"
+                HIGH_SIDE_TELEPORT_STORAGE_URI: https://aksteleportussec2.blob.core.microsoft.scloud/aksteleportussec2/sigvhd/
+                HIGH_SIDE_TELEPORT_SECRET_URI: https://akskvussec.vault.cloudapi.microsoft.scloud/secrets/aksteleportussec2-aksussecsighigh
+                STORAGE_ACCOUNT_TYPE: "Standard_LRS"
+                GROUP_REPLICA_COUNTS: >-
+                  ussecwest=2,
+                  usseceast=2,
+                  ussecwestcentral=2
+      ff:
+        Match:
+          Key: DEPLOYENV
+          Values:
+            int:
+              Variables:
+                RG_SUBSCRIPTION_ID: 70465ab6-3d9d-4eeb-9658-a5f969a07276
+                RG_REGION: "usgovvirginia"
+                SOV_CLOUD_HUB_STORAGE_ACCOUNT: "sigvhdsaint"
+                RESOURCE_SUFFIX: "int"
+                STORAGE_ACCOUNT_TYPE: "Standard_LRS"
+                GROUP_REPLICA_COUNTS: >-
+                  usgovvirginia=2
+            prod:
+              Variables:
+                RG_SUBSCRIPTION_ID: 9742022a-a1cc-4ae0-9ba7-b81e9c3f21ca #AKS Overlay VHD - FF Prod
+                RG_REGION: "usgovvirginia"
+                GROUP_REPLICA_COUNTS: >-
+                  usgovarizona=20,
+                  usgovtexas=20,
+                  usgovvirginia=20
+      mc:
+        Match:
+          Key: DEPLOYENV
+          Values:
+            int:
+              Variables:
+                RG_SUBSCRIPTION_ID: "7ff8885e-a99f-47ed-8684-c543dff80e9c" #MC Int
+                RG_REGION: "chinaeast2"
+                STORAGE_ACCOUNT_TYPE: "Standard_LRS"
+                SOV_CLOUD_HUB_STORAGE_ACCOUNT: "sigvhdsaint"
+                RESOURCE_SUFFIX: "int"
+                GROUP_REPLICA_COUNTS: >-
+                  chinaeast2=2,
+                  chinanorth2=2
+            prod:
+              Variables:
+                RG_SUBSCRIPTION_ID: "e03af0b6-3d12-4f9a-955d-cd91175ef5eb" #AKS Overlay VHD - MC Prod
+                RG_REGION: "chinaeast2"
+                GROUP_REPLICA_COUNTS: >-
+                  chinanorth2=20,
+                  chinaeast2=20,
+                  chinanorth3=20,
+                  chinaeast3=20
+Steps:
+- Script: ensure_azlogin "${RG_SUBSCRIPTION_ID}"
+  Retry: true
+- Script: ensure_package jq
+  Retry: true
+- Script: |
+    #!/bin/bash
+    echo "cse_additional_var set as: ${CSE_ADDITIONAL_VAR}"
+    echo "GROUP_REPLICA_COUNTS set as: ${GROUP_REPLICA_COUNTS}"
+    if [ "${CSE_ADDITIONAL_VAR}" == "scaffold" ]; then
+      echo "scaffolding ubuntu pool..."
+      chmod +x ./scaffold/scaffold.sh && ./scaffold/scaffold.sh
+    elif [ "${CSE_ADDITIONAL_VAR}" == "1espool" ]; then
+      echo "deploying ubuntu 1espool..."
+      chmod +x ./1espool/1espool.sh && ./1espool/1espool.sh
+    elif [ "${CSE_ADDITIONAL_VAR}" == "scaffoldMariner" ]; then
+      echo "scaffolding mariner pool..."
+      chmod +x ./scaffold/scaffold.sh && ./scaffold/scaffold.sh mariner
+    elif [ "${CSE_ADDITIONAL_VAR}" == "1espoolMariner" ]; then
+      echo "deploying mariner 1espool..."
+      chmod +x ./1espool/1espool.sh && ./1espool/1espool.sh mariner
+    fi
+    echo "done..."

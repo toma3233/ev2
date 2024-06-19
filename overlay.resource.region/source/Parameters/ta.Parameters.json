@@ -1,0 +1,27 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resource_name_prefix": {
+            "value": "<resource_name_prefix>"
+        },
+        "msi_operator_resource_id": {
+            "value": "<msi_operator_resource_id>"
+        },
+        "ev2_extension_operator_objectid": {
+            "value": "<ev2_extension_operator_objectid>"
+        },
+        "jitgroup_objectid": {
+            "value": "<jitgroup_objectid>"
+        },
+        "trafficmanager_name": {
+            "value": "<ta_trafficmanager_name>"
+        },
+        "trafficmanager_relative_name": {
+            "value": "<ta_trafficmanager_relative_name>"
+        },
+        "primary_target": {
+            "value": "<ta_primary_target>"
+        }
+    }
+}

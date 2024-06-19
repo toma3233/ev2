@@ -1,0 +1,122 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "server_name_prefix": {
+      "value": "{hcp_region_database_server_name_prefix}"
+    },
+    "service_level_objective": {
+      "value": "{hcp_region_database_service_level_objective}"
+    },
+    "primary_location": {
+      "value": "{hcp_sql_region}"
+    },
+    "databases_acsrpdb_name": {
+      "value": "{hcp_region_database_name}"
+    },
+    "administrator_login": {
+      "value": "{hcp_region_database_admin_login}"
+    },
+    "elastic_pool_sku_name": {
+      "value": "{hcp_elastic_pool_sku_name}"
+    },
+    "elastic_pool_prefix": {
+      "value": "{hcp_elastic_pool_prefix}"
+    },
+    "elastic_pool_capacity": {
+      "value": "{hcp_elastic_pool_capacity}"
+    },
+    "service_databases": {
+      "value": [
+        "eventgrid",
+        "devhub",
+        "autoupgrade",
+        "safeguards",
+        "machinepool"
+      ]
+    },
+    "zone_redundant_enabled": {
+      "value": "{hcp_sql_zone_redundant_enabled}"
+    },
+    "storage_sku": {
+      "value": "{hcp_storage_account_sku_name}"
+    },
+    "storage_name": {
+      "value": "{hcp_sql_audit_storage_name}"
+    },
+    "alert_name": {
+      "value": [
+        "SQL Failed Connections",
+        "SQL Successful connections",
+        "SQL Blocked by firewall detected"
+      ]
+    },
+    "alert_description": {
+      "value": [
+        "SQL Failed Connections",
+        "SQL Successful connections",
+        "SQL Blocked by firewall detected"
+      ]
+    },
+    "alert_severity": {
+      "value": 4
+    },
+    "metric_name": {
+      "value": [
+        "connection_failed",
+        "connection_successful",
+        "blocked_by_firewall"
+      ]
+    },
+    "operator": {
+      "value": "GreaterThan"
+    },
+    "alert_sensitivity": {
+      "value": "Medium"
+    },
+    "number_of_evaluation_periods": {
+      "value": "6"
+    },
+    "min_failing_periods_to_alert": {
+      "value": "6"
+    },
+    "time_aggregation": {
+      "value": [
+        "Total",
+        "Count",
+        "Count",
+        "Count"
+      ]
+    },
+    "window_size": {
+      "value": "PT15M"
+    },
+    "evaluation_frequency": {
+      "value": "PT15M"
+    },
+    "resource_group_name_global": {
+      "value": "{resource_name_prefix_global}overlay-global"
+    },
+    "metric_alerts_enabled": {
+        "value": "{metric_alerts_enabled}"
+    },
+    "use_vcore_sku": {
+        "value": "{hcp_sql_use_vcore}"
+    },
+    "vcore_sku_name": {
+      "value": "{hcp_sql_vcore_sku_name}"
+    },
+    "vcore_sku_tier": {
+      "value": "{hcp_sql_vcore_sku_tier}"
+    },
+    "vcore_sku_family": {
+      "value": "{hcp_sql_vcore_sku_family}"
+    },
+    "vcore_sku_capacity": {
+      "value": "{hcp_sql_vcore_sku_capacity}"
+    },
+    "msi_operator_resource_id": {
+      "value": "{msi_operator_resource_id}"
+    }
+  }
+}

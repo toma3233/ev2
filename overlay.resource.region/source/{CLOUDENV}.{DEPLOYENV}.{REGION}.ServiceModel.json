@@ -1,0 +1,1347 @@
+{
+    "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/ServiceModel.json",
+    "contentVersion": "0.0.0.1",
+    "serviceMetadata": {
+        "serviceGroup": "{service_group_name}",
+        "environment": "{CLOUDENV}.{DEPLOYENV}.{REGION}"
+    },
+    "serviceResourceGroupDefinitions": [
+        {
+            "name": "group-definition",
+            "serviceResourceDefinitions": [
+                {
+                    "name": "arm.arn",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\arn.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.arn.azmonitor",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\arn.azmonitor.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.au",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\au.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.bl.keyvault",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\bl.keyvault.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.bl.msi",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\bl.msi.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.featurebl.msi",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\featurebl.msi.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.bl.storageAccount",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\bl.storageAccount.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.bus",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\bus.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.bus.namespace.azmonitor",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\bus.namespace.azmonitor.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.bus.resourceprovider.azmonitor",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\bus.resourceprovider.azmonitor.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.bus.fleetoperations.azmonitor",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\bus.fleetoperations.azmonitor.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.bus.secondary.ns",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\bus.secondary.ns.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.ccpacr",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\ccpacr.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.ccpingress",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\ccpingress.Template.json",
+                            "parametersPath": "Parameters\\ccpingress.Parameters.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.costanalysis",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\costanalysis.Template.json",
+                            "parametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.costanalysis.Parameters.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.cpc",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\cpc.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.devhub",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\devhub.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.devhub.kv",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\devhub.kv.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.devhub.dnszone.records",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\devhub.dnszone.records.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.devhub.frontdoor",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\devhub.frontdoor.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.diagnostics",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\diagnostics.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.dnc",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\dnc.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.dpl",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\dpl.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.dpl.hcp-keyvault",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\dpl.hcp-keyvault.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.dpl.hcp-underlay-kv",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\dpl.hcp-underlay-kv.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.dpl.hcp-sector-kv",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\dpl.hcp-sector-kv.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.hcp.database",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\hcp.database.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.eg",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\eg.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.flt",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\flt.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.fms",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\fms.Template.json",
+                            "parametersPath": "Parameters\\fms.Parameters.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.fms.kv",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\fms.kv.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.grd",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\grd.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.grd.rp-keyvault",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\grd.rp-keyvault.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.hcp.hcp-keyvault",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\hcp.hcp-keyvault.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.hcp.hcp-underlay-kv",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\hcp.hcp-underlay-kv.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.hcp.sectorkv",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\hcp.sectorkv.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.hcp",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\hcp.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.hcp.dnszone.records",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\hcp.dnszone.records.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.ig",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\ig.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.ig.dnszone.records",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\ig.dnszone.records.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.jit",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\jit.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.mcs",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\mcs.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.mcb",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\mcb.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.mcr",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\mcr.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.obo",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\obo.Template.json",
+                            "parametersPath": "Parameters\\obo.Parameters.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.oic",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\oic.Template.json",
+                            "parametersPath": "Parameters\\oic.Parameters.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.oic.dnszone.records",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\oic.dnszone.records.Template.json",
+                            "parametersPath": "Parameters\\oic.dnszone.records.Parameters.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.om",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\om.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.pc",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\pc.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.progressiverollout",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\progressiverollout.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.qw",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\qw.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.regionallooper",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\regionallooper.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.rl",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\rl.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.releasetracker",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\releasetracker.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.rp",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\rp.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.servicebusrelay",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\servicebusrelay.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.nodeprovisioner",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\nodeprovisioner.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.servicehub.msi",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\servicehub.msi.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.servicehub.sa",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\servicehub.sa.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.rp.cosmosdb",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\rp.cosmosdb.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.rp.hcp-keyvault",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\rp.hcp-keyvault.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.rp.hcp-underlay-kv",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\rp.hcp-underlay-kv.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.rp.redis",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\rp.redis.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.rp.sectorkv",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\rp.sectorkv.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.rp.dnszone.records",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\rp.dnszone.records.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.qw.sectorkv",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\qw.sectorkv.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.sg",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\sg.Template.json",
+                            "parametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.sg.Parameters.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.zen",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\zen.Template.json",
+                            "parametersPath": "Parameters\\zen.Parameters.json"
+                        }
+                    }
+                },
+                {
+                    "name": "cert.issuers",
+                    "composedOf": {
+                        "extension": {
+                            "rolloutParametersPath": "Parameters\\cert_issuers.Parameters.json"
+                        }
+                    }
+                },
+                {
+                    "name": "cert.items",
+                    "composedOf": {
+                        "extension": {
+                            "rolloutParametersPath": "Parameters\\cert_items.Parameters.json"
+                        }
+                    }
+                },
+                {
+                    "name": "script",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\CustomScript-linux.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.svcacr",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\svcacr.Template.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.ta",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\ta.Template.json",
+                            "parametersPath": "Parameters\\ta.Parameters.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.ta.dnszone.records",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\ta.dnszone.records.Template.json",
+                            "parametersPath": "Parameters\\ta.dnszone.records.Parameters.json"
+                        }
+                    }
+                },
+                {
+                    "name": "arm.tgl",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\tgl.Template.json",
+                            "parametersPath": "Parameters\\tgl.Parameters.json"
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "serviceResourceGroups": [
+        {
+            "azureResourceGroupName": "{resource_name_prefix}aks-msi-{REGION}",
+            "instanceOf": "group-definition",
+            "azureSubscriptionId": "{region_subscription_id}",
+            "location": "{region_location}",
+            "serviceResources": [
+                {
+                    "name": "fms.kv",
+                    "instanceOf": "arm.fms.kv",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.fms.kv.Parameters.json"
+                }
+            ]
+        },
+        {
+            "azureResourceGroupName": "{resource_name_prefix}servicehub-{REGION}",
+            "instanceOf": "group-definition",
+            "azureSubscriptionId": "{overlay_resources_subscription_id}",
+            "location": "{region_location}",
+            "serviceResources": [
+                {
+                    "name": "servicehub.sa",
+                    "instanceOf": "arm.servicehub.sa",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.servicehub.sa.Parameters.json"
+                }
+            ]
+        },
+        {
+            "azureResourceGroupName": "{resource_name_prefix}overlay-{REGION}",
+            "instanceOf": "group-definition",
+            "azureSubscriptionId": "{overlay_resources_subscription_id}",
+            "location": "{region_location}",
+            "scopeTags": [
+                {
+                    "name": "{CLOUDENV}.{DEPLOYENV}.{REGION}"
+                },
+                {
+                    "name": "ev2ab.system"
+                }
+            ],
+            "serviceResources": [
+                {
+                    "name": "arn",
+                    "instanceOf": "arm.arn",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.arn.Parameters.json"
+                },
+                {
+                    "name": "arn.azmonitor",
+                    "instanceOf": "arm.arn.azmonitor",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.arn.azmonitor.Parameters.json"
+                },
+                {
+                    "name": "au",
+                    "instanceOf": "arm.au",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.identity.Parameters.json"
+                },
+                {
+                    "name": "bus",
+                    "instanceOf": "arm.bus",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.bus.Parameters.json"
+                },
+                {
+                    "name": "bus.resourceprovider.azmonitor",
+                    "instanceOf": "arm.bus.resourceprovider.azmonitor",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.bus.resourceprovider.azmonitor.Parameters.json"
+                },
+                {
+                    "name": "bus.fleetoperations.azmonitor",
+                    "instanceOf": "arm.bus.fleetoperations.azmonitor",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.bus.fleetoperations.azmonitor.Parameters.json"
+                },
+                {
+                    "name": "bus.namespace.azmonitor",
+                    "instanceOf": "arm.bus.namespace.azmonitor",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.bus.namespace.azmonitor.Parameters.json"
+                },
+                {
+                    "name": "bus.secondary.ns",
+                    "instanceOf": "arm.bus.secondary.ns",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.bus.secondary.ns.Parameters.json"
+                },
+                {
+                    "name": "bl.msi",
+                    "instanceOf": "arm.bl.msi",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.identity.Parameters.json"
+                },
+                {
+                    "name": "featurebl.msi",
+                    "instanceOf": "arm.featurebl.msi",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.identity.Parameters.json"
+                },
+                {
+                    "name": "ccpacr",
+                    "instanceOf": "arm.ccpacr",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.identity.Parameters.json"
+                },
+                {
+                    "name": "ccpingress",
+                    "instanceOf": "arm.ccpingress"
+                },
+                {
+                    "name": "ccpingress.cert.issuers",
+                    "instanceOf": "cert.issuers",
+                    "scopeTags": [
+                        {
+                            "name": "component.ccpingress"
+                        }
+                    ]
+                },
+                {
+                    "name": "ccpingress.cert.items",
+                    "instanceOf": "cert.items",
+                    "scopeTags": [
+                        {
+                            "name": "component.ccpingress"
+                        }
+                    ]
+                },
+                {
+                    "name": "costanalysis",
+                    "instanceOf": "arm.costanalysis"
+                },
+                {
+                    "name": "cpc",
+                    "instanceOf": "arm.cpc",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.identity.Parameters.json"
+                },
+                {
+                    "name": "devhub",
+                    "instanceOf": "arm.devhub",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.devhub.Parameters.json"
+                },
+                {
+                    "name": "devhub.cert.issuers",
+                    "instanceOf": "cert.issuers",
+                    "scopeTags": [
+                        {
+                            "name": "component.devhub"
+                        }
+                    ]
+                },
+                {
+                    "name": "devhub.cert.items",
+                    "instanceOf": "cert.items",
+                    "scopeTags": [
+                        {
+                            "name": "component.devhub"
+                        }
+                    ]
+                },
+                {
+                    "name": "devhubfd.cert.issuers",
+                    "instanceOf": "cert.issuers",
+                    "scopeTags": [
+                        {
+                            "name": "component.devhubfd"
+                        }
+                    ]
+                },
+                {
+                    "name": "devhubfd.cert.items",
+                    "instanceOf": "cert.items",
+                    "scopeTags": [
+                        {
+                            "name": "component.devhubfd"
+                        }
+                    ]
+                },
+                {
+                    "name": "diagnostics",
+                    "instanceOf": "arm.diagnostics",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.diagnostics.Parameters.json"
+                },
+                {
+                    "name": "dnc",
+                    "instanceOf": "arm.dnc",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.dnc.Parameters.json"
+                },
+                {
+                    "name": "dnc.cert.issuers",
+                    "instanceOf": "cert.issuers",
+                    "scopeTags": [
+                        {
+                            "name": "component.dnc"
+                        }
+                    ]
+                },
+                {
+                    "name": "dnc.cert.items",
+                    "instanceOf": "cert.items",
+                    "scopeTags": [
+                        {
+                            "name": "component.dnc"
+                        }
+                    ]
+                },
+                {
+                    "name": "dpl",
+                    "instanceOf": "arm.dpl",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.dpl.Parameters.json"
+                },
+                {
+                    "name": "dpl.hcp-keyvault",
+                    "instanceOf": "arm.dpl.hcp-keyvault",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.dpl.hcp-keyvault.Parameters.json"
+                },
+                {
+                    "name": "eg",
+                    "instanceOf": "arm.eg",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.eg.Parameters.json"
+                },
+                {
+                    "name": "eg.cert.issuers",
+                    "instanceOf": "cert.issuers",
+                    "scopeTags": [
+                        {
+                            "name": "component.eg"
+                        }
+                    ]
+                },
+                {
+                    "name": "eg.cert.items",
+                    "instanceOf": "cert.items",
+                    "scopeTags": [
+                        {
+                            "name": "component.eg"
+                        }
+                    ]
+                },
+                {
+                    "name": "flt",
+                    "instanceOf": "arm.flt",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.flt.Parameters.json"
+                },
+                {
+                    "name": "flt.cert.issuers",
+                    "instanceOf": "cert.issuers",
+                    "scopeTags": [
+                        {
+                            "name": "component.flt"
+                        }
+                    ]
+                },
+                {
+                    "name": "flt.cert.items",
+                    "instanceOf": "cert.items",
+                    "scopeTags": [
+                        {
+                            "name": "component.flt"
+                        }
+                    ]
+                },
+                {
+                    "name": "fms",
+                    "instanceOf": "arm.fms"
+                },
+                {
+                    "name": "fms.cert.issuers",
+                    "instanceOf": "cert.issuers",
+                    "scopeTags": [
+                        {
+                            "name": "component.fms"
+                        }
+                    ]
+                },
+                {
+                    "name": "fms.cert.items",
+                    "instanceOf": "cert.items",
+                    "scopeTags": [
+                        {
+                            "name": "component.fms"
+                        }
+                    ]
+                },
+                {
+                    "name": "grd",
+                    "instanceOf": "arm.grd",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.grd.Parameters.json"
+                },
+                {
+                    "name": "grd.rp-keyvault",
+                    "instanceOf": "arm.grd.rp-keyvault",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.grd.rp-keyvault.Parameters.json"
+                },
+                {
+                    "name": "hcp.hcp-keyvault",
+                    "instanceOf": "arm.hcp.hcp-keyvault",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.hcp.hcp-keyvault.Parameters.json"
+                },
+                {
+                    "name": "ig",
+                    "instanceOf": "arm.ig",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.ig.Parameters.json"
+                },
+                {
+                    "name": "ig.cert.issuers",
+                    "instanceOf": "cert.issuers",
+                    "scopeTags": [
+                        {
+                            "name": "component.ig"
+                        }
+                    ]
+                },
+                {
+                    "name": "ig.cert.items",
+                    "instanceOf": "cert.items",
+                    "scopeTags": [
+                        {
+                            "name": "component.ig"
+                        }
+                    ]
+                },
+                {
+                    "name": "mcs",
+                    "instanceOf": "arm.mcs",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.mcs.Parameters.json"
+                },
+                {
+                    "name": "obo",
+                    "instanceOf": "arm.obo"
+                },
+                {
+                    "name": "obo.cert.issuers",
+                    "instanceOf": "cert.issuers",
+                    "scopeTags": [
+                        {
+                            "name": "component.obo"
+                        }
+                    ]
+                },
+                {
+                    "name": "obo.cert.items",
+                    "instanceOf": "cert.items",
+                    "scopeTags": [
+                        {
+                            "name": "component.obo"
+                        }
+                    ]
+                },
+                {
+                    "name": "oic",
+                    "instanceOf": "arm.oic"
+                },
+                {
+                    "name": "oic.cert.issuers",
+                    "instanceOf": "cert.issuers",
+                    "scopeTags": [
+                        {
+                            "name": "component.oic"
+                        }
+                    ]
+                },
+                {
+                    "name": "oic.cert.items",
+                    "instanceOf": "cert.items",
+                    "scopeTags": [
+                        {
+                            "name": "component.oic"
+                        }
+                    ]
+                },
+                {
+                    "name": "om",
+                    "instanceOf": "arm.om",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.om.Parameters.json"
+                },
+                {
+                    "name": "om.cert.issuers",
+                    "instanceOf": "cert.issuers",
+                    "scopeTags": [
+                        {
+                            "name": "component.om"
+                        }
+                    ]
+                },
+                {
+                    "name": "om.cert.items",
+                    "instanceOf": "cert.items",
+                    "scopeTags": [
+                        {
+                            "name": "component.om"
+                        }
+                    ]
+                },
+                {
+                    "name": "pc",
+                    "instanceOf": "arm.pc",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.identity.Parameters.json"
+                },
+                {
+                    "name": "progressiverollout",
+                    "instanceOf": "arm.progressiverollout",
+                    "armParametersPath": "Parameters\\progressiverollout.Parameters.json"
+                },
+                {
+                    "name": "progressiverollout.issuers",
+                    "instanceOf": "cert.issuers",
+                    "scopeTags": [
+                        {
+                            "name": "component.progressiverollout"
+                        }
+                    ]
+                },
+                {
+                    "name": "progressiverollout.cert",
+                    "instanceOf": "cert.items",
+                    "scopeTags": [
+                        {
+                            "name": "component.progressiverollout"
+                        }
+                    ]
+                },
+                {
+                    "name": "releasetracker",
+                    "instanceOf": "arm.releasetracker",
+                    "armParametersPath": "Parameters\\releasetracker.Parameters.json"
+                },
+                {
+                    "name": "rp",
+                    "instanceOf": "arm.rp",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.rp.Parameters.json"
+                },
+                {
+                    "name": "servicebusrelay",
+                    "instanceOf": "arm.servicebusrelay",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.servicebusrelay.Parameters.json"
+                },
+                {
+                    "name": "nodeprovisioner",
+                    "instanceOf": "arm.nodeprovisioner",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.nodeprovisioner.Parameters.json"
+                },
+                {
+                    "name": "rp.cert.issuers",
+                    "instanceOf": "cert.issuers",
+                    "scopeTags": [
+                        {
+                            "name": "component.rp"
+                        }
+                    ]
+                },
+                {
+                    "name": "rp.cert.items",
+                    "instanceOf": "cert.items",
+                    "scopeTags": [
+                        {
+                            "name": "component.rp"
+                        }
+                    ]
+                },
+                {
+                    "name": "rp.cosmosdb",
+                    "instanceOf": "arm.rp.cosmosdb",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.rp.cosmosdb.Parameters.json"
+                },
+                {
+                    "name": "rp.hcp-keyvault",
+                    "instanceOf": "arm.rp.hcp-keyvault",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.rp.hcp-keyvault.Parameters.json"
+                },
+                {
+                    "name": "rp.redis",
+                    "instanceOf": "arm.rp.redis",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.rp.redis.Parameters.json"
+                },                
+                {
+                    "name": "hcp",
+                    "instanceOf": "arm.hcp",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.hcp.Parameters.json"
+                },
+                {
+                    "name": "hcp.cert.issuers",
+                    "instanceOf": "cert.issuers",
+                    "scopeTags": [
+                        {
+                            "name": "component.hcp"
+                        }
+                    ]
+                },
+                {
+                    "name": "hcp.cert.items",
+                    "instanceOf": "cert.items",
+                    "scopeTags": [
+                        {
+                            "name": "component.hcp"
+                        }
+                    ]
+                },
+                {
+                    "name": "hcp.database",
+                    "instanceOf": "arm.hcp.database",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.hcp.database.Parameters.json"
+                },
+                {
+                    "name": "jit",
+                    "instanceOf": "arm.jit",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.identity.Parameters.json"
+                },
+                {
+                    "name": "mcb",
+                    "instanceOf": "arm.mcb",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.identity.Parameters.json"
+                },
+                {
+                    "name": "mcr",
+                    "instanceOf": "arm.mcr",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.identity.Parameters.json"
+                },
+                {
+                    "name": "qw",
+                    "instanceOf": "arm.qw",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.identity.Parameters.json"
+                },
+                {
+                    "name": "regionallooper",
+                    "instanceOf": "arm.regionallooper",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.identity.Parameters.json"
+                },
+                {
+                    "name": "rl",
+                    "instanceOf": "arm.rl",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.identity.Parameters.json"
+                },
+                {
+                    "name": "sg",
+                    "instanceOf": "arm.sg"
+                },
+                {
+                    "name": "svcacr",
+                    "instanceOf": "arm.svcacr",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.identity.Parameters.json"
+                },
+                {
+                    "name": "servicehub.msi",
+                    "instanceOf": "arm.servicehub.msi",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.identity.Parameters.json"
+                },
+                {
+                    "name": "ta",
+                    "instanceOf": "arm.ta"
+                },
+                {
+                    "name": "ta.cert.issuers",
+                    "instanceOf": "cert.issuers",
+                    "scopeTags": [
+                        {
+                            "name": "component.ta"
+                        }
+                    ]
+                },
+                {
+                    "name": "ta.cert.items",
+                    "instanceOf": "cert.items",
+                    "scopeTags": [
+                        {
+                            "name": "component.ta"
+                        }
+                    ]
+                },
+                {
+                    "name": "zen",
+                    "instanceOf": "arm.zen"
+                },
+                {
+                    "name": "zen.cert.issuers",
+                    "instanceOf": "cert.issuers",
+                    "scopeTags": [
+                        {
+                            "name": "component.zen"
+                        }
+                    ]
+                },
+                {
+                    "name": "zen.cert.items",
+                    "instanceOf": "cert.items",
+                    "scopeTags": [
+                        {
+                            "name": "component.zen"
+                        }
+                    ]
+                },
+                {
+                    "name": "tgl",
+                    "instanceOf": "arm.tgl"
+                }
+            ]
+        },
+        {
+            "instanceOf": "group-definition",
+            "azureSubscriptionId": "{deploybox_subscription_id}",
+            "azureResourceGroupName": "{resource_name_prefix}deploybox-{rollout_name}-{system:normalized_build_version}-{REGION}",
+            "location": "{deploybox_resourcegroup_location}",
+            "serviceResources": [
+                {
+                    "name": "script",
+                    "instanceOf": "script",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.{rollout_template_name}.Parameters.json"
+                }
+            ]
+        },
+        {
+            "azureResourceGroupName": "{hcp_region_vault_resource_group}",
+            "instanceOf": "group-definition",
+            "azureSubscriptionId": "{region_subscription_id}",
+            "location": "{region_location}",
+            "serviceResources": [
+                {
+                    "name": "dpl.hcp-underlay-kv",
+                    "instanceOf": "arm.dpl.hcp-underlay-kv",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.dpl.hcp-underlay-kv.Parameters.json"
+                },
+                {
+                    "name": "hcp.hcp-underlay-kv",
+                    "instanceOf": "arm.hcp.hcp-underlay-kv",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.hcp.hcp-underlay-kv.Parameters.json"
+                },
+                {
+                    "name": "rp.hcp-underlay-kv",
+                    "instanceOf": "arm.rp.hcp-underlay-kv",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.rp.hcp-underlay-kv.Parameters.json"
+                }
+            ]
+        },
+        {
+            "azureResourceGroupName": "{sector_vault_group}",
+            "instanceOf": "group-definition",
+            "azureSubscriptionId": "{sector_subscription_id}",
+            "location": "{region_location}",
+            "serviceResources": [
+                {
+                    "name": "dpl.hcp-sector-kv",
+                    "instanceOf": "arm.dpl.hcp-sector-kv",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.dpl.hcp-sector-kv.Parameters.json"
+                },
+                {
+                    "name": "hcp.sectorkv",
+                    "instanceOf": "arm.hcp.sectorkv",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.hcp.sectorkv.Parameters.json"
+                },
+                {
+                    "name": "rp.sectorkv",
+                    "instanceOf": "arm.rp.sectorkv",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.rp.sectorkv.Parameters.json"
+                },
+                {
+                    "name": "qw.sectorkv",
+                    "instanceOf": "arm.qw.sectorkv",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.qw.sectorkv.Parameters.json"
+                }
+            ]
+        },
+        {
+            "azureResourceGroupName": "{resource_name_prefix_global}overlay-global",
+            "azureSubscriptionId": "{overlay_resources_subscription_id}",
+            "location": "{global_default_location}",
+            "instanceOf": "group-definition",
+            "scopeTags": [
+                {
+                    "name": "ev2ab.system"
+                }
+            ],
+            "serviceResources": [
+                {
+                    "name": "devhub.dnszone.records",
+                    "instanceOf": "arm.devhub.dnszone.records",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.devhub.dnszone.records.Parameters.json"
+                },
+                {
+                    "name": "devhub.kv",
+                    "instanceOf": "arm.devhub.kv",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.devhub.kv.Parameters.json"
+                },
+                {
+                    "name": "devhub.frontdoor",
+                    "instanceOf": "arm.devhub.frontdoor",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.devhub.frontdoor.Parameters.json"
+                },
+                {
+                    "name": "ig.dnszone.records",
+                    "instanceOf": "arm.ig.dnszone.records",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.ig.dnszone.records.Parameters.json"
+                },
+                {
+                    "name": "rp.dnszone.records",
+                    "instanceOf": "arm.rp.dnszone.records",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.rp.dnszone.records.Parameters.json"
+                },
+                {
+                    "name": "hcp.dnszone.records",
+                    "instanceOf": "arm.hcp.dnszone.records",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.hcp.dnszone.records.Parameters.json"
+                },
+                {
+                    "name": "oic.dnszone.records",
+                    "instanceOf": "arm.oic.dnszone.records"
+                },
+                {
+                    "name": "ta.dnszone.records",
+                    "instanceOf": "arm.ta.dnszone.records"
+                }
+            ]
+        },
+        {
+            "azureResourceGroupName": "{resource_name_prefix}Feature.PAv2-{REGION}",
+            "instanceOf": "group-definition",
+            "azureSubscriptionId": "{overlay_resources_subscription_id}",
+            "location": "{region_location}",
+            "serviceResources": [
+                {
+                    "name": "bl.storageAccount",
+                    "instanceOf": "arm.bl.storageAccount",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.bl.storageAccount.Parameters.json"
+                },
+                {
+                    "name": "bl.keyvault",
+                    "instanceOf": "arm.bl.keyvault",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.bl.keyvault.Parameters.json"
+                }
+            ]
+        }
+    ]
+}

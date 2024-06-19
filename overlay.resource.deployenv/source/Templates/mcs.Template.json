@@ -1,0 +1,2317 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resource_name_prefix": {
+            "type": "string"
+        },
+        "cloudenv": {
+            "type": "string"
+        },
+        "deployenv": {
+            "type": "string"
+        }
+    },
+    "resources": [
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-12",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-12",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Dateline Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-11",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-11",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "UTC-11"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-10",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-10",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Hawaiian Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-9",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-9",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "UTC-09"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-8",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-8",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "UTC-08"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-7",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-7",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Mountain Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-6",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-6",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Central Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-5",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-5",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Eastern Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-4",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-4",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Atlantic Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-3",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-3",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Greenland Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-2",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-2",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "UTC-02"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-1",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-1",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Azores Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "UTC"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc1",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc1",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "W. Central Africa Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc2",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc2",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Egypt Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc3",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc3",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Turkey Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc4",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc4",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Mauritius Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc5",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc5",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Pakistan Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc6",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc6",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Omsk Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc7",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc7",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "SE Asia Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc8",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc8",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "China Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc9",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc9",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Tokyo Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc10",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc10",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "E. Australia Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc11",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc11",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Central Pacific Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc12",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc12",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "UTC+12"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-12",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-12",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Dateline Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-11",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-11",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "UTC-11"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-10",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-10",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Hawaiian Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-9",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-9",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "UTC-09"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-8",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-8",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "UTC-08"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-7",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-7",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Mountain Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-6",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-6",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Central Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-5",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-5",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Eastern Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-4",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-4",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Atlantic Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-3",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-3",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Greenland Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-2",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-2",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "UTC-02"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-1",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-1",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Azores Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "UTC"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc1",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc1",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "W. Central Africa Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc2",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc2",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Egypt Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc3",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc3",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Turkey Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc4",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc4",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Mauritius Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc5",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc5",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Pakistan Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc6",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc6",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Omsk Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc7",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc7",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "SE Asia Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc8",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc8",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "China Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc9",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc9",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Tokyo Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc10",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc10",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "E. Australia Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc11",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc11",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Central Pacific Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc12",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc12",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "UTC+12"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-12-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-12-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Dateline Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-11-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-11-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "UTC-11"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-10-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-10-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Hawaiian Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-9-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-9-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "UTC-09"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-8-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-8-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "UTC-08"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-7-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-7-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Mountain Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-6-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-6-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Central Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-5-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-5-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Eastern Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-4-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-4-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Atlantic Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-3-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-3-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Greenland Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-2-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-2-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "UTC-02"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-1-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-1-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Azores Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "UTC"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc1-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc1-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "W. Central Africa Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc2-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc2-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Egypt Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc3-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc3-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Turkey Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc4-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc4-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Mauritius Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc5-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc5-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Pakistan Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc6-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc6-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Omsk Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc7-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc7-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "SE Asia Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc8-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc8-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "China Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc9-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc9-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Tokyo Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc10-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc10-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "E. Australia Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc11-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc11-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Central Pacific Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekend_utc12-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekend_utc12-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Friday,Saturday,Sunday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "UTC+12"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-12-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-12-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Dateline Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-11-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-11-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "UTC-11"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-10-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-10-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Hawaiian Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-9-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-9-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "UTC-09"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-8-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-8-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "UTC-08"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-7-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-7-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Mountain Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-6-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-6-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Central Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-5-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-5-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Eastern Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-4-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-4-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Atlantic Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-3-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-3-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Greenland Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-2-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-2-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "UTC-02"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-1-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-1-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Azores Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "UTC"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc1-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc1-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "W. Central Africa Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc2-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc2-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Egypt Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc3-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc3-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Turkey Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc4-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc4-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Mauritius Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc5-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc5-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Pakistan Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc6-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc6-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Omsk Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc7-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc7-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "SE Asia Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc8-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc8-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "China Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc9-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc9-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Tokyo Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc10-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc10-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "E. Australia Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc11-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc11-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "Central Pacific Standard Time"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('cloudenv'),'gb'),equals(parameters('deployenv'),'prod'))]",
+            "type": "Microsoft.Maintenance/maintenanceConfigurations",
+            "apiVersion": "2021-09-01-preview",
+            "name": "aks-mrp-cfg-weekday_utc12-eastus2euap",
+            "location": "eastus2euap",
+            "properties": {
+                "extensionProperties": {
+                    "publicMaintenanceConfigurationId": "aks-mrp-cfg-weekday_utc12-eastus2euap",
+                    "isAvailable": "true",
+                    "maintenanceSubScope": "AKS"
+                },
+                "maintenanceScope": "Resource",
+                "maintenanceWindow": {
+                    "duration": "08:00",
+                    "recurEvery": "Week Monday,Tuesday,Wednesday,Thursday",
+                    "startDateTime": "2022-08-01 22:00",
+                    "timeZone": "UTC+12"
+                },
+                "namespace": "Microsoft.Maintenance",
+                "visibility": "Public"
+            }
+        }
+    ]
+}

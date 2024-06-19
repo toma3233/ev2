@@ -1,0 +1,23 @@
+{
+    "mdmHealthChecks": [
+        {
+            "name": "check",
+            "monitoringAccountName": "__ACCOUNT__",
+            "mdmHealthCheckEndpoint": "__ENDPOINT__",
+            "waitBeforeMonitorTimeInMinutes": "__DURATION_WAIT_V2__",
+            "maxElasticDurationInMinutes": "__DURATION_ELASTIC_V2__",
+            "monitorTimeInMinutes": "__DURATION_MONITOR_V2__",
+            "healthResources": [
+                {
+                    "name": "__RESOURCE_TYPE__",
+                    "resourceType": "__RESOURCE_TYPE__",
+                    "dimensions": {
+                        "DeployEnv": "__DEPLOY_ENV__",
+                        "Location": "__LOCATION__",
+                        "Version": "__VERSION__"
+                    }
+                }
+            ]
+        }
+    ]
+}

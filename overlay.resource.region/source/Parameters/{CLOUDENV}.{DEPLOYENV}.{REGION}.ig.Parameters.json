@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resource_name_prefix": {
+            "value": "{resource_name_prefix}"
+        },
+        "ev2_extension_operator_objectid": {
+            "value": "{ev2_extension_operator_objectid}"
+        },
+        "jitgroup_objectid": {
+            "value": "{jitgroup_objectid}"
+        },
+        "ig_trafficmanager_name": {
+            "value": "{ig_trafficmanager_name}"
+        },
+        "ig_trafficmanager_relative_name": {
+            "value": "{ig_trafficmanager_relative_name}"
+        },
+        "service_cluster_name": {
+            "value": "{service_cluster_name}"
+        },
+        "backup_service_cluster_name": {
+            "value": "{backup_service_cluster_name}"
+        },
+        "endpoint_suffix": {
+            "value": ".{REGION}.{cloud_dns_suffix}"
+        }
+    }
+}

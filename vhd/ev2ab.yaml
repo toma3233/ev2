@@ -1,0 +1,58 @@
+Template:
+  - customscript-linux.CLOUDENV.DEPLOYENV.REGION
+  - rolloutspec.CLOUDENV.DEPLOYENV.REGION
+VariableGroup:
+  Variables:
+    rollout_name: vhd
+    cse_additional_var: # see comment below in the rx/ex sections
+  Match:
+    Key: CLOUDENV
+    Values:
+      gb:
+        Match:
+          Key: DEPLOYENV
+          Values:
+            test:
+              Match:
+                Key: REGION
+                Values:
+                  eastus:
+                  westus2:
+                  eastus2euap:
+                  australiaeast:
+                  australiacentral:
+                  japaneast:
+                  brazilsouth:
+                  centraluseuap:
+                  canadaeast: # redundant placeholder regions for future testing task use
+                  southeastasia:
+                  westus:
+      rx:
+        Match:
+          Key: DEPLOYENV
+          Values:
+            prod:
+              Variables:
+                # FIXME:
+                # need to set the cse additional var this way because AGRM does not currently support scope binding overrides
+                # provided via the ADO step. this works in our case, though, because the only rollout we ever want to do
+                # inside the AGC is the release one.  however, we should remove this and the custom scope binding template
+                # under the source directory when AGRM catches up and supports scope binding overrides. there is definitely
+                # potential for creating some future bug/misunderstanding like this, but it's the lesser of two evils right
+                # now in order to get automated releases working in the AGC
+                cse_additional_var: release
+      ex:
+        Match:
+          Key: DEPLOYENV
+          Values:
+            prod:
+              Variables:
+                # FIXME:
+                # need to set the cse additional var this way because AGRM does not currently support scope binding overrides
+                # provided via the ADO step. this works in our case, though, because the only rollout we ever want to do
+                # inside the AGC is the release one.  however, we should remove this and the custom scope binding template
+                # under the source directory when AGRM catches up and supports scope binding overrides. there is definitely
+                # potential for creating some future bug/misunderstanding like this, but it's the lesser of two evils right
+                # now in order to get automated releases working in the AGC
+                cse_additional_var: release
+AutoSelector: true

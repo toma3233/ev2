@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploy_dns_config": {
+      "value": "{devhub_deploy_networking_config}"
+    },
+    "devhub_trafficmanager_name": {
+      "value": "{devhub_trafficmanager_name}"
+    },
+    "devhub_region": {
+      "value": "{domain_region_prefix}{REGION}"
+    },
+    "devhub_domain_dnszone_name": {
+      "value": "devhub.{domain_deployenv}"
+    },
+    "trafficmanager_resource_group_name": {
+      "value": "{resource_name_prefix}overlay-{REGION}"
+    },
+    "frontdoor_profile_name": {
+      "value": "{devhub_frontdoor_profile_endpoint_name}"
+    },
+    "frontdoor_endpoint_name": {
+      "value": "{devhub_frontdoor_profile_endpoint_name}"
+    },
+    "frontdoor_regional_endpoint_name": {
+      "value": "{devhub_frontdoor_regional_cname}"
+    }
+  }
+}

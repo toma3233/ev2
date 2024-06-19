@@ -1,0 +1,50 @@
+{
+    "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/rolloutParameters.json",
+    "contentVersion": "1.0.0.0",
+    "extensions": [
+        {
+            "Name": "zone-aks",
+            "Type": "Microsoft.Azure.Networking.Dns/DelegateChildZoneExtension",
+            "Version": "2019-04-01",
+            "ConnectionProperties": {
+                "MaxExecutionTime": "PT1H",
+                "Authentication": {
+                    "type": "SystemCertificateAuthentication"
+                }
+            },
+            "payloadProperties": {
+                "ParentZoneName": {
+                    "Value": "{domain_cloud_zone_root}"
+                },
+                "ChildZoneName": {
+                    "Value": "{domain_deployenv}"
+                },
+                "ContactInformation": {
+                    "value": "aks-overlay@microsoft.com"
+                }
+            }
+        },
+        {
+            "Name": "zone-aksapp",
+            "Type": "Microsoft.Azure.Networking.Dns/DelegateChildZoneExtension",
+            "Version": "2019-04-01",
+            "ConnectionProperties": {
+                "MaxExecutionTime": "PT1H",
+                "Authentication": {
+                    "type": "SystemCertificateAuthentication"
+                }
+            },
+            "payloadProperties": {
+                "ParentZoneName": {
+                    "Value": "{domain_cloud_zone_root}"
+                },
+                "ChildZoneName": {
+                    "Value": "{resource_name_prefix}aksapp.{v2_domain_cloud_zone_name}"
+                },
+                "ContactInformation": {
+                    "value": "aks-overlay@microsoft.com"
+                }
+            }
+        }
+    ]
+}

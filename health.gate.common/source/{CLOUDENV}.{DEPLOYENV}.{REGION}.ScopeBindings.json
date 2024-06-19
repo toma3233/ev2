@@ -1,0 +1,30 @@
+{
+  "scopeBindings": [
+    {
+      "scopeTagName": "common",
+      "bindings": [
+        {
+          "find": "__CSE_PIPELINE_VAR__",
+          "replaceWith": ""
+        },
+        {
+          "find": "__CSE_ADDITIONAL_VAR__",
+          "replaceWith": ""
+        }
+      ]
+    },
+    {
+      "scopeTagName": "arbitraryMDMHealthCheckApp",
+      "bindings": [
+        {
+          "find": "__DUMMY_PLACEHOLDER__",
+          "replaceWith": "$buildVersion()"
+        },
+        {
+          "find": "__HEALTH_MODEL_RESOURCE_VERSION__",
+          "replaceWith": "$buildVersion()"
+        }
+      ]
+    }
+  ]
+}

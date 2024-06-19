@@ -1,0 +1,6 @@
+; TEAM: Azure Kubernetes Service - Node Provision SIG
+*amaheshwari
+*aganeshkumar
+*cameissner
+*mumanski
+

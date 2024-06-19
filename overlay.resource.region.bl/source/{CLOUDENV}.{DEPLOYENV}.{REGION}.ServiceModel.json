@@ -1,0 +1,45 @@
+{
+    "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/ServiceModel.json",
+    "contentVersion": "0.0.0.1",
+    "serviceMetadata": {
+        "serviceGroup": "{service_group_name}",
+        "environment": "{CLOUDENV}.{DEPLOYENV}.{REGION}"
+    },
+    "serviceResourceGroupDefinitions": [
+        {
+            "name": "group-definition",
+            "serviceResourceDefinitions": [
+                {
+                    "name": "bl.pav2.onboard",
+                    "composedOf": {
+                        "extension": {
+                            "rolloutParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.bl.pav2.onboard.Parameters.json"
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "serviceResourceGroups": [
+        {
+            "azureResourceGroupName": "{resource_name_prefix}Feature.PAv2-{REGION}",
+            "instanceOf": "group-definition",
+            "azureSubscriptionId": "{overlay_resources_subscription_id}",
+            "location": "{region_location}",
+            "scopeTags": [
+                {
+                    "name": "{CLOUDENV}.{DEPLOYENV}.{REGION}"
+                },
+                {
+                    "name": "ev2ab.system"
+                }
+            ],
+            "serviceResources": [
+                {
+                    "name": "bl.pav2.onboard",
+                    "instanceOf": "bl.pav2.onboard"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,73 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resource_name_prefix": {
+            "type": "string"
+        },
+        "ev2_extension_operator_objectid": {
+            "type": "string"
+        },
+        "jitgroup_objectid": {
+            "type": "string"
+        }        
+    },
+    "variables": {
+        "location": "[resourceGroup().location]",
+        "progressive_rollout_user_assigned_identity_name": "[concat(parameters('resource_name_prefix'),'aksprogrollout')]",
+        "progressive_rollout_keyvault_name": "[concat(parameters('resource_name_prefix'),'akspr',variables('location'))]",
+        "tenant_id": "[subscription().tenantid]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2019-09-01",
+            "name": "[variables('progressive_rollout_keyvault_name')]",
+            "location": "[variables('location')]",
+            "properties": {
+                "enableSoftDelete": true,
+                "sku": {
+                    "family": "A",
+                    "name": "standard"
+                },
+                "tenantId": "[variables('tenant_id')]",
+                "accessPolicies": [
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[parameters('ev2_extension_operator_objectid')]",
+                        "permissions": {
+                            "certificates": [
+                                "create",
+                                "get",
+                                "setissuers",
+                                "update"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[variables('tenant_id')]",
+                        "objectId": "[parameters('jitgroup_objectid')]",
+                        "permissions": {
+                            "secrets": [
+                                "list"
+                            ],
+                            "certificates": [
+                                "delete",
+                                "get",
+                                "list",
+                                "listissuers"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "[variables('progressive_rollout_user_assigned_identity_name')]",
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+            "apiVersion": "2018-11-30",
+            "location": "[variables('location')]",
+            "properties": {}
+        }
+    ]
+}

@@ -1,0 +1,42 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resource_name_prefix": {
+            "value": "{resource_name_prefix}"
+        },
+        "resource_name_prefix_nodash": {
+            "value": "{resource_name_prefix_nodash}"
+        },
+        "svc_objectid": {
+            "value": "{svc_objectid}"
+        },
+        "msi_operator_resource_id": {
+            "value": "{msi_operator_resource_id}"
+        },
+        "ev2_extension_operator_objectid": {
+            "value": "{ev2_extension_operator_objectid}"
+        },
+        "jitgroup_objectid": {
+            "value": "{jitgroup_objectid}"
+        },
+        "om_etcd_storage_account_sku_name": {
+            "value": "{om_etcd_storage_account_sku_name}"
+        },
+        "legacy_storage_account_region_subscription_id": {
+            "value": "{om_legacy_storage_account_region_subscription_id}"
+        },
+        "legacy_etcd_resource_group_name": {
+            "value": "{om_legacy_etcd_resource_group_name}"
+        },
+        "legacy_etcd_backup_storage_account_name": {
+            "value": "{om_legacy_etcd_backup_storage_account_name}"
+        },
+        "legacy_etcd_storage_account_sku_name": {
+            "value": "{om_legacy_etcd_storage_account_sku_name}"
+        },
+        "om_deploy_legacy_etcd_backup_storage_account": {
+            "value": "{om_deploy_legacy_etcd_backup_storage_account}"
+        }
+    }
+}

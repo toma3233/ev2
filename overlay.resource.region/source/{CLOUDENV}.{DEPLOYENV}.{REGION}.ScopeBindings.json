@@ -1,0 +1,220 @@
+{
+    "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/scopeBindings.json",
+    "contentVersion": "1.0.0.0",
+    "scopeBindings": [
+        {
+            "scopeTagName": "common",
+            "bindings": [
+                {
+                    "find": "__CSE_PIPELINE_VAR__",
+                    "replaceWith": ""
+                },
+                {
+                    "find": "__CSE_ADDITIONAL_VAR__",
+                    "replaceWith": ""
+                }
+            ]
+        },
+        {
+            "scopeTagName": "{CLOUDENV}.{DEPLOYENV}.{REGION}",
+            "bindings": [
+                {
+                    "find": "__EV2_EXTENSION_OPERATOR_APPID__",
+                    "replaceWith": "{ev2_extension_operator_appid}"
+                },
+                {
+                    "find": "__EV2_EXTENSION_OPERATOR_APPCERTIFICATE__",
+                    "replaceWith": "{ev2_extension_operator_appcert}"
+                },
+                {
+                    "find": "__ONECERTV2_ISSUER_PROVIDER_PRIVATE__",
+                    "replaceWith": "{onecertv2_issuer_provider_private}"
+                },
+                {
+                    "find": "__CERT_DOMAIN_BASE__",
+                    "replaceWith": "{domain_deployenv}"
+                },
+                {
+                    "find": "__REGION__",
+                    "replaceWith": "{domain_region_prefix}{REGION}"
+                },
+                {
+                    "find": "__PUBLIC_CERTIFICATE_KEY_CONFIG__",
+                    "replaceWith": "{public_certificate_key_config}"
+                }
+            ]
+        },
+        {
+            "scopeTagName": "component.ccpingress",
+            "bindings": [
+                {
+                    "find": "__CERT_TARGET_KEYVAULT_URI__",
+                    "replaceWith": "https://{resource_name_prefix}akscig{REGION}.{keyvault_suffix}"
+                }
+            ]
+        },
+        {
+            "scopeTagName": "component.devhub",
+            "bindings": [
+                {
+                    "find": "__CERT_TARGET_KEYVAULT_URI__",
+                    "replaceWith": "https://{resource_name_prefix}aksdh{REGION}.{keyvault_suffix}"
+                },
+                {
+                    "find": "__CERT_TARGET_FD_KEYVAULT_URI__",
+                    "replaceWith": "https://{resource_name_prefix}aksdhglobal.{keyvault_suffix}"
+                }
+            ]
+        },
+        {
+            "scopeTagName": "component.devhubfd",
+            "bindings": [
+                {
+                    "find": "__CERT_TARGET_KEYVAULT_URI__",
+                    "replaceWith": "https://{resource_name_prefix}aksdh{REGION}.{keyvault_suffix}"
+                },
+                {
+                    "find": "__FD_CNAME__",
+                    "replaceWith": "{devhub_frontdoor_regional_cname}"
+                }
+            ]
+        },
+        {
+            "scopeTagName": "component.dnc",
+            "bindings": [
+                {
+                    "find": "__CERT_TARGET_KEYVAULT_URI__",
+                    "replaceWith": "https://{resource_name_prefix}aksdnc{REGION}.{keyvault_suffix}"
+                },
+                {
+                    "find": "__DNC_PUBSUB_CERT_DOMAIN__",
+                    "replaceWith": "{dnc_pubsub_cert_domain}"
+                }
+            ]
+        },
+        {
+            "scopeTagName": "component.eg",
+            "bindings": [
+                {
+                    "find": "__CERT_TARGET_KEYVAULT_URI__",
+                    "replaceWith": "https://{resource_name_prefix}akseg{REGION}.{keyvault_suffix}"
+                }
+            ]
+        },
+        {
+            "scopeTagName": "component.flt",
+            "bindings": [
+                {
+                    "find": "__CERT_TARGET_KEYVAULT_URI__",
+                    "replaceWith": "https://{resource_name_prefix}aksflt{REGION}.{keyvault_suffix}"
+                }
+            ]
+        },
+        {
+            "scopeTagName": "component.fms",
+            "bindings": [
+                {
+                    "find": "__CERT_TARGET_KEYVAULT_URI__",
+                    "replaceWith": "https://{resource_name_prefix}aksfms{REGION}.{keyvault_suffix}"
+                }
+            ]
+        },
+        {
+            "scopeTagName": "component.hcp",
+            "bindings": [
+                {
+                    "find": "__CERT_TARGET_KEYVAULT_URI__",
+                    "replaceWith": "https://{hcp_keyvault_name}.{keyvault_suffix}"
+                }
+            ]
+        },
+        {
+            "scopeTagName": "component.ig",
+            "bindings": [
+                {
+                    "find": "__CERT_TARGET_KEYVAULT_URI__",
+                    "replaceWith": "https://{resource_name_prefix}aksig{REGION}.{keyvault_suffix}"
+                },
+                {
+                    "find": "__IG_ENDPOINT_URI__",
+                    "replaceWith": "{ig_endpoint_uri}"
+                }
+            ]
+        },
+        {
+            "scopeTagName": "component.progressiverollout",
+            "bindings": [
+                {
+                    "find": "__CERT_TARGET_KEYVAULT_URI__",
+                    "replaceWith": "https://{resource_name_prefix}akspr{REGION}.{keyvault_suffix}"
+                },
+                {
+                    "find": "__CERT_DOMAIN_BASE__",
+                    "replaceWith": "{domain_deployenv}"
+                }
+            ]
+        },
+        {
+            "scopeTagName": "component.obo",
+            "bindings": [
+                {
+                    "find": "__CERT_TARGET_KEYVAULT_URI__",
+                    "replaceWith": "https://{resource_name_prefix}aksobo{REGION}.{keyvault_suffix}"
+                }
+            ]
+        },
+        {
+            "scopeTagName": "component.oic",
+            "bindings": [
+                {
+                    "find": "__CERT_TARGET_KEYVAULT_URI__",
+                    "replaceWith": "https://{resource_name_prefix}aksoic{REGION}.{keyvault_suffix}"
+                }
+            ]
+        },
+        {
+            "scopeTagName": "component.om",
+            "bindings": [
+                {
+                    "find": "__CCP_CERT_CN__",
+                    "replaceWith": "*.portal.hcp.{REGION}.{om_ccp_dns_domain}"
+                },
+                {
+                    "find": "__CERT_TARGET_KEYVAULT_URI__",
+                    "replaceWith": "https://{resource_name_prefix}aksom{REGION}.{keyvault_suffix}"
+                }
+            ]
+        },
+        {
+            "scopeTagName": "component.rp",
+            "bindings": [
+                {
+                    "find": "__CERT_TARGET_KEYVAULT_URI__",
+                    "replaceWith": "https://{resource_name_prefix}aksrp{REGION}.{keyvault_suffix}"
+                },
+                {
+                    "find": "__RP_ENDPOINT_URI__",
+                    "replaceWith": "{rp_endpoint_uri}"
+                }
+            ]
+        },
+        {
+            "scopeTagName": "component.ta",
+            "bindings": [
+                {
+                    "find": "__CERT_TARGET_KEYVAULT_URI__",
+                    "replaceWith": "https://{resource_name_prefix}aksta{REGION}.{keyvault_suffix}"
+                }
+            ]
+        },
+        {
+            "scopeTagName": "component.zen",
+            "bindings": [
+                {
+                    "find": "__CERT_TARGET_KEYVAULT_URI__",
+                    "replaceWith": "https://{resource_name_prefix}akszen{REGION}.{keyvault_suffix}"
+                }
+            ]
+        }
+    ]
+}

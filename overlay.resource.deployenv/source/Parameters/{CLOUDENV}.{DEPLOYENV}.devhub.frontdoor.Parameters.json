@@ -1,0 +1,41 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "profile_name": {
+      "value": "{resource_name_prefix}devhub"
+    },
+    "endpoint_name": {
+      "value": "{resource_name_prefix}devhub"
+    },
+    "sku_name": {
+      "value": "Premium_AzureFrontDoor"
+    },
+    "deploy_profile": {
+      "value": "{devhub_deploy_network_resources}"
+    },
+    "waf_mode": {
+      "value": "Prevention"
+    },
+    "waf_managed_rule_sets": {
+      "value": [
+          {
+              "ruleSetType": "Microsoft_DefaultRuleSet",
+              "ruleSetVersion": "1.1"
+          }
+      ]
+    },
+    "vault_name": {
+      "value": "{resource_name_prefix}aksdhglobal"
+    },
+    "ev2_extension_operator_objectid": {
+      "value": "{ev2_extension_operator_objectid}"
+    },
+    "jitgroup_objectid": {
+      "value": "{jitgroup_objectid}"
+    },
+    "frontdoor_object_id": {
+      "value": "{frontdoor_object_id}"
+    }
+  }
+}

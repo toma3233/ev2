@@ -1,0 +1,1044 @@
+Template:
+  - customscript-linux.CLOUDENV.DEPLOYENV.REGION
+Include:
+  - Parameters/cert_issuers.Parameters.json
+VariableGroup:
+  Variables:
+    # config shared between configs
+    diagnostics_enabled: false
+    # redis is ring1 service, it will be enabled manually after AKS new region built out
+    redis_enabled: false
+    most_reliable_storage_sku: Standard_LRS
+    rollout_name: overlay.resource.region
+    zone_redundant_enabled: false
+    # per component config, please keep prefix with component_code and keep alphabet order
+    arn_eventgriddomain_enabled: "false"
+    arn_eventgriddomain_maintenance_topic: "aks-maintenance"
+    arn_eventgriddomain_name: "{resource_name_prefix}aksarnegd{REGION}"
+    arn_metric_alerts_enabled: false
+    bl_pav2_objectid: ""
+    bl_storage_account_sku: "{most_reliable_storage_sku}"
+    bus_namespace_name: "{resource_name_prefix}akssvcbus-{REGION}"
+    bus_failover_enabled: false
+    node_provisioner_sb_namespace: "{resource_name_prefix}nodeprovisionersvcbus-{REGION}"
+    bus_resourceprovider_alert_level: level1
+    bus_sku: premium
+    bus_storage_account_sku: "{most_reliable_storage_sku}"
+    costanalysis_eventhub_zone_redundant: "true"
+    costanalysis_namespace: "{resource_name_prefix}akseh-{REGION}"
+    devhub_deploy_networking_config: false
+    devhub_frontdoor_custom_domain: "{resource_name_prefix}fd-domain"
+    devhub_frontdoor_regional_cname: "fd-{REGION}"
+    devhub_frontdoor_path_match: "/{REGION}/*"
+    devhub_frontdoor_profile_endpoint_name: "{resource_name_prefix}devhub"
+    devhub_global_kv_name: "{resource_name_prefix}aksdhglobal"
+    devhub_trafficmanager_name: "{resource_name_prefix}aksdevhub-{REGION}"
+    devhub_trafficmanager_relative_name: "{domain_region_prefix}{REGION}.devhub.{domain_deployenv}"
+    dnc_db_primary_zone_redundant: "true"
+    dnc_pubsub_cert_domain: "aks-{REGION}.dnc.azure.net"
+    dpl_keep_kv: false
+    dpl_storage_account_sku: "{most_reliable_storage_sku}"
+    flt_cosmosdb_zone_redundant: "true"
+    flt_deploy_cosmosdb: "false"
+    fms_sku_name: premium
+    # hcp config values:
+    hcp_elastic_pool_capacity: 125
+    hcp_elastic_pool_prefix: "{REGION}"
+    hcp_elastic_pool_sku_name: PremiumPool # for prod
+    hcp_keyvault_name: "{resource_name_prefix}akshcp{REGION}"
+    hcp_region_database_admin_login: "sqldbuser"
+    hcp_region_database_name: "regionaldb"
+    hcp_region_database_server_name_prefix: "{resource_name_prefix}{REGION}-regional"
+    hcp_region_database_service_level_objective: P1
+    hcp_region_vault_name: "{resource_name_prefix}hcp-{REGION}"
+    hcp_region_vault_resource_group: "{resource_name_prefix}hcp-underlay-{REGION}"
+    hcp_sql_audit_storage_name: "{resource_name_prefix_nodash}akssa{REGION}"
+    hcp_sql_region: "{REGION}"
+    hcp_sql_use_vcore: "false"
+    hcp_sql_vcore_sku_tier: "BusinessCritical"
+    hcp_sql_vcore_sku_name: "BC_Gen5"
+    hcp_sql_vcore_sku_family: "Gen5"
+    hcp_sql_vcore_sku_capacity: 2
+    hcp_sql_zone_redundant_enabled: "true"
+    hcp_storage_account_sku_name: "{most_reliable_storage_sku}"
+    hcp_trafficmanager_name: "{resource_name_prefix}akshcp-{REGION}"
+    hcp_trafficmanager_relative_name: "{domain_region_prefix}{REGION}.hcp.{domain_deployenv}"
+    ig_trafficmanager_name: "{resource_name_prefix}aksig-{REGION}"
+    ig_trafficmanager_relative_name: "{domain_region_prefix}{REGION}.ig.{domain_deployenv}"
+    ig_endpoint_uri: "{domain_region_prefix}{REGION}.ig.{domain_deployenv}"
+    log_analytics_account_name: "{resource_name_prefix}loganalytics"
+    mcs_storage_account_sku: "{most_reliable_storage_sku}"
+    mcs_eventhub_zone_redundant: "true"
+    metric_alerts_enabled: true
+    oic_primary_target: "aksoic-{service_cluster_name}.{REGION}.{cloud_dns_suffix}"
+    oic_trafficmanager_name: "{resource_name_prefix}aksoic-{REGION}"
+    oic_trafficmanager_relative_name: "{domain_region_prefix}{REGION}.oic.{domain_deployenv}"
+    oic_allow_blob_public_access: 'true'
+    om_ccp_dns_domain: azmk8s.io
+    om_etcd_storage_account_sku_name: "{most_reliable_storage_sku}"
+    om_legacy_etcd_resource_group_name: "{resource_name_prefix}hcp-underlay-{REGION}"
+    om_legacy_etcd_backup_storage_account_name: "{resource_name_prefix_nodash}etcd{REGION}"
+    om_legacy_etcd_storage_account_sku_name: "{most_reliable_storage_sku}"
+    om_legacy_storage_account_region_subscription_id: "{region_subscription_id}"
+    om_deploy_legacy_etcd_backup_storage_account: "true"
+    public_certificate_key_config: "\\\"kty\\\":\\\"EC\\\",\\\"key_size\\\":256,\\\"crv\\\":\\\"P-256\\\""
+    rp_cosmosdb_zone_redundant: "true"
+    rp_endpoint_uri: "{domain_region_prefix}{REGION}.rp.{domain_deployenv}"
+    rp_trafficmanager_name: "{resource_name_prefix}aksrp-{REGION}"
+    rp_trafficmanager_relative_name: "{domain_region_prefix}{REGION}.rp.{domain_deployenv}"
+    sector_subscription_id: "{global_subscription_id}"
+    sector_vault_group: "dummy-sector-group" # EV2 serviceResourceGroups prevent duplicate by {subid, rg}, for regions without sector, we will endup hit this duplicate, so we use this dummy resourceGroup.
+    sector_vault_name: "" # we use empty sector_vault_name to disable sector kv assignment
+    servicebus_zone_redundant_enabled: "{zone_redundant_enabled}"
+    ta_primary_target: aksta-{service_cluster_name}.{REGION}.{cloud_dns_suffix}
+    ta_trafficmanager_name: "{resource_name_prefix}aksta-{REGION}"
+    ta_trafficmanager_relative_name: "{domain_region_prefix}{REGION}.trustedaccess.{domain_deployenv}"
+    tgl_storage_account_sku_name: "{most_reliable_storage_sku}"    #like om_etcd we want tgl storage to be zrs where ever available
+  Match:
+    Key: CLOUDENV
+    Values: # NOTE: NEEDS TO BE UPDATED MANUALLY AS PART OF NEW REGION BUILDOUT
+      gb:
+        Variables:
+          bl_pav2_objectid: 41181ad2-1829-4a61-9feb-f976788a495d #PAv2 first party app in AME
+          devhub_deploy_networking_config: true
+          dpl_keep_kv: true
+          flt_deploy_cosmosdb: "true"
+          hcp_deploy_trafficmanager_endpoint: true
+          om_legacy_storage_account_region_subscription_id: "{overlay_resources_subscription_id}"
+          om_legacy_etcd_resource_group_name: "{resource_name_prefix}overlay-{REGION}"
+        Match:
+          Key: DEPLOYENV
+          Values:
+            test:
+              Variables:
+                arn_eventgriddomain_enabled: "true"
+                arn_metric_alerts_enabled: true
+                bl_pav2_objectid: 38a1ad03-90aa-4f98-9ba9-8d24509db898 # PAv2-Test first party app in MSIT
+                bl_storage_account_sku: Standard_LRS
+                bus_failover_enabled: true
+                bus_resourceprovider_alert_level: level3
+                bus_storage_account_sku: Standard_LRS
+                diagnostics_enabled: true
+                dpl_storage_account_sku: Standard_LRS
+                hcp_elastic_pool_capacity: 125
+                mcs_storage_account_sku: Standard_LRS
+                mcs_eventhub_zone_redundant: "false"
+                most_reliable_storage_sku: Standard_ZRS
+                oic_allow_blob_public_access: 'false'
+                om_ccp_dns_domain: legacy-cx.test-aks.azure.com
+                om_legacy_etcd_storage_account_sku_name: Standard_LRS
+                redis_enabled: true
+                zone_redundant_enabled: true
+            int:
+              Variables:
+                arn_eventgriddomain_enabled: "true"
+                arn_metric_alerts_enabled: true
+                bl_pav2_objectid: 22d8fef6-b57f-4dd0-9a17-619a51687125 # PAv2-Test first party app in ame
+                bl_storage_account_sku: Standard_LRS
+                bus_failover_enabled: true
+                bus_storage_account_sku: Standard_LRS
+                diagnostics_enabled: true
+                dpl_storage_account_sku: Standard_LRS
+                hcp_region_database_admin_login: "dbadmin"
+                hcp_region_database_name: "regionaldb{REGION}"
+                hcp_region_database_server_name_prefix: "acs-{REGION}-intv2"
+                hcp_region_vault_name: "hcp-intv2-{REGION}"
+                hcp_region_vault_resource_group: "hcp-underlay-intv2-{REGION}"
+                mcs_eventhub_zone_redundant: "false"
+                mcs_storage_account_sku: Standard_LRS
+                most_reliable_storage_sku: Standard_ZRS
+                om_ccp_dns_domain: intv2.azmk8s.io
+                om_legacy_etcd_backup_storage_account_name: "etcdintv2{REGION}"
+                redis_enabled: true
+                sector_vault_name: acs-ussector-intv2
+                sector_vault_group: rp-common-ussector-intv2
+                sector_subscription_id: 8c4b4f4e-6bf7-4da8-a51a-d341baf3ce44
+                zone_redundant_enabled: true
+              Match:
+                Key: REGION
+                Values:
+                  eastus2euap:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bl_storage_account_sku: Standard_ZRS
+                      bus_storage_account_sku: Standard_ZRS
+                      diagnostics_enabled: false # logAnalytics is not available in eastus2euap
+                      hcp_elastic_pool_capacity: 50
+                      hcp_elastic_pool_sku_name: "StandardPool"
+                      hcp_region_database_admin_login: "dbadmin"
+                      hcp_region_database_name: "regionaldb"
+                      hcp_region_database_server_name_prefix: "int-eastus2euap-regional"
+                      hcp_region_database_service_level_objective: S0
+                      hcp_sql_region: "eastus"
+                      mcs_storage_account_sku: Standard_ZRS
+                      mcs_eventhub_zone_redundant: "false"
+                      om_legacy_etcd_backup_storage_account_name: "intetcdbkeastus2euap"
+                      redis_enabled: true
+            staging:
+              Variables:
+                arn_eventgriddomain_enabled: "true"
+                arn_metric_alerts_enabled: true
+                bus_failover_enabled: true
+                costanalysis_eventhub_zone_redundant: "true"
+                devhub_frontdoor_custom_domain: "fd-domain"
+                devhub_frontdoor_regional_cname: "fd-stg-{REGION}"
+                devhub_frontdoor_path_match: "/{resource_name_prefix}{REGION}/*"
+                devhub_frontdoor_profile_endpoint_name: "devhub"
+                devhub_global_kv_name: "aksdhglobal"
+                diagnostics_enabled: true
+                hcp_elastic_pool_prefix: "aks-westus2-staging-pool"
+                hcp_region_database_name: "regionaldbwestus2"
+                hcp_region_database_server_name_prefix: "acs-westus2-staging"
+                hcp_region_database_service_level_objective: P2
+                hcp_region_database_admin_login: "dbadmin"
+                hcp_region_vault_name: "hcp-{resource_name_prefix}{REGION}"
+                hcp_region_vault_resource_group: "hcp-underlay-{resource_name_prefix}{REGION}"
+                mcs_eventhub_zone_redundant: "false"
+                most_reliable_storage_sku: Standard_ZRS
+                om_ccp_dns_domain: staging.azmk8s.io
+                om_legacy_etcd_backup_storage_account_name: "etcdstgwestus2"
+                redis_enabled: true
+                rp_cosmosdb_zone_redundant: "true"
+                sector_subscription_id: f9db94ae-e1cc-4a93-8ceb-51e39b6bbee8
+                sector_vault_name: acs-ussector-staging
+                sector_vault_group: rp-common-ussector-staging
+                zone_redundant_enabled: true
+            prod:
+              Variables:
+                sector_subscription_id: "a6cec963-c286-421a-b449-e842b26cee9a"
+              Match:
+                Key: REGION
+                Values:
+                  australiacentral:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      dnc_db_primary_zone_redundant: "false"
+                      flt_cosmosdb_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      hcp_region_database_service_level_objective: P2
+                      mcs_eventhub_zone_redundant: "false"
+                      rp_cosmosdb_zone_redundant: "false"
+                      costanalysis_eventhub_zone_redundant: "false"
+                      om_legacy_etcd_backup_storage_account_name: "etcdaustraliacentral"
+                      redis_enabled: true
+                  australiacentral2:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      dnc_db_primary_zone_redundant: "false"
+                      flt_cosmosdb_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      mcs_eventhub_zone_redundant: "false"
+                      redis_enabled: true
+                      rp_cosmosdb_zone_redundant: "false"
+                      costanalysis_eventhub_zone_redundant: "false"
+                  australiaeast:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      hcp_region_database_service_level_objective: P4
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      om_legacy_etcd_backup_storage_account_name: "etcdaustraliaeast"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-australiasector
+                      sector_vault_name: acs-australiasector
+                      zone_redundant_enabled: true
+                  australiasoutheast:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      dnc_db_primary_zone_redundant: "false"
+                      flt_cosmosdb_zone_redundant: "false"
+                      mcs_eventhub_zone_redundant: "false"
+                      rp_cosmosdb_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      hcp_region_database_service_level_objective: P4
+                      costanalysis_eventhub_zone_redundant: "false"
+                      om_legacy_etcd_backup_storage_account_name: "etcdaustraliasoutheast"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-australiasector
+                      sector_vault_name: acs-australiasector
+                  brazilsouth:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      om_legacy_etcd_backup_storage_account_name: "etcdbrazilsouth"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-brazilsector
+                      sector_vault_name: acs-brazilsector
+                      zone_redundant_enabled: true
+                      hcp_region_database_service_level_objective: P4
+                  brazilsoutheast:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      dnc_db_primary_zone_redundant: "false"
+                      flt_cosmosdb_zone_redundant: "false"
+                      rp_cosmosdb_zone_redundant: "false"
+                      costanalysis_eventhub_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      mcs_eventhub_zone_redundant: "false"
+                      om_legacy_etcd_backup_storage_account_name: "etcdbrazilsoutheast"
+                      hcp_region_database_service_level_objective: P2
+                      redis_enabled: true
+                  canadaeast:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      dnc_db_primary_zone_redundant: "false"
+                      flt_cosmosdb_zone_redundant: "false"
+                      rp_cosmosdb_zone_redundant: "false"
+                      costanalysis_eventhub_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      hcp_region_database_service_level_objective: P4
+                      mcs_eventhub_zone_redundant: "false"
+                      om_legacy_etcd_backup_storage_account_name: "hcp0001canadaeastsvc"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-canadasector
+                      sector_vault_name: acs-canadasector
+                  canadacentral:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      hcp_region_database_service_level_objective: P4
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      om_legacy_etcd_backup_storage_account_name: "hcp0001canadacentralsvc"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-canadasector
+                      sector_vault_name: acs-canadasector
+                      zone_redundant_enabled: true
+                  centralindia:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      hcp_region_database_service_level_objective: P4
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      om_legacy_etcd_backup_storage_account_name: "etcdcentralindia"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-indiasector
+                      sector_vault_name: acs-indiasector
+                      servicebus_zone_redundant_enabled: false
+                      zone_redundant_enabled: true
+                  centralus:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      bus_resourceprovider_alert_level: level2
+                      hcp_region_database_service_level_objective: P6
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      om_legacy_etcd_backup_storage_account_name: "hcp0001centralussvc"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-ussector
+                      sector_vault_name: acs-ussector
+                      zone_redundant_enabled: true
+                  centraluseuap:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      diagnostics_enabled: false
+                      dnc_db_primary_zone_redundant: "false"
+                      flt_cosmosdb_zone_redundant: "false"
+                      rp_cosmosdb_zone_redundant: "false"
+                      costanalysis_eventhub_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      mcs_eventhub_zone_redundant: "false"
+                      om_legacy_etcd_backup_storage_account_name: "etcdcentraluseuap"
+                      redis_enabled: true
+                  eastasia:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      hcp_region_database_service_level_objective: P2
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      om_legacy_etcd_backup_storage_account_name: "etcdeastasia"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-asiasector
+                      sector_vault_name: acs-asiasector
+                      servicebus_zone_redundant_enabled: false
+                      zone_redundant_enabled: true
+                  eastus:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      bus_resourceprovider_alert_level: level2
+                      hcp_region_database_server_name_prefix: "aks-{REGION}-regional"
+                      hcp_region_database_service_level_objective: P15
+                      hcp_sql_use_vcore: "true"
+                      hcp_sql_vcore_sku_capacity: 40
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      om_legacy_etcd_backup_storage_account_name: "hcp0001eastussvc"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-ussector
+                      sector_vault_name: acs-ussector
+                      zone_redundant_enabled: true
+                  eastus2:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      bus_resourceprovider_alert_level: level2
+                      hcp_region_database_service_level_objective: P11
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      om_legacy_etcd_backup_storage_account_name: "etcdeastus2"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-ussector
+                      sector_vault_name: acs-ussector
+                      zone_redundant_enabled: true
+                  eastus2euap:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      diagnostics_enabled: false # logAnalytics is not enabled for eastus2euap
+                      hcp_region_database_server_name_prefix: "aks-{REGION}-regional"
+                      hcp_sql_audit_storage_name: "{resource_name_prefix_nodash}sa{REGION}"
+                      hcp_region_database_service_level_objective: P2
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      om_legacy_etcd_backup_storage_account_name: "etcdeastus2euap"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-uscanarysector
+                      sector_vault_name: acs-uscanarysector
+                      zone_redundant_enabled: true
+                  francecentral:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      hcp_region_database_service_level_objective: P4
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      om_legacy_etcd_backup_storage_account_name: "etcdfrancecentral"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-francesector
+                      sector_vault_name: acs-francesector
+                      zone_redundant_enabled: true
+                  francesouth:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      costanalysis_eventhub_zone_redundant: "false"
+                      dnc_db_primary_zone_redundant: "false"
+                      flt_cosmosdb_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      mcs_eventhub_zone_redundant: "false"
+                      om_legacy_etcd_backup_storage_account_name: "etcdfrancesouth"
+                      redis_enabled: true
+                      rp_cosmosdb_zone_redundant: "false"
+                  germanynorth:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      dnc_db_primary_zone_redundant: "false"
+                      flt_cosmosdb_zone_redundant: "false"
+                      rp_cosmosdb_zone_redundant: "false"
+                      costanalysis_eventhub_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      mcs_eventhub_zone_redundant: "false"
+                      om_legacy_etcd_backup_storage_account_name: "etcdgermanynorth"
+                      redis_enabled: true
+                  germanywestcentral:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      hcp_region_database_service_level_objective: P4
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      om_legacy_etcd_backup_storage_account_name: "etcdgermanywestcentral"
+                      redis_enabled: true
+                      zone_redundant_enabled: true
+                  israelcentral:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      most_reliable_storage_sku: Standard_ZRS
+                      redis_enabled: true
+                      zone_redundant_enabled: true
+                  italynorth:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      most_reliable_storage_sku: Standard_ZRS
+                      redis_enabled: true
+                      zone_redundant_enabled: true
+                  japaneast:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      hcp_region_database_service_level_objective: P4
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      om_legacy_etcd_backup_storage_account_name: "etcdjapaneast"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-japansector
+                      sector_vault_name: acs-japansector
+                      zone_redundant_enabled: true
+                  japanwest:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      dnc_db_primary_zone_redundant: "false"
+                      flt_cosmosdb_zone_redundant: "false"
+                      rp_cosmosdb_zone_redundant: "false"
+                      costanalysis_eventhub_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      hcp_region_database_service_level_objective: P4
+                      mcs_eventhub_zone_redundant: "false"
+                      om_legacy_etcd_backup_storage_account_name: "etcdjapanwest"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-japansector
+                      sector_vault_name: acs-japansector
+                  jioindiacentral:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      dnc_db_primary_zone_redundant: "false"
+                      flt_cosmosdb_zone_redundant: "false"
+                      rp_cosmosdb_zone_redundant: "false"
+                      costanalysis_eventhub_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      mcs_eventhub_zone_redundant: "false"
+                      redis_enabled: true
+                  jioindiawest:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      dnc_db_primary_zone_redundant: "false"
+                      flt_cosmosdb_zone_redundant: "false"
+                      rp_cosmosdb_zone_redundant: "false"
+                      costanalysis_eventhub_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      mcs_eventhub_zone_redundant: "false"
+                      redis_enabled: true
+                  koreacentral:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      hcp_region_database_service_level_objective: P2
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      om_legacy_etcd_backup_storage_account_name: "etcdkoreacentral"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-koreasector
+                      sector_vault_name: acs-koreasector
+                      zone_redundant_enabled: true
+                  koreasouth:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      dnc_db_primary_zone_redundant: "false"
+                      flt_cosmosdb_zone_redundant: "false"
+                      rp_cosmosdb_zone_redundant: "false"
+                      costanalysis_eventhub_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      hcp_region_database_service_level_objective: P2
+                      mcs_eventhub_zone_redundant: "false"
+                      om_legacy_etcd_backup_storage_account_name: "etcdkoreasouth"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-koreasector
+                      sector_vault_name: acs-koreasector
+                  malaysiasouth:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      dnc_db_primary_zone_redundant: "false"
+                      flt_cosmosdb_zone_redundant: "false"
+                      rp_cosmosdb_zone_redundant: "false"
+                      costanalysis_eventhub_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      mcs_eventhub_zone_redundant: "false"
+                      redis_enabled: true
+                  mexicocentral:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      most_reliable_storage_sku: Standard_ZRS
+                      zone_redundant_enabled: true
+                      redis_enabled: true
+                  northcentralus:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      bus_resourceprovider_alert_level: level2
+                      dnc_db_primary_zone_redundant: "false"
+                      flt_cosmosdb_zone_redundant: "false"
+                      rp_cosmosdb_zone_redundant: "false"
+                      costanalysis_eventhub_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      hcp_region_database_service_level_objective: P4
+                      mcs_eventhub_zone_redundant: "false"
+                      om_legacy_etcd_backup_storage_account_name: "etcdnorthcentralus"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-ussector
+                      sector_vault_name: acs-ussector
+                  northeurope:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      bus_resourceprovider_alert_level: level2
+                      hcp_region_database_service_level_objective: P6
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      om_legacy_etcd_backup_storage_account_name: "etcdnortheurope"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-europesector
+                      sector_vault_name: acs-europesector
+                      zone_redundant_enabled: true
+                  norwayeast:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      hcp_region_database_service_level_objective: P2
+                      om_legacy_etcd_backup_storage_account_name: "etcdnorwayeast"
+                      redis_enabled: true
+                      zone_redundant_enabled: true
+                  norwaywest:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      dnc_db_primary_zone_redundant: "false"
+                      flt_cosmosdb_zone_redundant: "false"
+                      rp_cosmosdb_zone_redundant: "false"
+                      costanalysis_eventhub_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      mcs_eventhub_zone_redundant: "false"
+                      om_legacy_etcd_backup_storage_account_name: "etcdnorwaywest"
+                      redis_enabled: true
+                  polandcentral:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      most_reliable_storage_sku: Standard_ZRS
+                      om_legacy_etcd_backup_storage_account_name: "etcdpolandcentral"
+                      redis_enabled: true
+                      zone_redundant_enabled: true
+                      hcp_region_database_service_level_objective: P2
+                  qatarcentral:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      hcp_region_database_service_level_objective: P2
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      om_legacy_etcd_backup_storage_account_name: "etcdqatarcentral"
+                      redis_enabled: true
+                      zone_redundant_enabled: true
+                  southafricanorth:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      om_legacy_etcd_backup_storage_account_name: "etcdsouthafricanorth"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-africasector
+                      sector_vault_name: acs-africasector
+                      zone_redundant_enabled: true
+                      hcp_region_database_service_level_objective: P2
+                  southafricawest:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      dnc_db_primary_zone_redundant: "false"
+                      flt_cosmosdb_zone_redundant: "false"
+                      rp_cosmosdb_zone_redundant: "false"
+                      costanalysis_eventhub_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      mcs_eventhub_zone_redundant: "false"
+                      om_legacy_etcd_backup_storage_account_name: "etcdsouthafricawest"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-africasector
+                      sector_vault_name: acs-africasector
+                  southcentralus:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      bus_resourceprovider_alert_level: level2
+                      hcp_region_database_service_level_objective: P4
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      om_legacy_etcd_backup_storage_account_name: "etcdsouthcentralus"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-ussector
+                      sector_vault_name: acs-ussector
+                      zone_redundant_enabled: true
+                  southeastasia:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      hcp_region_database_service_level_objective: P4
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      om_legacy_etcd_backup_storage_account_name: "etcdsoutheastasia"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-asiasector
+                      sector_vault_name: acs-asiasector
+                      zone_redundant_enabled: true
+                  southindia:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      dnc_db_primary_zone_redundant: "false"
+                      flt_cosmosdb_zone_redundant: "false"
+                      rp_cosmosdb_zone_redundant: "false"
+                      costanalysis_eventhub_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      hcp_region_database_service_level_objective: P2
+                      mcs_eventhub_zone_redundant: "false"
+                      om_legacy_etcd_backup_storage_account_name: "etcdsouthindia"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-indiasector
+                      sector_vault_name: acs-indiasector
+                  spaincentral:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      most_reliable_storage_sku: Standard_ZRS
+                      redis_enabled: true
+                      zone_redundant_enabled: true
+                  swedencentral:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      hcp_region_database_service_level_objective: P2
+                      redis_enabled: true
+                      servicebus_zone_redundant_enabled: false
+                      zone_redundant_enabled: true
+                  swedensouth:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      dnc_db_primary_zone_redundant: "false"
+                      flt_cosmosdb_zone_redundant: "false"
+                      rp_cosmosdb_zone_redundant: "false"
+                      costanalysis_eventhub_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      mcs_eventhub_zone_redundant: "false"
+                      hcp_region_database_service_level_objective: P2
+                      redis_enabled: true
+                  switzerlandnorth:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      hcp_region_database_service_level_objective: P2
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      om_legacy_etcd_backup_storage_account_name: "etcdswitzerlandnorth"
+                      redis_enabled: true
+                      servicebus_zone_redundant_enabled: false
+                      zone_redundant_enabled: true
+                  switzerlandwest:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      dnc_db_primary_zone_redundant: "false"
+                      flt_cosmosdb_zone_redundant: "false"
+                      rp_cosmosdb_zone_redundant: "false"
+                      costanalysis_eventhub_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      mcs_eventhub_zone_redundant: "false"
+                      om_legacy_etcd_backup_storage_account_name: "etcdswitzerlandwest"
+                      redis_enabled: true
+                  taiwannorth:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      dnc_db_primary_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_LRS
+                      flt_cosmosdb_zone_redundant: "false"
+                      rp_cosmosdb_zone_redundant: "false"
+                      costanalysis_eventhub_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      mcs_eventhub_zone_redundant: "false"
+                      zone_redundant_enabled: false # This region is being built out as single zone, but will have availability zones 1 year after ring0 buildout completes.
+                  taiwannorthwest:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      dnc_db_primary_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_LRS
+                      flt_cosmosdb_zone_redundant: "false"
+                      rp_cosmosdb_zone_redundant: "false"
+                      costanalysis_eventhub_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      mcs_eventhub_zone_redundant: "false"
+                      zone_redundant_enabled: false
+                  uaecentral:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      dnc_db_primary_zone_redundant: "false"
+                      flt_cosmosdb_zone_redundant: "false"
+                      rp_cosmosdb_zone_redundant: "false"
+                      costanalysis_eventhub_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      mcs_eventhub_zone_redundant: "false"
+                      om_legacy_etcd_backup_storage_account_name: "etcduaecentral"
+                      hcp_region_database_service_level_objective: P2
+                      redis_enabled: true
+                  uaenorth:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      om_legacy_etcd_backup_storage_account_name: "etcduaenorth"
+                      servicebus_zone_redundant_enabled: false
+                      zone_redundant_enabled: true
+                      hcp_region_database_service_level_objective: P4
+                      redis_enabled: true
+                  uksouth:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      hcp_region_database_service_level_objective: P6
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      om_legacy_etcd_backup_storage_account_name: "etcduksouth"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-uksector
+                      sector_vault_name: acs-uksector
+                      zone_redundant_enabled: true
+                  ukwest:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      dnc_db_primary_zone_redundant: "false"
+                      flt_cosmosdb_zone_redundant: "false"
+                      rp_cosmosdb_zone_redundant: "false"
+                      costanalysis_eventhub_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      hcp_region_database_service_level_objective: P4
+                      mcs_eventhub_zone_redundant: "false"
+                      om_legacy_etcd_backup_storage_account_name: "etcdukwest"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-uksector
+                      sector_vault_name: acs-uksector
+                  westcentralus:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      dnc_db_primary_zone_redundant: "false"
+                      flt_cosmosdb_zone_redundant: "false"
+                      rp_cosmosdb_zone_redundant: "false"
+                      costanalysis_eventhub_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      hcp_region_database_service_level_objective: P2
+                      mcs_eventhub_zone_redundant: "false"
+                      om_legacy_etcd_backup_storage_account_name: "etcdwestcentralus"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-uscanarysector
+                      sector_vault_name: acs-uscanarysector
+                  westeurope:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      bus_resourceprovider_alert_level: level3
+                      hcp_region_database_service_level_objective: P15
+                      hcp_sql_use_vcore: "true"
+                      hcp_sql_vcore_sku_capacity: 40
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      om_legacy_etcd_backup_storage_account_name: "hcp0001westeuropesvc"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-europesector
+                      sector_vault_name: acs-europesector
+                      zone_redundant_enabled: true
+                  westus:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      bus_resourceprovider_alert_level: level2
+                      dnc_db_primary_zone_redundant: "false"
+                      flt_cosmosdb_zone_redundant: "false"
+                      rp_cosmosdb_zone_redundant: "false"
+                      costanalysis_eventhub_zone_redundant: "false"
+                      hcp_sql_zone_redundant_enabled: "false"
+                      hcp_region_database_service_level_objective: P4
+                      mcs_eventhub_zone_redundant: "false"
+                      om_legacy_etcd_backup_storage_account_name: "etcdwestus"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-ussector
+                      sector_vault_name: acs-ussector
+                  westus2:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      bus_resourceprovider_alert_level: level2
+                      hcp_region_database_server_name_prefix: "aks-{REGION}-regional"
+                      hcp_region_database_service_level_objective: P6
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      om_legacy_etcd_backup_storage_account_name: "etcdwestus2"
+                      redis_enabled: true
+                      sector_vault_group: rp-common-ussector
+                      sector_vault_name: acs-ussector
+                      zone_redundant_enabled: true
+                  westus3:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_failover_enabled: true
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      hcp_region_database_service_level_objective: P4
+                      redis_enabled: true
+                      zone_redundant_enabled: true
+      ff:
+        Variables:
+          devhub_deploy_networking_config: false
+          flt_deploy_cosmosdb: "true"
+          dnc_db_primary_zone_redundant: "false"
+          flt_cosmosdb_zone_redundant: "false"
+          rp_cosmosdb_zone_redundant: "false"
+          costanalysis_eventhub_zone_redundant: "false"
+          hcp_sql_zone_redundant_enabled: "false"
+          hcp_deploy_trafficmanager_endpoint: true
+          mcs_eventhub_zone_redundant: "false"
+          om_ccp_dns_domain: cx.aks.containerservice.azure.us
+          om_legacy_storage_account_region_subscription_id: "{overlay_resources_subscription_id}"
+          om_legacy_etcd_resource_group_name: "{resource_name_prefix}overlay-{REGION}"
+          redis_enabled: true # disable for new region
+          sector_vault_name: "{resource_name_prefix}acs-usgov{resource_name_prefix_nodash}sector"
+          sector_vault_group: "{resource_name_prefix}rp-common-usgov{resource_name_prefix_nodash}sector"
+          dnc_pubsub_cert_domain: "aks.dnc.usgovcloudapi.net" #want this to be aks-{REGION} but matt long has to unbreak things
+        Match:
+          Key: DEPLOYENV
+          Values:
+            int:
+              Variables:
+                bl_pav2_objectid: 9db5f06b-1139-465a-9ad9-155f8b6e42f2 # int-aksoverlay-msi-operator
+                costanalysis_eventhub_zone_redundant: "true"
+                dnc_db_primary_zone_redundant: "true"
+                flt_cosmosdb_zone_redundant: "true"
+                hcp_elastic_pool_capacity: 50
+                hcp_elastic_pool_sku_name: "StandardPool"
+                hcp_region_vault_resource_group: "hcp-underlay-{resource_name_prefix}{REGION}"
+                hcp_region_database_service_level_objective: S1
+                hcp_sql_zone_redundant_enabled: "true"
+                mcs_eventhub_zone_redundant: "false"
+                most_reliable_storage_sku: Standard_ZRS
+                om_ccp_dns_domain: cx.int-aks.containerservice.azure.us
+                rp_cosmosdb_zone_redundant: "true"
+              Match:
+                Key: REGION
+                Values:
+                  usgovvirginia:
+                    Variables:
+                      region_short_name: virginia
+            prod:
+              Variables:
+                bl_pav2_objectid: 347577e9-2d24-401f-93ba-eabb0eaf6f06 # PAv2SP-FF - PAv2 Service Principal Object ID
+                mcs_eventhub_zone_redundant: "false"
+              Match:
+                Key: REGION
+                Values:
+                  usgovvirginia:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      dnc_db_primary_zone_redundant: "true"
+                      flt_cosmosdb_zone_redundant: "true"
+                      hcp_sql_zone_redundant_enabled: "true"
+                      mcs_eventhub_zone_redundant: "false"
+                      most_reliable_storage_sku: Standard_ZRS
+                      rp_cosmosdb_zone_redundant: "true"
+                      costanalysis_eventhub_zone_redundant: "true"
+      mc:
+        Variables:
+          bl_storage_account_sku: Standard_LRS
+          bus_sku: standard
+          devhub_deploy_networking_config: false
+          dnc_db_primary_zone_redundant: "false"
+          flt_cosmosdb_zone_redundant: "false"
+          rp_cosmosdb_zone_redundant: "false"
+          costanalysis_eventhub_zone_redundant: "false"
+          hcp_sql_zone_redundant_enabled: "false"
+          flt_deploy_cosmosdb: "true"
+          fms_sku_name: standard
+          hcp_deploy_trafficmanager_endpoint: true
+          mcs_eventhub_zone_redundant: "false"
+          om_ccp_dns_domain: cx.prod.service.azk8s.cn
+          om_legacy_storage_account_region_subscription_id: "{overlay_resources_subscription_id}"
+          om_legacy_etcd_resource_group_name: "{resource_name_prefix}overlay-{REGION}"
+          redis_enabled: true # disable for new region
+          sector_vault_name: "{resource_name_prefix}acs-china{resource_name_prefix_nodash}sector"
+          sector_vault_group: "{resource_name_prefix}rp-common-china{resource_name_prefix_nodash}sector"
+          dnc_pubsub_cert_domain: "aks.dnc.chinacloudapi.cn" #want this to be aks-{REGION} but matt long has to unbreak things
+        Match:
+          Key: DEPLOYENV
+          Values:
+            int:
+              Variables:
+                om_ccp_dns_domain: cx.int.service.azk8s.cn
+                hcp_region_vault_resource_group: "hcp-underlay-{resource_name_prefix}{REGION}"
+                bl_pav2_objectid: 4ea0e29e-f7ae-4d4e-a885-efabf5ef0646 # int-aksoverlay-msi-operator
+                hcp_region_database_service_level_objective: S1
+                hcp_elastic_pool_sku_name: "StandardPool"
+                hcp_elastic_pool_capacity: 50
+            prod:
+              Variables:
+                bl_pav2_objectid: b557b23c-fc16-47fc-93f7-1747212a2d1b # PAv2SP-MC - PAv2 Service Principal Object ID
+              Match:
+                Key: REGION
+                Values:
+                  chinanorth3:
+                    Variables:
+                      arn_eventgriddomain_enabled: "true"
+                      bus_sku: premium
+                      dnc_db_primary_zone_redundant: "true"
+                      flt_cosmosdb_zone_redundant: "true"
+                      hcp_sql_zone_redundant_enabled: "true"
+                      rp_cosmosdb_zone_redundant: "true"
+                      costanalysis_eventhub_zone_redundant: "true"
+                      zone_redundant_enabled: true
+                      most_reliable_storage_sku: Standard_ZRS
+                      bl_storage_account_sku: Standard_ZRS
+      ex:
+        Variables:
+          bl_storage_account_sku: Standard_LRS
+          bus_sku: standard
+          devhub_deploy_networking_config: false
+          dnc_pubsub_cert_domain: aks-{REGION}.dnc.azure.eaglex.ic.gov
+          fms_sku_name: standard
+          hcp_deploy_trafficmanager_endpoint: true
+          mcs_eventhub_zone_redundant: "false"
+          om_ccp_dns_domain: cx.aks.containerservice.eaglex.ic.gov
+          om_legacy_storage_account_region_subscription_id: "{overlay_resources_subscription_id}"
+          om_legacy_etcd_resource_group_name: "{resource_name_prefix}overlay-{REGION}"
+          redis_enabled: true
+          bl_pav2_objectid: 94b5963e-775e-4906-a0bb-f16316620750 # PAv2SP-USNat - PAv2 Service Principal Object ID
+          public_certificate_key_config: "\\\"kty\\\":\\\"RSA\\\",\\\"key_size\\\":2048"
+          bus_resourceprovider_alert_level: level2
+          dnc_db_primary_zone_redundant: "false"
+          flt_cosmosdb_zone_redundant: "false"
+          rp_cosmosdb_zone_redundant: "false"
+          hcp_sql_zone_redundant_enabled: "false"
+          costanalysis_eventhub_zone_redundant: "false"
+      rx:
+        Variables:
+          bl_storage_account_sku: Standard_LRS
+          bus_sku: standard
+          devhub_deploy_networking_config: false
+          dnc_pubsub_cert_domain: aks-{REGION}.dnc.azure.microsoft.scloud
+          fms_sku_name: standard
+          hcp_deploy_trafficmanager_endpoint: true
+          mcs_eventhub_zone_redundant: "false"
+          om_ccp_dns_domain: cx.aks.containerservice.microsoft.scloud
+          om_legacy_storage_account_region_subscription_id: "{overlay_resources_subscription_id}"
+          om_legacy_etcd_resource_group_name: "{resource_name_prefix}overlay-{REGION}"
+          redis_enabled: true
+          bl_pav2_objectid: c86685ec-c856-47d0-ab70-1839eb6424f8 # PAv2SP-USSec - PAv2 Service Principal Object ID
+          # microsoft is reserved keyword. Hence for ussec, removing the cloud zone root
+          hcp_trafficmanager_relative_name: "{domain_region_prefix}{REGION}.hcp.{v2_domain_deployenv_name}.azure"
+          oic_trafficmanager_relative_name: "{domain_region_prefix}{REGION}.oic.{v2_domain_deployenv_name}.azure"
+          rp_trafficmanager_relative_name: "{domain_region_prefix}{REGION}.rp.{v2_domain_deployenv_name}.azure"
+          ta_trafficmanager_relative_name: "{domain_region_prefix}{REGION}.trustedaccess.{v2_domain_deployenv_name}.azure"
+          ig_trafficmanager_relative_name: "{domain_region_prefix}{REGION}.rp-ig.{v2_domain_deployenv_name}.azure"
+          public_certificate_key_config: "\\\"kty\\\":\\\"RSA\\\",\\\"key_size\\\":2048"
+          bus_resourceprovider_alert_level: level2
+          dnc_db_primary_zone_redundant: "false"
+          flt_cosmosdb_zone_redundant: "false"
+          rp_cosmosdb_zone_redundant: "false"
+          hcp_sql_zone_redundant_enabled: "false"
+          costanalysis_eventhub_zone_redundant: "false"
+AutoSelector: true
+FeatureIndirectReplaceList: # alpha feature, use carefully
+  - REGION # actually not used for >= 9.29.2

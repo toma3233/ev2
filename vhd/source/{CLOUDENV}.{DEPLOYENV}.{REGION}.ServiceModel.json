@@ -1,0 +1,44 @@
+{
+    "$schema": "https://ev2schema.azure.net/schemas/2020-01-01/serviceModel.json",
+    "contentVersion": "0.0.0.1",
+    "serviceMetadata": {
+        "serviceGroup": "{service_group_name}",
+        "environment": "{CLOUDENV}.{DEPLOYENV}",
+        "serviceIdentifier": "f1d1800e-d38e-41f2-b63c-72d59ecaf9c0"
+    },
+    "serviceResourceGroupDefinitions": [
+        {
+            "name": "group-definition",
+            "serviceResourceDefinitions": [
+                {
+                    "name": "Default",
+                    "composedOf": {
+                        "arm": {
+                            "templatePath": "Templates\\{rollout_template_name}.Template.json"
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "serviceResourceGroups": [
+        {
+            "instanceOf": "group-definition",
+            "azureSubscriptionId": "{rollout_subscription_id}",
+            "azureResourceGroupName": "{resource_name_prefix}{resource_group_name}",
+            "location": "{rollout_location}",
+            "scopeTags": [
+                {
+                    "name": "common"
+                }
+            ],
+            "serviceResources": [
+                {
+                    "name": "DefaultServiceResource",
+                    "instanceOf": "Default",
+                    "armParametersPath": "Parameters\\{CLOUDENV}.{DEPLOYENV}.{REGION}.{rollout_template_name}.Parameters.json"
+                }
+            ]
+        }
+    ]
+}
