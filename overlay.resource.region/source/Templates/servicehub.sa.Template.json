@@ -25,6 +25,22 @@
                 "allowBlobPublicAccess": false,
                 "allowSharedKeyAccess": false
             }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "name": "[concat(parameters('storageaccount_name'),'2')]",
+            "location": "[resourceGroup().location]",
+            "kind": "StorageV2",
+            "sku": {
+                "name": "[parameters('storage_sku')]",
+                "tier": "Standard"
+            },
+            "properties": {
+                "accessTier": "Hot",
+                "allowBlobPublicAccess": false,
+                "allowSharedKeyAccess": false
+            }
         }
     ]
 }
